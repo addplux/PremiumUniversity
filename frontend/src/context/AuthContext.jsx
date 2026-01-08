@@ -33,13 +33,21 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUser = async () => {
         try {
+            // Ensure header is set before request
+            if (token) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            }
+
             const response = await axios.get('/auth/me');
             if (response.data.success) {
                 setUser(response.data.data);
             }
         } catch (error) {
             console.error('Failed to fetch user:', error);
-            logout();
+            // Only logout if token is invalid (401), not on network errors
+            if (error.response && error.response.status === 401) {
+                logout();
+            }
         } finally {
             setLoading(false);
         }
