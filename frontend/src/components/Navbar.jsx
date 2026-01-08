@@ -21,7 +21,7 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-container">
                         <img
-                            src="C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_1767895014903.jpg"
+                            src="/assets/uploaded_image_1767895014903.jpg"
                             alt="PSOHS Logo"
                             className="logo"
                         />

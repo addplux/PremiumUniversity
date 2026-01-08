@@ -117,7 +117,7 @@ const HomePage = () => {
                         </div>
                         <div className="about-image">
                             <img
-                                src="C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_1_1767895364487.jpg"
+                                src="/assets/uploaded_image_1_1767895364487.jpg"
                                 alt="PSOHS Students"
                             />
                         </div>
@@ -230,14 +230,14 @@ const HomePage = () => {
                     <div className="facilities-grid">
                         <div className="facility-card">
                             <img
-                                src="C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_0_1767895364487.jpg"
+                                src="/assets/uploaded_image_0_1767895364487.jpg"
                                 alt="Medical Equipment"
                             />
                             <h4>Modern Medical Equipment</h4>
                         </div>
                         <div className="facility-card">
                             <img
-                                src="C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_2_1767895364487.jpg"
+                                src="/assets/uploaded_image_2_1767895364487.jpg"
                                 alt="Clinical Training"
                             />
                             <h4>Clinical Training Facilities</h4>

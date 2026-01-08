@@ -5,27 +5,27 @@ import './GalleryPage.css';
 const GalleryPage = () => {
     const gallery = [
         {
-            src: 'C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_0_1767895364487.jpg',
+            src: '/assets/uploaded_image_0_1767895364487.jpg',
             title: 'Medical Equipment & Training',
             category: 'Facilities'
         },
         {
-            src: 'C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_1_1767895364487.jpg',
+            src: '/assets/uploaded_image_1_1767895364487.jpg',
             title: 'Our Students',
             category: 'Student Life'
         },
         {
-            src: 'C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_2_1767895364487.jpg',
+            src: '/assets/uploaded_image_2_1767895364487.jpg',
             title: 'Clinical Practice',
             category: 'Training'
         },
         {
-            src: 'C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_3_1767895364487.jpg',
+            src: '/assets/uploaded_image_3_1767895364487.jpg',
             title: 'Graduation Ceremony',
             category: 'Events'
         },
         {
-            src: 'C:/Users/flyst/.gemini/antigravity/brain/70241dd5-b90c-44e6-af60-d66cfb9fe4bc/uploaded_image_4_1767895364487.jpg',
+            src: '/assets/uploaded_image_4_1767895364487.jpg',
             title: 'Celebrating Success',
             category: 'Events'
         }
