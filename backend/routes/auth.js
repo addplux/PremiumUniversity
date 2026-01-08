@@ -35,9 +35,9 @@ router.post('/register', async (req, res) => {
             email,
             phone,
             password,
-            dateOfBirth,
             address,
-            city
+            city,
+            dateOfBirth: dateOfBirth || undefined // Handle empty string which causes CastError
         });
 
         if (user) {
