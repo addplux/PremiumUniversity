@@ -71,7 +71,7 @@ const applicationSchema = new mongoose.Schema({
     documents: {
         grade12Certificate: String,
         nrcCopy: String,
-        passport Photo: String,
+        passportPhoto: String,
         medicalCertificate: String,
         policeClearance: String
     },
