@@ -1,27 +1,46 @@
 # Deployment Guide for PSOHS Platform
 
-## Option 1: Railway (Easiest "All-in-One")
-Railway is great because it can host your Backend, Frontend, and Database all in one project.
+## Option 1: Railway (Recommended - Step-by-Step)
+Railway is the easiest way because it handles everything (Code + Database) in one dashboard.
 
-### 1. Setup Database & Backend
-1. Create a [Railway](https://railway.app/) account.
-2. Create a **New Project** > **Provision MongoDB**.
-3. Click on the MongoDB service > **Connect** tab.
-4. Copy the **Mongo Connection URL**.
-   * *Tip: You can use this URL in your local `.env` file to skip installing MongoDB locally!*
-5. In your project, click **New** > **GitHub Repo** > Select your repo.
-6. Configure the Backend service:
-   * **Root Directory:** `backend`
-   * **Variables:** Add all variables from your `backend/.env` file.
-   * Set `frontent_URL` to your future frontend domain (or `*` for now).
+### Phase 1: Create the Project
+1. Go to [Railway.app](https://railway.app/) and **Login with GitHub**.
+2. Click **+ New Project**.
+3. Select **Deploy from GitHub repo**.
+4. Select your repository: `PremiumUniversity`.
+5. Click **Add Variables** later, just click **Deploy Now** (it might fail initially, that's fine).
 
-### 2. Setup Frontend
-1. In the same project, click **New** > **GitHub Repo** > Select repo again.
-2. Configure the Frontend service:
-   * **Root Directory:** `frontend`
-   * **Build Command:** `npm run build`
-   * **Start Command:** `npm run preview` (or serve `dist` folder)
-   * **Variables:** `VITE_API_URL` = Your Railway Backend URL.
+### Phase 2: Configure the Backend
+1. Click on the card that appeared (it represents your repo).
+2. Go to **Settings** > **Root Directory**.
+3. Change it to: `/backend`  (This is critical!).
+4. Go to **Variables** tab. Add these:
+   - `PORT`: `5000`
+   - `JWT_SECRET`: (Create a random secret password)
+   - `Node_ENV`: `production`
+5. Go to **Settings** > **Networking** > **Generate Domain**.
+   - Copy this URL (e.g., `backend-production.up.railway.app`).
+
+### Phase 3: Add the Database
+1. Click **+ New** (top right) > **Database** > **MongoDB**.
+2. Wait for it to initialize.
+3. Click on the **MongoDB** card > **Connect** tab.
+4. Copy the **MONGO_URI**.
+5. Go back to your **Backend Service** > **Variables**.
+6. Add `MONGO_URI` and paste the value you copied.
+7. The Backend should now redeploy and say "Success".
+
+### Phase 4: Configure the Frontend
+1. Click **+ New** > **GitHub Repo**.
+2. Select `PremiumUniversity` AGAIN.
+3. Click on this NEW card (this will be your frontend).
+4. Go to **Settings** > **Root Directory**.
+5. Change it to: `/frontend`
+6. Go to **Variables** tab. Add:
+   - `VITE_API_URL`: Paste the Backend URL from Phase 2 (e.g., `https://backend-production.up.railway.app/api`)
+     *IMPORTANT: Make sure to add `/api` at the end!*
+7. Go to **Settings** > **Networking** > **Generate Domain**.
+8. Click that link - Your Website is LIVE! 🚀
 
 ---
 
