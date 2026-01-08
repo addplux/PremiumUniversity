@@ -17,7 +17,11 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'));
 
     // Configure axios defaults
-    axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    // Use environment variable, OR fallback to the known Production URL if in production mode, OR localhost for dev
+    const prodUrl = 'https://premiumuniversity-production.up.railway.app/api';
+    axios.defaults.baseURL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? prodUrl : 'http://localhost:5000/api');
+
+    console.log('Using API URL:', axios.defaults.baseURL); // Debug log
 
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
