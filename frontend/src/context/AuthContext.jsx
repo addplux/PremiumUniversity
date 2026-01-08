@@ -69,9 +69,20 @@ export const AuthProvider = ({ children }) => {
                 return { success: true };
             }
         } catch (error) {
+            let message = 'Login failed';
+
+            if (error.response) {
+                // Prefer the verbose 'error' field if available (set in server.js), otherwise 'message'
+                message = error.response.data?.error || error.response.data?.message || message;
+            } else if (error.request) {
+                message = 'Network Error: Cannot reach server. Please check your connection.';
+            } else {
+                message = error.message;
+            }
+
             return {
                 success: false,
-                message: error.response?.data?.message || 'Login failed'
+                message: message
             };
         }
     };
