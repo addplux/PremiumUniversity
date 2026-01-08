@@ -58,7 +58,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/psohs', {
+// Support MONGODB_URI (Standard) or MONGO_URL (Railway Default)
+const mongoKey = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/psohs';
+
+mongoose.connect(mongoKey, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
