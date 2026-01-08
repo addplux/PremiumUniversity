@@ -21,7 +21,7 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-container">
                         <img
-                            src="/assets/uploaded_image_1767895014903.jpg"
+                            src="/assets/logo.jpg"
                             alt="PSOHS Logo"
                             className="logo"
                         />

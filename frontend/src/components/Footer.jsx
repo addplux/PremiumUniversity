@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="footer-grid">
                     <div className="footer-col">
                         <img
-                            src="/assets/uploaded_image_1767895014903.jpg"
+                            src="/assets/logo.jpg"
                             alt="PSOHS Logo"
                             className="footer-logo"
                         />

@@ -117,7 +117,7 @@ const HomePage = () => {
                         </div>
                         <div className="about-image">
                             <img
-                                src="/assets/uploaded_image_1_1767895364487.jpg"
+                                src="/assets/students_group.jpg"
                                 alt="PSOHS Students"
                             />
                         </div>
@@ -230,14 +230,14 @@ const HomePage = () => {
                     <div className="facilities-grid">
                         <div className="facility-card">
                             <img
-                                src="/assets/uploaded_image_0_1767895364487.jpg"
+                                src="/assets/facility_equipment.jpg"
                                 alt="Medical Equipment"
                             />
                             <h4>Modern Medical Equipment</h4>
                         </div>
                         <div className="facility-card">
                             <img
-                                src="/assets/uploaded_image_2_1767895364487.jpg"
+                                src="/assets/clinical_training.jpg"
                                 alt="Clinical Training"
                             />
                             <h4>Clinical Training Facilities</h4>

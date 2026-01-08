@@ -5,27 +5,27 @@ import './GalleryPage.css';
 const GalleryPage = () => {
     const gallery = [
         {
-            src: '/assets/uploaded_image_0_1767895364487.jpg',
+            src: '/assets/facility_equipment.jpg',
             title: 'Medical Equipment & Training',
             category: 'Facilities'
         },
         {
-            src: '/assets/uploaded_image_1_1767895364487.jpg',
+            src: '/assets/students_group.jpg',
             title: 'Our Students',
             category: 'Student Life'
         },
         {
-            src: '/assets/uploaded_image_2_1767895364487.jpg',
+            src: '/assets/clinical_training.jpg',
             title: 'Clinical Practice',
             category: 'Training'
         },
         {
-            src: '/assets/uploaded_image_3_1767895364487.jpg',
+            src: '/assets/graduation.jpg',
             title: 'Graduation Ceremony',
             category: 'Events'
         },
         {
-            src: '/assets/uploaded_image_4_1767895364487.jpg',
+            src: '/assets/celebration.jpg',
             title: 'Celebrating Success',
             category: 'Events'
         }
