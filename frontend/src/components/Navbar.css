@@ -150,7 +150,7 @@
         top: 80px;
         left: 0;
         right: 0;
-        background: white;
+        background: var(--bg-white);
         flex-direction: column;
         padding: var(--spacing-lg);
         box-shadow: var(--shadow-lg);
@@ -158,11 +158,14 @@
         opacity: 0;
         transition: var(--transition);
         gap: var(--spacing-md);
+        pointer-events: none;
+        z-index: 999;
     }
 
     .nav-links.active {
         transform: translateY(0);
         opacity: 1;
+        pointer-events: auto;
     }
 
     .mobile-menu-btn {
