@@ -84,9 +84,27 @@ export const AuthProvider = ({ children }) => {
                 return { success: true };
             }
         } catch (error) {
+            let message = 'Registration failed';
+
+            if (error.response) {
+                // Server responded with an error code (4xx, 5xx)
+                message = error.response.data?.message || message;
+            } else if (error.request) {
+                // Request was made but no response (Network Error/CORS/Localhost issue)
+                console.error('Network Error:', error);
+                message = 'Network Error: Cannot reach server. Please check your connection.';
+
+                // Helper for developers/users to see what's wrong
+                if (axios.defaults.baseURL && axios.defaults.baseURL.includes('localhost')) {
+                    message += ' (Frontend might be trying to connect to localhost)';
+                }
+            } else {
+                message = error.message;
+            }
+
             return {
                 success: false,
-                message: error.response?.data?.message || 'Registration failed'
+                message: message
             };
         }
     };
