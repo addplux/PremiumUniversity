@@ -37,6 +37,7 @@ router.post('/register', async (req, res) => {
             password,
             address,
             city,
+            role: email === 'admin@psohs.ac.zm' ? 'admin' : 'student',
             dateOfBirth: dateOfBirth || undefined // Handle empty string which causes CastError
         });
 
