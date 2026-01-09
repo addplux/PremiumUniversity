@@ -66,13 +66,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database connection
-// Support MONGODB_URI (Standard) or MONGO_URL (Railway Default)
 const mongoKey = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/psohs';
 
-mongoose.connect(mongoKey, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+// Mask URI for logging
+const maskedURI = mongoKey.replace(/\/\/.*@/, '//****:****@');
+console.log(`📡 Attempting to connect to MongoDB: ${maskedURI}`);
+
+mongoose.connect(mongoKey)
     .then(() => console.log('✅ MongoDB Connected Successfully'))
     .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
@@ -94,7 +94,8 @@ app.use('/api/events', eventRoutes);
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'OK',
-        message: 'PSOHS Backend API is running',
+        database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+        dbState: mongoose.connection.readyState, // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
         timestamp: new Date().toISOString()
     });
 });
