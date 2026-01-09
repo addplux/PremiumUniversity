@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
 
             if (error.response) {
                 // Server responded with an error code (4xx, 5xx)
-                message = error.response.data?.message || message;
+                message = error.response.data?.error || error.response.data?.message || message;
             } else if (error.request) {
                 // Request was made but no response (Network Error/CORS/Localhost issue)
                 console.error('Network Error:', error);

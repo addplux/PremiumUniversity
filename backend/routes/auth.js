@@ -57,9 +57,17 @@ router.post('/register', async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+
+        let message = 'Registration failed';
+        if (error.name === 'ValidationError') {
+            message = Object.values(error.errors).map(val => val.message).join(', ');
+        } else if (error.code === 11000) {
+            message = 'Duplicate field value entered';
+        }
+
+        res.status(error.name === 'ValidationError' ? 400 : 500).json({
             success: false,
-            message: 'Registration failed',
+            message: message,
             error: error.message
         });
     }
