@@ -10,6 +10,14 @@ import authRoutes from './routes/auth.js';
 import applicationRoutes from './routes/applications.js';
 import programRoutes from './routes/programs.js';
 import contactRoutes from './routes/contact.js';
+import userRoutes from './routes/users.js';
+import courseRoutes from './routes/courses.js';
+import enrollmentRoutes from './routes/enrollments.js';
+import assignmentRoutes from './routes/assignments.js';
+import financeRoutes from './routes/finance.js';
+import dashboardRoutes from './routes/dashboard.js';
+import scheduleRoutes from './routes/schedules.js';
+import eventRoutes from './routes/events.js';
 
 // Get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -73,6 +81,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/programs', programRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
+app.use('/api/assignments', assignmentRoutes);
+app.use('/api/finance', financeRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/schedules', scheduleRoutes);
+app.use('/api/events', eventRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
