@@ -77,13 +77,16 @@ if (process.env.MONGODB_URI) {
     source = 'process.env.MONGO_URL';
 }
 
+// SANITIZATION: Remove any accidentally copied wrapping like ${{ }} or trailing braces
+mongoKey = mongoKey.trim().replace(/^\${{/, '').replace(/}}$/, '');
+
 // Mask URI for logging
 const maskedURI = mongoKey.replace(/\/\/.*@/, '//****:****@');
 console.log(`📡 DB Source: ${source}`);
 console.log(`📡 Attempting to connect to MongoDB: ${maskedURI}`);
 
 mongoose.connect(mongoKey, {
-    serverSelectionTimeoutMS: 5000, // Fail fast if cannot connect
+    serverSelectionTimeoutMS: 5000,
 })
     .then(() => console.log('✅ MongoDB Connected Successfully'))
     .catch(err => {
