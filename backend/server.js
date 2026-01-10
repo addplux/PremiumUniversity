@@ -66,15 +66,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database connection
-const mongoKey = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/psohs';
+let mongoKey = 'mongodb://localhost:27017/psohs';
+let source = 'Default (Local)';
+
+if (process.env.MONGODB_URI) {
+    mongoKey = process.env.MONGODB_URI;
+    source = 'process.env.MONGODB_URI';
+} else if (process.env.MONGO_URL) {
+    mongoKey = process.env.MONGO_URL;
+    source = 'process.env.MONGO_URL';
+}
 
 // Mask URI for logging
 const maskedURI = mongoKey.replace(/\/\/.*@/, '//****:****@');
+console.log(`📡 DB Source: ${source}`);
 console.log(`📡 Attempting to connect to MongoDB: ${maskedURI}`);
 
-mongoose.connect(mongoKey)
+mongoose.connect(mongoKey, {
+    serverSelectionTimeoutMS: 5000, // Fail fast if cannot connect
+})
     .then(() => console.log('✅ MongoDB Connected Successfully'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+    .catch(err => {
+        console.error('❌ MongoDB Connection Error:', err.message);
+        console.error('🛠️ Troubleshooting: Ensure your Railway variables are correct and not wrapped in ${{ }}.');
+    });
 
 // Routes
 app.use('/api/auth', authRoutes);
