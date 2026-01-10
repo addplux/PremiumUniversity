@@ -2,14 +2,14 @@ import express from 'express';
 import Assignment from '../models/Assignment.js';
 import Submission from '../models/Submission.js';
 import Enrollment from '../models/Enrollment.js';
-import { protect, admin } from '../middleware/auth.js';
+import { protect, academicAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // @route   POST /api/assignments
 // @desc    Create new assignment (Admin only for now)
 // @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, academicAdmin, async (req, res) => {
     try {
         const assignment = await Assignment.create({
             ...req.body,
@@ -119,7 +119,7 @@ router.post('/:id/submit', protect, async (req, res) => {
 // @route   GET /api/assignments/:id/submissions
 // @desc    Get all submissions for an assignment (Admin only)
 // @access  Private/Admin
-router.get('/:id/submissions', protect, admin, async (req, res) => {
+router.get('/:id/submissions', protect, academicAdmin, async (req, res) => {
     try {
         const submissions = await Submission.find({ assignment: req.params.id })
             .populate('student', 'firstName lastName email')
@@ -139,7 +139,7 @@ router.get('/:id/submissions', protect, admin, async (req, res) => {
 // @route   PUT /api/assignments/submission/:id/grade
 // @desc    Grade a submission
 // @access  Private/Admin
-router.put('/submission/:id/grade', protect, admin, async (req, res) => {
+router.put('/submission/:id/grade', protect, academicAdmin, async (req, res) => {
     try {
         const { grade, feedback } = req.body;
 

@@ -18,6 +18,9 @@ import financeRoutes from './routes/finance.js';
 import dashboardRoutes from './routes/dashboard.js';
 import scheduleRoutes from './routes/schedules.js';
 import eventRoutes from './routes/events.js';
+import gradeRoutes from './routes/grades.js';
+import onlineClassRoutes from './routes/onlineClasses.js';
+import systemRoutes from './routes/system.js';
 
 // Get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -107,6 +110,9 @@ app.use('/api/finance', financeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/grades', gradeRoutes);
+app.use('/api/online-classes', onlineClassRoutes);
+app.use('/api/system', systemRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

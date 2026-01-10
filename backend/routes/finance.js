@@ -1,14 +1,14 @@
 import express from 'express';
 import Payment from '../models/Payment.js';
 import User from '../models/User.js';
-import { protect, admin } from '../middleware/auth.js';
+import { protect, financeAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // @route   GET /api/finance
 // @desc    Get all payments
 // @access  Private/Admin
-router.get('/', protect, admin, async (req, res) => {
+router.get('/', protect, financeAdmin, async (req, res) => {
     try {
         const payments = await Payment.find()
             .populate('student', 'firstName lastName email studentId')
@@ -29,7 +29,7 @@ router.get('/', protect, admin, async (req, res) => {
 // @route   POST /api/finance
 // @desc    Record a new payment
 // @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, financeAdmin, async (req, res) => {
     try {
         const { studentId, amount, paymentMethod, reference, description, status } = req.body;
 
@@ -82,7 +82,7 @@ router.get('/my', protect, async (req, res) => {
 // @route   GET /api/finance/student/:id
 // @desc    Get specific student's payments
 // @access  Private/Admin
-router.get('/student/:id', protect, admin, async (req, res) => {
+router.get('/student/:id', protect, financeAdmin, async (req, res) => {
     try {
         const payments = await Payment.find({ student: req.params.id }).sort({ date: -1 });
 
@@ -100,7 +100,7 @@ router.get('/student/:id', protect, admin, async (req, res) => {
 // @route   GET /api/finance/stats
 // @desc    Get financial statistics
 // @access  Private/Admin
-router.get('/stats', protect, admin, async (req, res) => {
+router.get('/stats', protect, financeAdmin, async (req, res) => {
     try {
         const stats = await Payment.aggregate([
             {

@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
             });
         }
 
-        // Create user
+        // Create user (all new registrations are students by default)
         const user = await User.create({
             firstName,
             lastName,
@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
             password,
             address,
             city,
-            role: email === 'admin@psohs.ac.zm' ? 'admin' : 'student',
+            role: 'student',
             dateOfBirth: dateOfBirth || undefined // Handle empty string which causes CastError
         });
 

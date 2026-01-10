@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import EnterpriseLayout from './layouts/EnterpriseLayout';
 import LearningLayout from './layouts/LearningLayout';
 
@@ -29,23 +30,27 @@ import Timetable from './pages/Timetable';
 import EventsCalendar from './pages/EventsCalendar';
 import ScheduleManager from './pages/ScheduleManager';
 
-// Protected Route Component
-const ProtectedRoute = ({ children, adminOnly = false }) => {
-  const { isAuthenticated, isAdmin, loading } = useAuth();
+// New Role-Based Dashboards
+import SystemAdminDashboard from './pages/SystemAdminDashboard';
+import FinanceAdminDashboard from './pages/FinanceAdminDashboard';
+import AcademicAdminDashboard from './pages/AcademicAdminDashboard';
 
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
+// Dashboard Router - Redirects to appropriate dashboard based on role
+const DashboardRouter = () => {
+  const { userRole, loading } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  if (loading) return <div className="loading-screen">Loading...</div>;
 
-  if (adminOnly && !isAdmin) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  // Redirect based on role
+  const redirectMap = {
+    'student': '/dashboard',
+    'system_admin': '/admin/system',
+    'finance_admin': '/admin/finance',
+    'academic_admin': '/admin/academic',
+    'admin': '/admin' // Legacy admin
+  };
 
-  return children;
+  return <Navigate to={redirectMap[userRole] || '/dashboard'} replace />;
 };
 
 function App() {
@@ -63,15 +68,56 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Protected Routes */}
-          {/* Enterprise Portal (Admin Only) */}
+          {/* Auto-redirect to role-specific dashboard */}
+          <Route path="/portal" element={
+            <ProtectedRoute>
+              <DashboardRouter />
+            </ProtectedRoute>
+          } />
+
+          {/* System Admin Routes */}
+          <Route path="/admin/system" element={
+            <ProtectedRoute allowedRoles={['system_admin']}>
+              <EnterpriseLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<SystemAdminDashboard />} />
+            <Route path="users" element={<StudentRegistry />} />
+            {/* Add more system admin routes as needed */}
+          </Route>
+
+          {/* Finance Admin Routes */}
+          <Route path="/admin/finance" element={
+            <ProtectedRoute allowedRoles={['finance_admin', 'system_admin']}>
+              <EnterpriseLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<FinanceAdminDashboard />} />
+            <Route path="payments" element={<FinanceDashboard />} />
+            {/* Add more finance admin routes as needed */}
+          </Route>
+
+          {/* Academic Admin Routes */}
+          <Route path="/admin/academic" element={
+            <ProtectedRoute allowedRoles={['academic_admin', 'system_admin']}>
+              <EnterpriseLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<AcademicAdminDashboard />} />
+            <Route path="courses" element={<CourseManager />} />
+            <Route path="assignments" element={<AssignmentManager />} />
+            <Route path="grades" element={<AcademicRecords />} />
+            <Route path="timetable" element={<ScheduleManager />} />
+            {/* Add more academic admin routes as needed */}
+          </Route>
+
+          {/* Legacy Admin Routes (for backward compatibility) */}
           <Route path="/admin" element={
-            <ProtectedRoute adminOnly={true}>
+            <ProtectedRoute allowedRoles={['admin', 'system_admin', 'finance_admin', 'academic_admin']}>
               <EnterpriseLayout />
             </ProtectedRoute>
           }>
             <Route index element={<AdminDashboard />} />
-            {/* Future Admin Routes will go here, e.g., /admin/applications */}
             <Route path="applications" element={<ApplicationsManager />} />
             <Route path="students" element={<StudentRegistry />} />
             <Route path="finance" element={<FinanceDashboard />} />
@@ -82,9 +128,9 @@ function App() {
             <Route path="classes" element={<ScheduleManager />} />
           </Route>
 
-          {/* Learning Portal (Student/Faculty) */}
+          {/* Student Portal */}
           <Route path="/dashboard" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['student']}>
               <LearningLayout />
             </ProtectedRoute>
           }>

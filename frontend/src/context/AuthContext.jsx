@@ -138,7 +138,16 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         isAuthenticated: !!user,
-        isAdmin: user?.role === 'admin'
+        isAdmin: user?.role === 'admin',
+        // New role checks
+        isSystemAdmin: user?.role === 'system_admin',
+        isFinanceAdmin: user?.role === 'finance_admin',
+        isAcademicAdmin: user?.role === 'academic_admin',
+        isStudent: user?.role === 'student',
+        // Helper to check if user has any admin role
+        isAnyAdmin: ['admin', 'system_admin', 'finance_admin', 'academic_admin'].includes(user?.role),
+        // Get user role
+        userRole: user?.role
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

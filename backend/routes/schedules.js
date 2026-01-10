@@ -1,7 +1,7 @@
 import express from 'express';
 import Schedule from '../models/Schedule.js';
 import Enrollment from '../models/Enrollment.js';
-import { protect, admin } from '../middleware/auth.js';
+import { protect, academicAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -33,7 +33,7 @@ router.get('/my', protect, async (req, res) => {
 // @route   POST /api/schedules
 // @desc    Create a schedule (Admin)
 // @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, academicAdmin, async (req, res) => {
     try {
         const schedule = await Schedule.create({ ...req.body, createdBy: req.user._id });
         res.status(201).json({ success: true, data: schedule });
@@ -48,7 +48,7 @@ router.post('/', protect, admin, async (req, res) => {
 // @route   DELETE /api/schedules/:id
 // @desc    Delete a schedule (Admin)
 // @access  Private/Admin
-router.delete('/:id', protect, admin, async (req, res) => {
+router.delete('/:id', protect, academicAdmin, async (req, res) => {
     try {
         await Schedule.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: 'Schedule deleted' });

@@ -50,3 +50,51 @@ export const admin = (req, res, next) => {
         });
     }
 };
+
+// Finance Admin middleware
+export const financeAdmin = (req, res, next) => {
+    if (req.user && (req.user.role === 'finance_admin' || req.user.role === 'system_admin')) {
+        next();
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Not authorized - Finance Admin access required'
+        });
+    }
+};
+
+// System Admin middleware
+export const systemAdmin = (req, res, next) => {
+    if (req.user && req.user.role === 'system_admin') {
+        next();
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Not authorized - System Admin access required'
+        });
+    }
+};
+
+// Academic Admin middleware
+export const academicAdmin = (req, res, next) => {
+    if (req.user && (req.user.role === 'academic_admin' || req.user.role === 'system_admin')) {
+        next();
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Not authorized - Academic Admin access required'
+        });
+    }
+};
+
+// Any Admin middleware (for shared resources)
+export const anyAdmin = (req, res, next) => {
+    if (req.user && ['admin', 'finance_admin', 'system_admin', 'academic_admin'].includes(req.user.role)) {
+        next();
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Not authorized - Admin access required'
+        });
+    }
+};

@@ -1,6 +1,6 @@
 import express from 'express';
 import Course from '../models/Course.js';
-import { protect, admin } from '../middleware/auth.js';
+import { protect, academicAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/courses
 // @desc    Create new course
 // @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, academicAdmin, async (req, res) => {
     try {
         const course = await Course.create(req.body);
         res.status(201).json({
@@ -57,7 +57,7 @@ router.post('/', protect, admin, async (req, res) => {
 // @route   PUT /api/courses/:id
 // @desc    Update course
 // @access  Private/Admin
-router.put('/:id', protect, admin, async (req, res) => {
+router.put('/:id', protect, academicAdmin, async (req, res) => {
     try {
         let course = await Course.findById(req.params.id);
         if (!course) {
@@ -78,7 +78,7 @@ router.put('/:id', protect, admin, async (req, res) => {
 // @route   DELETE /api/courses/:id
 // @desc    Delete course
 // @access  Private/Admin
-router.delete('/:id', protect, admin, async (req, res) => {
+router.delete('/:id', protect, academicAdmin, async (req, res) => {
     try {
         const course = await Course.findById(req.params.id);
         if (!course) {
