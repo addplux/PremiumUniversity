@@ -128,7 +128,7 @@ const FinanceAdminDashboard = () => {
                         <h4>➕ Record Payment</h4>
                         <p className="text-small">Add new student payment</p>
                     </Link>
-                    <Link to="/admin/finance" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
+                    <Link to="/admin/finance/payments" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
                         <h4>📋 Payment History</h4>
                         <p className="text-small">View all transactions</p>
                     </Link>

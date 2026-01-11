@@ -24,6 +24,8 @@ import StudentAssignments from './pages/StudentAssignments';
 import AssignmentManager from './pages/AssignmentManager';
 import FinanceDashboard from './pages/FinanceDashboard';
 import StudentFinance from './pages/StudentFinance';
+import RecordPayment from './pages/RecordPayment';
+import FinanceReports from './pages/FinanceReports';
 import GradesDashboard from './pages/GradesDashboard';
 import AcademicRecords from './pages/AcademicRecords';
 import Timetable from './pages/Timetable';
@@ -94,6 +96,8 @@ function App() {
           }>
             <Route index element={<FinanceAdminDashboard />} />
             <Route path="payments" element={<FinanceDashboard />} />
+            <Route path="record" element={<RecordPayment />} />
+            <Route path="reports" element={<FinanceReports />} />
             {/* Add more finance admin routes as needed */}
           </Route>
 
