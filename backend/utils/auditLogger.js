@@ -68,4 +68,4 @@ exports.auditMiddleware = (action, targetModel) => {
     };
 };
 
-module.exports = { createAuditLog, auditMiddleware };
+// module.exports = { createAuditLog, auditMiddleware };
