@@ -9,11 +9,28 @@ const classworkSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    subject: {
+    periodicSemester: {
         type: String,
         required: true
     },
-    class: {
+    programme: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Program',
+        required: true
+    },
+    semester: {
+        type: String,
+        required: true
+    },
+    batch: {
+        type: String,
+        required: true
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    faculty: {
         type: String,
         required: true
     },
@@ -22,17 +39,13 @@ const classworkSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course'
-    },
     date: {
         type: Date,
         required: true,
         default: Date.now
     },
     duration: {
-        type: Number // in minutes
+        type: Number
     },
     activityType: {
         type: String,
@@ -78,7 +91,7 @@ const classworkSchema = new mongoose.Schema({
 
 // Index for efficient queries
 classworkSchema.index({ teacher: 1, date: -1 });
-classworkSchema.index({ class: 1, date: -1 });
-classworkSchema.index({ course: 1 });
+classworkSchema.index({ programme: 1, semester: 1 });
+classworkSchema.index({ batch: 1, date: -1 });
 
 module.exports = mongoose.model('Classwork', classworkSchema);
