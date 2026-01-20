@@ -4,27 +4,41 @@ import './Dashboard.css';
 
 const LessonPlanning = () => {
     const [lessonPlans, setLessonPlans] = useState([]);
+    const [programmes, setProgrammes] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [editingPlan, setEditingPlan] = useState(null);
     const [formData, setFormData] = useState({
-        subject: '',
-        class: '',
+        programme: '',
+        semester: '',
+        batch: '',
+        module: '',
+        faculty: '',
+        startDate: '',
+        endDate: '',
+        lectureCode: '',
         topic: '',
-        date: '',
-        period: '',
-        duration: 60,
-        objectives: [''],
-        learningOutcomes: [''],
-        teachingMethodology: '',
-        resources: [''],
-        activities: [{ activity: '', duration: 0, description: '' }],
-        assessment: '',
-        homework: '',
-        notes: ''
+        description: ''
     });
+
+    // Predefined options
+    const semesters = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'];
+    const batches = ['2024', '2023', '2022', '2021', '2020'];
+    const modules = [
+        'Mathematics',
+        'Physics',
+        'Chemistry',
+        'Biology',
+        'Computer Science',
+        'English',
+        'History',
+        'Geography',
+        'Business Studies',
+        'Economics'
+    ];
 
     useEffect(() => {
         fetchLessonPlans();
+        fetchProgrammes();
     }, []);
 
     const fetchLessonPlans = async () => {
@@ -36,6 +50,18 @@ const LessonPlanning = () => {
             setLessonPlans(response.data);
         } catch (error) {
             console.error('Error fetching lesson plans:', error);
+        }
+    };
+
+    const fetchProgrammes = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/programs`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setProgrammes(response.data);
+        } catch (error) {
+            console.error('Error fetching programmes:', error);
         }
     };
 
@@ -67,20 +93,16 @@ const LessonPlanning = () => {
     const handleEdit = (plan) => {
         setEditingPlan(plan);
         setFormData({
-            subject: plan.subject,
-            class: plan.class,
-            topic: plan.topic,
-            date: plan.date.split('T')[0],
-            period: plan.period || '',
-            duration: plan.duration,
-            objectives: plan.objectives.length ? plan.objectives : [''],
-            learningOutcomes: plan.learningOutcomes.length ? plan.learningOutcomes : [''],
-            teachingMethodology: plan.teachingMethodology || '',
-            resources: plan.resources.length ? plan.resources : [''],
-            activities: plan.activities.length ? plan.activities : [{ activity: '', duration: 0, description: '' }],
-            assessment: plan.assessment || '',
-            homework: plan.homework || '',
-            notes: plan.notes || ''
+            programme: plan.programme?._id || '',
+            semester: plan.semester || '',
+            batch: plan.batch || '',
+            module: plan.module || '',
+            faculty: plan.faculty || '',
+            startDate: plan.startDate ? plan.startDate.split('T')[0] : '',
+            endDate: plan.endDate ? plan.endDate.split('T')[0] : '',
+            lectureCode: plan.lectureCode || '',
+            topic: plan.topic || '',
+            description: plan.description || ''
         });
         setShowForm(true);
     };
@@ -100,56 +122,19 @@ const LessonPlanning = () => {
 
     const resetForm = () => {
         setFormData({
-            subject: '',
-            class: '',
+            programme: '',
+            semester: '',
+            batch: '',
+            module: '',
+            faculty: '',
+            startDate: '',
+            endDate: '',
+            lectureCode: '',
             topic: '',
-            date: '',
-            period: '',
-            duration: 60,
-            objectives: [''],
-            learningOutcomes: [''],
-            teachingMethodology: '',
-            resources: [''],
-            activities: [{ activity: '', duration: 0, description: '' }],
-            assessment: '',
-            homework: '',
-            notes: ''
+            description: ''
         });
         setEditingPlan(null);
         setShowForm(false);
-    };
-
-    const addArrayField = (field) => {
-        setFormData({ ...formData, [field]: [...formData[field], ''] });
-    };
-
-    const updateArrayField = (field, index, value) => {
-        const updated = [...formData[field]];
-        updated[index] = value;
-        setFormData({ ...formData, [field]: updated });
-    };
-
-    const removeArrayField = (field, index) => {
-        const updated = formData[field].filter((_, i) => i !== index);
-        setFormData({ ...formData, [field]: updated });
-    };
-
-    const addActivity = () => {
-        setFormData({
-            ...formData,
-            activities: [...formData.activities, { activity: '', duration: 0, description: '' }]
-        });
-    };
-
-    const updateActivity = (index, field, value) => {
-        const updated = [...formData.activities];
-        updated[index][field] = value;
-        setFormData({ ...formData, activities: updated });
-    };
-
-    const removeActivity = (index) => {
-        const updated = formData.activities.filter((_, i) => i !== index);
-        setFormData({ ...formData, activities: updated });
     };
 
     return (
@@ -167,108 +152,155 @@ const LessonPlanning = () => {
                     <form onSubmit={handleSubmit}>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div className="form-group">
-                                <label>Subject *</label>
-                                <input
-                                    type="text"
-                                    value={formData.subject}
-                                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                <label>Programme *</label>
+                                <select
+                                    value={formData.programme}
+                                    onChange={(e) => setFormData({ ...formData, programme: e.target.value })}
                                     required
-                                />
+                                >
+                                    <option value="">Select Programme</option>
+                                    {programmes.map((prog) => (
+                                        <option key={prog._id} value={prog._id}>
+                                            {prog.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
+
                             <div className="form-group">
-                                <label>Class *</label>
+                                <label>Semester *</label>
+                                <select
+                                    value={formData.semester}
+                                    onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Semester</option>
+                                    {semesters.map((sem) => (
+                                        <option key={sem} value={sem}>
+                                            {sem}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Batch *</label>
+                                <select
+                                    value={formData.batch}
+                                    onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Batch</option>
+                                    {batches.map((batch) => (
+                                        <option key={batch} value={batch}>
+                                            {batch}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Module *</label>
+                                <select
+                                    value={formData.module}
+                                    onChange={(e) => setFormData({ ...formData, module: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Module</option>
+                                    {modules.map((mod) => (
+                                        <option key={mod} value={mod}>
+                                            {mod}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Faculty *</label>
                                 <input
                                     type="text"
-                                    value={formData.class}
-                                    onChange={(e) => setFormData({ ...formData, class: e.target.value })}
+                                    value={formData.faculty}
+                                    onChange={(e) => setFormData({ ...formData, faculty: e.target.value })}
+                                    placeholder="Enter faculty name"
                                     required
                                 />
                             </div>
+
+                            <div className="form-group">
+                                <label>Start Date *</label>
+                                <input
+                                    type="date"
+                                    value={formData.startDate}
+                                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>End Date *</label>
+                                <input
+                                    type="date"
+                                    value={formData.endDate}
+                                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Attachment</label>
+                                <input
+                                    type="file"
+                                    onChange={(e) => {
+                                        // File handling would be implemented here
+                                        console.log('File selected:', e.target.files[0]);
+                                    }}
+                                    accept=".pdf,.doc,.docx,.ppt,.pptx"
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+                            <div className="form-group">
+                                <label>Lecture Code *</label>
+                                <input
+                                    type="text"
+                                    value={formData.lectureCode}
+                                    onChange={(e) => setFormData({ ...formData, lectureCode: e.target.value })}
+                                    placeholder="e.g., CS101-L01"
+                                    required
+                                />
+                            </div>
+
                             <div className="form-group">
                                 <label>Topic *</label>
                                 <input
                                     type="text"
                                     value={formData.topic}
                                     onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Date *</label>
-                                <input
-                                    type="date"
-                                    value={formData.date}
-                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Period</label>
-                                <input
-                                    type="text"
-                                    value={formData.period}
-                                    onChange={(e) => setFormData({ ...formData, period: e.target.value })}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Duration (minutes) *</label>
-                                <input
-                                    type="number"
-                                    value={formData.duration}
-                                    onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
+                                    placeholder="Enter topic"
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="form-group">
-                            <label>Learning Objectives</label>
-                            {formData.objectives.map((obj, index) => (
-                                <div key={index} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                                    <input
-                                        type="text"
-                                        value={obj}
-                                        onChange={(e) => updateArrayField('objectives', index, e.target.value)}
-                                        placeholder="Enter objective"
-                                    />
-                                    <button type="button" onClick={() => removeArrayField('objectives', index)} className="btn-danger">Remove</button>
-                                </div>
-                            ))}
-                            <button type="button" onClick={() => addArrayField('objectives')} className="btn-secondary">+ Add Objective</button>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Teaching Methodology</label>
+                            <label>Description *</label>
                             <textarea
-                                value={formData.teachingMethodology}
-                                onChange={(e) => setFormData({ ...formData, teachingMethodology: e.target.value })}
-                                rows="3"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                rows="4"
+                                placeholder="Enter detailed description of the lesson plan"
+                                required
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label>Assessment</label>
-                            <textarea
-                                value={formData.assessment}
-                                onChange={(e) => setFormData({ ...formData, assessment: e.target.value })}
-                                rows="2"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Homework</label>
-                            <textarea
-                                value={formData.homework}
-                                onChange={(e) => setFormData({ ...formData, homework: e.target.value })}
-                                rows="2"
-                            />
-                        </div>
-
-                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                             <button type="submit" className="btn-primary">
-                                {editingPlan ? 'Update' : 'Create'} Lesson Plan
+                                Submit
                             </button>
-                            <button type="button" onClick={resetForm} className="btn-secondary">Cancel</button>
+                            <button type="button" onClick={resetForm} className="btn-secondary">
+                                Cancel
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -280,11 +312,14 @@ const LessonPlanning = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Subject</th>
-                                <th>Class</th>
+                                <th>Lecture Code</th>
                                 <th>Topic</th>
-                                <th>Duration</th>
+                                <th>Programme</th>
+                                <th>Semester</th>
+                                <th>Batch</th>
+                                <th>Module</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -292,11 +327,14 @@ const LessonPlanning = () => {
                         <tbody>
                             {lessonPlans.map((plan) => (
                                 <tr key={plan._id}>
-                                    <td>{new Date(plan.date).toLocaleDateString()}</td>
-                                    <td>{plan.subject}</td>
-                                    <td>{plan.class}</td>
+                                    <td>{plan.lectureCode}</td>
                                     <td>{plan.topic}</td>
-                                    <td>{plan.duration} min</td>
+                                    <td>{plan.programme?.name || 'N/A'}</td>
+                                    <td>{plan.semester}</td>
+                                    <td>{plan.batch}</td>
+                                    <td>{plan.module}</td>
+                                    <td>{new Date(plan.startDate).toLocaleDateString()}</td>
+                                    <td>{new Date(plan.endDate).toLocaleDateString()}</td>
                                     <td>
                                         <span className={`badge badge-${plan.status}`}>
                                             {plan.status}

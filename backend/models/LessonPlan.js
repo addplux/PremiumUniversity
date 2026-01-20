@@ -6,15 +6,41 @@ const lessonPlanSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    course: {
+    programme: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course'
+        ref: 'Program',
+        required: true
     },
-    subject: {
+    semester: {
         type: String,
         required: true
     },
-    class: {
+    batch: {
+        type: String,
+        required: true
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    faculty: {
+        type: String,
+        required: true
+    },
+    startDate: {
+        type: Date,
+        required: true
+    },
+    endDate: {
+        type: Date,
+        required: true
+    },
+    attachments: [{
+        fileName: String,
+        fileUrl: String,
+        fileSize: Number
+    }],
+    lectureCode: {
         type: String,
         required: true
     },
@@ -22,42 +48,9 @@ const lessonPlanSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
-        type: Date,
+    description: {
+        type: String,
         required: true
-    },
-    period: {
-        type: String
-    },
-    duration: {
-        type: Number, // in minutes
-        required: true
-    },
-    objectives: [{
-        type: String
-    }],
-    learningOutcomes: [{
-        type: String
-    }],
-    teachingMethodology: {
-        type: String
-    },
-    resources: [{
-        type: String
-    }],
-    activities: [{
-        activity: String,
-        duration: Number,
-        description: String
-    }],
-    assessment: {
-        type: String
-    },
-    homework: {
-        type: String
-    },
-    notes: {
-        type: String
     },
     status: {
         type: String,
@@ -76,8 +69,8 @@ const lessonPlanSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-lessonPlanSchema.index({ teacher: 1, date: 1 });
-lessonPlanSchema.index({ course: 1, date: 1 });
-lessonPlanSchema.index({ class: 1, date: 1 });
+lessonPlanSchema.index({ teacher: 1, startDate: 1 });
+lessonPlanSchema.index({ programme: 1, semester: 1 });
+lessonPlanSchema.index({ batch: 1, startDate: 1 });
 
 module.exports = mongoose.model('LessonPlan', lessonPlanSchema);
