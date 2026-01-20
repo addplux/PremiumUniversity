@@ -46,6 +46,7 @@ const EnterpriseLayout = () => {
                 { name: "Examinations", path: "/admin/examinations", icon: "📝" },
                 { name: "Circulars", path: "/admin/circulars", icon: "📢" },
                 { name: "Notifications", path: "/admin/notifications", icon: "🔔" },
+                { name: "ID Cards", path: "/admin/id-cards", icon: "🪪" },
                 { name: "Academic Records", path: "/admin/academic-records", icon: "🎓" },
                 { name: "Classes", path: "/admin/classes", icon: "🏫" },
             ]

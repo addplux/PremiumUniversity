@@ -47,6 +47,7 @@ import HomeworkManager from './pages/HomeworkManager';
 import ClassworkManager from './pages/ClassworkManager';
 import CircularManager from './pages/CircularManager';
 import NotificationCenter from './pages/NotificationCenter';
+import IDCardManager from './pages/IDCardManager';
 
 // Dashboard Router - Redirects to appropriate dashboard based on role
 const DashboardRouter = () => {
@@ -152,6 +153,7 @@ function App() {
             <Route path="classwork" element={<ClassworkManager />} />
             <Route path="circulars" element={<CircularManager />} />
             <Route path="notifications" element={<NotificationCenter />} />
+            <Route path="id-cards" element={<IDCardManager />} />
           </Route>
 
           {/* Student Portal */}
