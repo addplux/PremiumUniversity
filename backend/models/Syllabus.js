@@ -1,26 +1,33 @@
 const mongoose = require('mongoose');
 
 const syllabusSchema = new mongoose.Schema({
-    course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
-        required: true
-    },
-    program: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Program'
-    },
     title: {
         type: String,
         required: true
     },
-    academicYear: {
+    periodicSemester: {
         type: String,
+        required: true
+    },
+    programme: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Program',
         required: true
     },
     semester: {
         type: String,
-        enum: ['1', '2', '3', 'Full Year'],
+        required: true
+    },
+    batch: {
+        type: String,
+        required: true
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    faculty: {
+        type: String,
         required: true
     },
     description: {
@@ -36,7 +43,7 @@ const syllabusSchema = new mongoose.Schema({
         title: String,
         description: String,
         weekNumber: Number,
-        duration: Number, // in hours
+        duration: Number,
         subtopics: [String]
     }],
     assessmentMethods: [{
@@ -87,7 +94,7 @@ const syllabusSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-syllabusSchema.index({ course: 1, academicYear: 1 });
-syllabusSchema.index({ program: 1, academicYear: 1 });
+syllabusSchema.index({ programme: 1, semester: 1 });
+syllabusSchema.index({ batch: 1, periodicSemester: 1 });
 
 module.exports = mongoose.model('Syllabus', syllabusSchema);

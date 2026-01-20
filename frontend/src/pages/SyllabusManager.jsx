@@ -4,20 +4,57 @@ import './Dashboard.css';
 
 const SyllabusManager = () => {
     const [syllabi, setSyllabi] = useState([]);
+    const [filteredSyllabi, setFilteredSyllabi] = useState([]);
+    const [programmes, setProgrammes] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [editingSyllabus, setEditingSyllabus] = useState(null);
+
+    // Filter states
+    const [filters, setFilters] = useState({
+        periodicSemester: '',
+        programme: '',
+        semester: '',
+        batch: '',
+        module: ''
+    });
+
+    // Form data
     const [formData, setFormData] = useState({
         title: '',
-        academicYear: '',
-        semester: '1',
-        description: '',
-        objectives: [''],
-        topics: [{ title: '', description: '', weekNumber: 1, duration: 0 }]
+        periodicSemester: '',
+        programme: '',
+        semester: '',
+        batch: '',
+        module: '',
+        faculty: '',
+        description: ''
     });
+
+    // Predefined options
+    const periodicSemesters = ['2024-2025', '2023-2024', '2022-2023', '2021-2022'];
+    const semesters = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5', 'Semester 6'];
+    const batches = ['2024', '2023', '2022', '2021', '2020'];
+    const modules = [
+        'Mathematics',
+        'Physics',
+        'Chemistry',
+        'Biology',
+        'Computer Science',
+        'English',
+        'History',
+        'Geography',
+        'Business Studies',
+        'Economics'
+    ];
 
     useEffect(() => {
         fetchSyllabi();
+        fetchProgrammes();
     }, []);
+
+    useEffect(() => {
+        applyFilters();
+    }, [filters, syllabi]);
 
     const fetchSyllabi = async () => {
         try {
@@ -29,6 +66,80 @@ const SyllabusManager = () => {
         } catch (error) {
             console.error('Error fetching syllabi:', error);
         }
+    };
+
+    const fetchProgrammes = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/programs`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setProgrammes(response.data);
+        } catch (error) {
+            console.error('Error fetching programmes:', error);
+        }
+    };
+
+    const applyFilters = () => {
+        let filtered = [...syllabi];
+
+        if (filters.periodicSemester) {
+            filtered = filtered.filter(s => s.periodicSemester === filters.periodicSemester);
+        }
+        if (filters.programme) {
+            filtered = filtered.filter(s => s.programme?._id === filters.programme);
+        }
+        if (filters.semester) {
+            filtered = filtered.filter(s => s.semester === filters.semester);
+        }
+        if (filters.batch) {
+            filtered = filtered.filter(s => s.batch === filters.batch);
+        }
+        if (filters.module) {
+            filtered = filtered.filter(s => s.module === filters.module);
+        }
+
+        setFilteredSyllabi(filtered);
+    };
+
+    const handleSearch = () => {
+        applyFilters();
+    };
+
+    const handleReset = () => {
+        setFilters({
+            periodicSemester: '',
+            programme: '',
+            semester: '',
+            batch: '',
+            module: ''
+        });
+    };
+
+    const handleExport = () => {
+        // Create CSV content
+        const headers = ['Syllabus Title', 'Periodic Semester', 'Faculty', 'Programme', 'Semester', 'Batch', 'Module'];
+        const csvContent = [
+            headers.join(','),
+            ...filteredSyllabi.map(s => [
+                `"${s.title}"`,
+                `"${s.periodicSemester}"`,
+                `"${s.faculty}"`,
+                `"${s.programme?.name || 'N/A'}"`,
+                `"${s.semester}"`,
+                `"${s.batch}"`,
+                `"${s.module}"`
+            ].join(','))
+        ].join('\\n');
+
+        // Create download link
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `syllabi_export_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
     };
 
     const handleSubmit = async (e) => {
@@ -56,6 +167,21 @@ const SyllabusManager = () => {
         }
     };
 
+    const handleEdit = (syllabus) => {
+        setEditingSyllabus(syllabus);
+        setFormData({
+            title: syllabus.title || '',
+            periodicSemester: syllabus.periodicSemester || '',
+            programme: syllabus.programme?._id || '',
+            semester: syllabus.semester || '',
+            batch: syllabus.batch || '',
+            module: syllabus.module || '',
+            faculty: syllabus.faculty || '',
+            description: syllabus.description || ''
+        });
+        setShowForm(true);
+    };
+
     const handleDelete = async (id) => {
         if (!confirm('Are you sure you want to delete this syllabus?')) return;
         try {
@@ -72,11 +198,13 @@ const SyllabusManager = () => {
     const resetForm = () => {
         setFormData({
             title: '',
-            academicYear: '',
-            semester: '1',
-            description: '',
-            objectives: [''],
-            topics: [{ title: '', description: '', weekNumber: 1, duration: 0 }]
+            periodicSemester: '',
+            programme: '',
+            semester: '',
+            batch: '',
+            module: '',
+            faculty: '',
+            description: ''
         });
         setEditingSyllabus(null);
         setShowForm(false);
@@ -85,36 +213,141 @@ const SyllabusManager = () => {
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">
-                <h1>📚 Syllabus Management</h1>
-                <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
-                    {showForm ? 'Cancel' : '+ New Syllabus'}
-                </button>
+                <h1>📚 Syllabus Listing</h1>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button className="btn-secondary" onClick={handleExport}>
+                        📤 Export Syllabus
+                    </button>
+                    <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
+                        {showForm ? 'Cancel' : '+ Add Syllabus'}
+                    </button>
+                </div>
             </div>
 
+            {/* Filter Section */}
+            <div className="card" style={{ marginBottom: '1.5rem' }}>
+                <h3 style={{ marginBottom: '1rem' }}>Search Filters</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', marginBottom: '1rem' }}>
+                    <div className="form-group">
+                        <label>Periodic Semester</label>
+                        <select
+                            value={filters.periodicSemester}
+                            onChange={(e) => setFilters({ ...filters, periodicSemester: e.target.value })}
+                        >
+                            <option value="">All</option>
+                            {periodicSemesters.map(ps => (
+                                <option key={ps} value={ps}>{ps}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Programme</label>
+                        <select
+                            value={filters.programme}
+                            onChange={(e) => setFilters({ ...filters, programme: e.target.value })}
+                        >
+                            <option value="">All</option>
+                            {programmes.map(prog => (
+                                <option key={prog._id} value={prog._id}>{prog.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Semester</label>
+                        <select
+                            value={filters.semester}
+                            onChange={(e) => setFilters({ ...filters, semester: e.target.value })}
+                        >
+                            <option value="">All</option>
+                            {semesters.map(sem => (
+                                <option key={sem} value={sem}>{sem}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Batch</label>
+                        <select
+                            value={filters.batch}
+                            onChange={(e) => setFilters({ ...filters, batch: e.target.value })}
+                        >
+                            <option value="">All</option>
+                            {batches.map(batch => (
+                                <option key={batch} value={batch}>{batch}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Module</label>
+                        <select
+                            value={filters.module}
+                            onChange={(e) => setFilters({ ...filters, module: e.target.value })}
+                        >
+                            <option value="">All</option>
+                            {modules.map(mod => (
+                                <option key={mod} value={mod}>{mod}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button className="btn-primary" onClick={handleSearch}>
+                        🔍 Search
+                    </button>
+                    <button className="btn-secondary" onClick={handleReset}>
+                        🔄 Reset
+                    </button>
+                </div>
+            </div>
+
+            {/* Add/Edit Form */}
             {showForm && (
                 <div className="card" style={{ marginBottom: '2rem' }}>
-                    <h2>{editingSyllabus ? 'Edit Syllabus' : 'Create Syllabus'}</h2>
+                    <h2>{editingSyllabus ? 'Edit Syllabus' : 'Add Syllabus'}</h2>
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Title *</label>
-                            <input
-                                type="text"
-                                value={formData.title}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                required
-                            />
-                        </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div className="form-group">
-                                <label>Academic Year *</label>
+                                <label>Syllabus Title *</label>
                                 <input
                                     type="text"
-                                    value={formData.academicYear}
-                                    onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
-                                    placeholder="e.g., 2024-2025"
+                                    value={formData.title}
+                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                     required
                                 />
                             </div>
+
+                            <div className="form-group">
+                                <label>Periodic Semester *</label>
+                                <select
+                                    value={formData.periodicSemester}
+                                    onChange={(e) => setFormData({ ...formData, periodicSemester: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Periodic Semester</option>
+                                    {periodicSemesters.map(ps => (
+                                        <option key={ps} value={ps}>{ps}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Programme *</label>
+                                <select
+                                    value={formData.programme}
+                                    onChange={(e) => setFormData({ ...formData, programme: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Programme</option>
+                                    {programmes.map(prog => (
+                                        <option key={prog._id} value={prog._id}>{prog.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
                             <div className="form-group">
                                 <label>Semester *</label>
                                 <select
@@ -122,62 +355,123 @@ const SyllabusManager = () => {
                                     onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
                                     required
                                 >
-                                    <option value="1">Semester 1</option>
-                                    <option value="2">Semester 2</option>
-                                    <option value="3">Semester 3</option>
-                                    <option value="Full Year">Full Year</option>
+                                    <option value="">Select Semester</option>
+                                    {semesters.map(sem => (
+                                        <option key={sem} value={sem}>{sem}</option>
+                                    ))}
                                 </select>
                             </div>
+
+                            <div className="form-group">
+                                <label>Batch *</label>
+                                <select
+                                    value={formData.batch}
+                                    onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Batch</option>
+                                    {batches.map(batch => (
+                                        <option key={batch} value={batch}>{batch}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Module *</label>
+                                <select
+                                    value={formData.module}
+                                    onChange={(e) => setFormData({ ...formData, module: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Module</option>
+                                    {modules.map(mod => (
+                                        <option key={mod} value={mod}>{mod}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Faculty *</label>
+                                <input
+                                    type="text"
+                                    value={formData.faculty}
+                                    onChange={(e) => setFormData({ ...formData, faculty: e.target.value })}
+                                    placeholder="Enter faculty name"
+                                    required
+                                />
+                            </div>
                         </div>
+
                         <div className="form-group">
                             <label>Description</label>
                             <textarea
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                rows="3"
+                                rows="4"
+                                placeholder="Enter syllabus description"
                             />
                         </div>
-                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+
+                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                             <button type="submit" className="btn-primary">
-                                {editingSyllabus ? 'Update' : 'Create'} Syllabus
+                                Submit
                             </button>
-                            <button type="button" onClick={resetForm} className="btn-secondary">Cancel</button>
+                            <button type="button" onClick={resetForm} className="btn-secondary">
+                                Cancel
+                            </button>
                         </div>
                     </form>
                 </div>
             )}
 
+            {/* Syllabus Table - 5 Columns */}
             <div className="card">
-                <h2>Syllabi</h2>
+                <h2>Syllabus List ({filteredSyllabi.length})</h2>
                 <div className="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Academic Year</th>
-                                <th>Semester</th>
-                                <th>Status</th>
-                                <th>Version</th>
-                                <th>Actions</th>
+                                <th>Syllabus Title</th>
+                                <th>Periodic Semester</th>
+                                <th>Faculty</th>
+                                <th>Programme / Semester / Batch / Module</th>
+                                <th>Operation</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {syllabi.map((syllabus) => (
-                                <tr key={syllabus._id}>
-                                    <td>{syllabus.title}</td>
-                                    <td>{syllabus.academicYear}</td>
-                                    <td>{syllabus.semester}</td>
-                                    <td>
-                                        <span className={`badge badge-${syllabus.status}`}>
-                                            {syllabus.status}
-                                        </span>
-                                    </td>
-                                    <td>v{syllabus.version}</td>
-                                    <td>
-                                        <button onClick={() => handleDelete(syllabus._id)} className="btn-sm btn-danger">Delete</button>
+                            {filteredSyllabi.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                        No syllabi found
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                filteredSyllabi.map((syllabus) => (
+                                    <tr key={syllabus._id}>
+                                        <td><strong>{syllabus.title}</strong></td>
+                                        <td>{syllabus.periodicSemester}</td>
+                                        <td>{syllabus.faculty}</td>
+                                        <td>
+                                            <div style={{ fontSize: '0.9rem', lineHeight: '1.6' }}>
+                                                <div><strong>Programme:</strong> {syllabus.programme?.name || 'N/A'}</div>
+                                                <div><strong>Semester:</strong> {syllabus.semester}</div>
+                                                <div><strong>Batch:</strong> {syllabus.batch}</div>
+                                                <div><strong>Module:</strong> {syllabus.module}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
+                                                <button onClick={() => handleEdit(syllabus)} className="btn-sm">
+                                                    ✏️ Edit
+                                                </button>
+                                                <button onClick={() => handleDelete(syllabus._id)} className="btn-sm btn-danger">
+                                                    🗑️ Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
