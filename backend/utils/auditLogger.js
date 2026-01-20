@@ -10,7 +10,7 @@ const AuditLog = require('../models/AuditLog.js');
  * @param {Object} params.details - Additional details about the action
  * @param {Object} params.req - Express request object (optional, for IP and user agent)
  */
-export const createAuditLog = async ({ userId, action, targetModel, targetId, details, req }) => {
+exports.createAuditLog = async ({ userId, action, targetModel, targetId, details, req }) => {
     try {
         const logData = {
             user: userId,
@@ -35,7 +35,7 @@ export const createAuditLog = async ({ userId, action, targetModel, targetId, de
 /**
  * Middleware to automatically log admin actions
  */
-export const auditMiddleware = (action, targetModel) => {
+exports.auditMiddleware = (action, targetModel) => {
     return async (req, res, next) => {
         // Store original json method
         const originalJson = res.json.bind(res);
