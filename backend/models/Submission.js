@@ -48,4 +48,4 @@ const submissionSchema = new mongoose.Schema({
 // Prevent multiple submissions for the same assignment by the same student
 submissionSchema.index({ assignment: 1, student: 1 }, { unique: true });
 
-export default mongoose.model('Submission', submissionSchema);
+module.exports = mongoose.model('Submission', submissionSchema);

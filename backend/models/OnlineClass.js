@@ -63,4 +63,4 @@ const onlineClassSchema = new mongoose.Schema({
 onlineClassSchema.index({ course: 1, scheduledDate: -1 });
 onlineClassSchema.index({ status: 1, scheduledDate: 1 });
 
-export default mongoose.model('OnlineClass', onlineClassSchema);
+module.exports = mongoose.model('OnlineClass', onlineClassSchema);

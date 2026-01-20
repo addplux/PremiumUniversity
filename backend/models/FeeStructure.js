@@ -41,4 +41,4 @@ const feeStructureSchema = new mongoose.Schema({
 // Compound index for unique fee structure per course/branch/year
 feeStructureSchema.index({ course: 1, branch: 1, academicYear: 1 }, { unique: true });
 
-export default mongoose.model('FeeStructure', feeStructureSchema);
+module.exports = mongoose.model('FeeStructure', feeStructureSchema);

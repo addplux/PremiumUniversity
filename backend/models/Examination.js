@@ -94,4 +94,4 @@ examinationSchema.pre('save', function (next) {
     next();
 });
 
-export default mongoose.model('Examination', examinationSchema);
+module.exports = mongoose.model('Examination', examinationSchema);

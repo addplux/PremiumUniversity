@@ -117,4 +117,4 @@ const applicationSchema = new mongoose.Schema({
 applicationSchema.index({ user: 1, status: 1 });
 applicationSchema.index({ program: 1, status: 1 });
 
-export default mongoose.model('Application', applicationSchema);
+module.exports = mongoose.model('Application', applicationSchema);

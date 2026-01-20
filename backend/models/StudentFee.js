@@ -107,4 +107,4 @@ studentFeeSchema.pre('save', function (next) {
     next();
 });
 
-export default mongoose.model('StudentFee', studentFeeSchema);
+module.exports = mongoose.model('StudentFee', studentFeeSchema);

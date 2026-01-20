@@ -34,4 +34,4 @@ const scheduleSchema = new mongoose.Schema({
 // Prevent room double-booking at the same time and day
 scheduleSchema.index({ dayOfWeek: 1, startTime: 1, room: 1 }, { unique: true });
 
-export default mongoose.model('Schedule', scheduleSchema);
+module.exports = mongoose.model('Schedule', scheduleSchema);

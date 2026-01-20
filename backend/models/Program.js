@@ -62,4 +62,4 @@ const programSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model('Program', programSchema);
+module.exports = mongoose.model('Program', programSchema);

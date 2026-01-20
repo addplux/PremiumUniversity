@@ -68,4 +68,4 @@ export const auditMiddleware = (action, targetModel) => {
     };
 };
 
-export default { createAuditLog, auditMiddleware };
+module.exports = { createAuditLog, auditMiddleware };

@@ -51,4 +51,4 @@ const lectureSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model('Lecture', lectureSchema);
+module.exports = mongoose.model('Lecture', lectureSchema);
