@@ -86,7 +86,8 @@ export const AuthProvider = ({ children }) => {
                 // Prefer the verbose 'error' field if available (set in server.js), otherwise 'message'
                 message = error.response.data?.error || error.response.data?.message || message;
             } else if (error.request) {
-                message = 'Network Error: Cannot reach server. Please check your connection.';
+                // Return the actual network error with URL for debugging
+                message = `Request failed to ${error.config?.url || 'server'}: ${error.message}`;
             } else {
                 message = error.message;
             }
@@ -118,7 +119,7 @@ export const AuthProvider = ({ children }) => {
             } else if (error.request) {
                 // Request was made but no response (Network Error/CORS/Localhost issue)
                 console.error('Network Error:', error);
-                message = 'Network Error: Cannot reach server. Please check your connection.';
+                message = `Request failed to ${error.config?.url || 'server'}: ${error.message}`;
 
                 // Helper for developers/users to see what's wrong
                 if (axios.defaults.baseURL && axios.defaults.baseURL.includes('localhost')) {
