@@ -37,8 +37,15 @@ const EnterpriseLayout = () => {
             items: [
                 { name: "Courses", path: "/admin/courses", icon: "📚" },
                 { name: "Lectures", path: "/admin/lectures", icon: "🎯" },
-                { name: "Assignments", path: "/admin/assignments", icon: "✍️" },
+                { name: "Lesson Planning", path: "/admin/lesson-planning", icon: "📝" },
+                { name: "Syllabus", path: "/admin/syllabus", icon: "📖" },
+                { name: "Materials", path: "/admin/materials", icon: "📁" },
+                { name: "Homework", path: "/admin/homework", icon: "✍️" },
+                { name: "Classwork", path: "/admin/classwork", icon: "✏️" },
+                { name: "Assignments", path: "/admin/assignments", icon: "📋" },
                 { name: "Examinations", path: "/admin/examinations", icon: "📝" },
+                { name: "Circulars", path: "/admin/circulars", icon: "📢" },
+                { name: "Notifications", path: "/admin/notifications", icon: "🔔" },
                 { name: "Academic Records", path: "/admin/academic-records", icon: "🎓" },
                 { name: "Classes", path: "/admin/classes", icon: "🏫" },
             ]

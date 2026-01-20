@@ -26,6 +26,13 @@ import lectureRoutes from './routes/lectures.js';
 import examinationRoutes from './routes/examinations.js';
 import feeStructureRoutes from './routes/feeStructures.js';
 import studentFeeRoutes from './routes/studentFees.js';
+import lessonPlanRoutes from './routes/lessonPlans.js';
+import syllabiRoutes from './routes/syllabi.js';
+import materialRoutes from './routes/materials.js';
+import homeworkRoutes from './routes/homework.js';
+import classworkRoutes from './routes/classwork.js';
+import circularRoutes from './routes/circulars.js';
+import notificationRoutes from './routes/notifications.js';
 
 // Get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -123,6 +130,13 @@ app.use('/api/lectures', lectureRoutes);
 app.use('/api/examinations', examinationRoutes);
 app.use('/api/fee-structures', feeStructureRoutes);
 app.use('/api/student-fees', studentFeeRoutes);
+app.use('/api/lesson-plans', lessonPlanRoutes);
+app.use('/api/syllabi', syllabiRoutes);
+app.use('/api/materials', materialRoutes);
+app.use('/api/homework', homeworkRoutes);
+app.use('/api/classwork', classworkRoutes);
+app.use('/api/circulars', circularRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

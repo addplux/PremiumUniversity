@@ -40,6 +40,13 @@ import ScheduleManager from './pages/ScheduleManager';
 import SystemAdminDashboard from './pages/SystemAdminDashboard';
 import FinanceAdminDashboard from './pages/FinanceAdminDashboard';
 import AcademicAdminDashboard from './pages/AcademicAdminDashboard';
+import LessonPlanning from './pages/LessonPlanning';
+import SyllabusManager from './pages/SyllabusManager';
+import MaterialsManager from './pages/MaterialsManager';
+import HomeworkManager from './pages/HomeworkManager';
+import ClassworkManager from './pages/ClassworkManager';
+import CircularManager from './pages/CircularManager';
+import NotificationCenter from './pages/NotificationCenter';
 
 // Dashboard Router - Redirects to appropriate dashboard based on role
 const DashboardRouter = () => {
@@ -138,6 +145,13 @@ function App() {
             <Route path="assignments" element={<AssignmentManager />} />
             <Route path="academic-records" element={<AcademicRecords />} />
             <Route path="classes" element={<ScheduleManager />} />
+            <Route path="lesson-planning" element={<LessonPlanning />} />
+            <Route path="syllabus" element={<SyllabusManager />} />
+            <Route path="materials" element={<MaterialsManager />} />
+            <Route path="homework" element={<HomeworkManager />} />
+            <Route path="classwork" element={<ClassworkManager />} />
+            <Route path="circulars" element={<CircularManager />} />
+            <Route path="notifications" element={<NotificationCenter />} />
           </Route>
 
           {/* Student Portal */}
