@@ -14,6 +14,31 @@ const circularSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    periodicSemester: {
+        type: String,
+        required: true
+    },
+    programme: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Program',
+        required: true
+    },
+    semester: {
+        type: String,
+        required: true
+    },
+    batch: {
+        type: String,
+        required: true
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    faculty: {
+        type: String,
+        required: true
+    },
     category: {
         type: String,
         enum: ['academic', 'administrative', 'event', 'holiday', 'exam', 'general', 'urgent'],
@@ -91,6 +116,8 @@ const circularSchema = new mongoose.Schema({
 // Index for efficient queries
 circularSchema.index({ circularNumber: 1 });
 circularSchema.index({ issuedDate: -1 });
+circularSchema.index({ programme: 1, semester: 1 });
+circularSchema.index({ batch: 1 });
 circularSchema.index({ targetAudience: 1, status: 1 });
 circularSchema.index({ category: 1, priority: 1 });
 
