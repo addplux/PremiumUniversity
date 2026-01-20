@@ -18,8 +18,19 @@ export const AuthProvider = ({ children }) => {
 
     // Configure axios defaults
     // Use environment variable, OR fallback to the known Production URL if in production mode, OR localhost for dev
-    const prodUrl = 'https://premiumuniversity-production.up.railway.app/api';
-    axios.defaults.baseURL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? prodUrl : 'http://localhost:5000/api');
+    // Configure axios defaults
+    // Use environment variable, ensuring it ends with /api
+    const getBaseUrl = () => {
+        const envUrl = import.meta.env.VITE_API_URL;
+        if (envUrl) {
+            // Remove trailing slash if present, then add /api
+            return `${envUrl.replace(/\/$/, '')}/api`;
+        }
+        // Fallback for development
+        return import.meta.env.PROD ? '/api' : 'http://localhost:5000/api';
+    };
+
+    axios.defaults.baseURL = getBaseUrl();
 
     console.log('Using API URL:', axios.defaults.baseURL); // Debug log
 
