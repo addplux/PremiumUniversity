@@ -21,10 +21,15 @@ export const AuthProvider = ({ children }) => {
     // Configure axios defaults
     // Use environment variable, ensuring it ends with /api
     const getBaseUrl = () => {
-        const envUrl = import.meta.env.VITE_API_URL;
+        let envUrl = import.meta.env.VITE_API_URL;
         if (envUrl) {
-            // Remove trailing slash if present, then add /api
-            return `${envUrl.replace(/\/$/, '')}/api`;
+            // Remove trailing slash
+            envUrl = envUrl.replace(/\/$/, '');
+            // Check if it already ends with /api
+            if (envUrl.endsWith('/api')) {
+                return envUrl;
+            }
+            return `${envUrl}/api`;
         }
         // Fallback for development
         return import.meta.env.PROD ? '/api' : 'http://localhost:5000/api';

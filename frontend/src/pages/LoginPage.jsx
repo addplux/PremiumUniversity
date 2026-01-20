@@ -88,6 +88,29 @@ const LoginPage = () => {
                         <button type="submit" className="btn-primary btn-full" disabled={loading}>
                             {loading ? 'Logging in...' : 'Login'}
                         </button>
+                        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                            <button
+                                type="button"
+                                className="btn-secondary"
+                                style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+                                onClick={async () => {
+                                    try {
+                                        setLoading(true);
+                                        const axios = (await import('axios')).default;
+                                        // Use the configured base URL from AuthContext/main
+                                        const response = await axios.get('/health');
+                                        alert(`✅ Connection Success!\nStatus: ${response.data.status}\nDB: ${response.data.database}`);
+                                    } catch (err) {
+                                        alert(`❌ Connection Failed to ${axios.defaults.baseURL}\n${err.message}`);
+                                        console.error(err);
+                                    } finally {
+                                        setLoading(false);
+                                    }
+                                }}
+                            >
+                                📡 Test Server Connection
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
