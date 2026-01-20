@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Homework = require('../models/Homework');
-const auth = require('../middleware/auth');
+const { protect: auth } = require('../middleware/auth');
 
 // Get all homework (with filters)
 router.get('/', auth, async (req, res) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Circular = require('../models/Circular');
-const auth = require('../middleware/auth');
+const { protect: auth } = require('../middleware/auth');
 
 // Get all circulars (with filters)
 router.get('/', auth, async (req, res) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Syllabus = require('../models/Syllabus');
-const auth = require('../middleware/auth');
+const { protect: auth } = require('../middleware/auth');
 
 // Get all syllabi (with filters)
 router.get('/', auth, async (req, res) => {

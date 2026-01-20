@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Material = require('../models/Material');
-const auth = require('../middleware/auth');
+const { protect: auth } = require('../middleware/auth');
 
 // Get all materials (with filters)
 router.get('/', auth, async (req, res) => {

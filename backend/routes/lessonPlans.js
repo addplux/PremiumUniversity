@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const LessonPlan = require('../models/LessonPlan');
-const auth = require('../middleware/auth');
+const { protect: auth } = require('../middleware/auth');
 
 // Get all lesson plans (with filters)
 router.get('/', auth, async (req, res) => {

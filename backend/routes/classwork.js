@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Classwork = require('../models/Classwork');
-const auth = require('../middleware/auth');
+const { protect: auth } = require('../middleware/auth');
 
 // Get all classwork (with filters)
 router.get('/', auth, async (req, res) => {
