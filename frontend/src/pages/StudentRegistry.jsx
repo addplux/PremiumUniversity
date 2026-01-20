@@ -7,6 +7,10 @@ const StudentRegistry = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [roleFilter, setRoleFilter] = useState('student');
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [showUpdateForm, setShowUpdateForm] = useState(false);
+    const [searchRollNo, setSearchRollNo] = useState('');
+    const [searching, setSearching] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -24,6 +28,42 @@ const StudentRegistry = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSearchByRollNo = async () => {
+        if (!searchRollNo.trim()) {
+            alert('Please enter a roll number');
+            return;
+        }
+
+        setSearching(true);
+        try {
+            const response = await axios.get(`/users/search/roll/${searchRollNo}`);
+            if (response.data.success) {
+                setSelectedUser(response.data.data);
+                // Optionally filter the list to show only this student
+                setUsers([response.data.data]);
+            }
+        } catch (error) {
+            console.error('Failed to search student:', error);
+            alert(error.response?.data?.message || 'Student not found');
+        } finally {
+            setSearching(false);
+        }
+    };
+
+    const handlePrint = () => {
+        if (!selectedUser) {
+            alert('Please select a student to print');
+            return;
+        }
+        window.print();
+    };
+
+    const handleBack = () => {
+        setSelectedUser(null);
+        setSearchRollNo('');
+        fetchUsers(); // Reload full list
     };
 
     const handleDeleteUser = async (userId) => {
@@ -44,14 +84,133 @@ const StudentRegistry = () => {
         <div className="apps-manager">
             <div className="manager-header">
                 <h1>People Registry</h1>
-                <div className="filters">
+                <div className="filters" style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
                         <option value="student">Students</option>
                         <option value="admin">Admins</option>
                         <option value="user">All Users</option>
                     </select>
+
+                    {roleFilter === 'student' && (
+                        <>
+                            <input
+                                type="text"
+                                placeholder="Search by Roll Number"
+                                value={searchRollNo}
+                                onChange={(e) => setSearchRollNo(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleSearchByRollNo()}
+                                style={{
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem',
+                                    minWidth: '200px'
+                                }}
+                            />
+                            <button
+                                onClick={handleSearchByRollNo}
+                                disabled={searching}
+                                style={{
+                                    background: '#10b981',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '0.6rem 1rem',
+                                    borderRadius: '6px',
+                                    cursor: searching ? 'not-allowed' : 'pointer',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}
+                            >
+                                🔍 {searching ? 'Searching...' : 'Search'}
+                            </button>
+                            <button
+                                onClick={handlePrint}
+                                disabled={!selectedUser}
+                                style={{
+                                    background: selectedUser ? '#8b5cf6' : '#cbd5e1',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '0.6rem 1rem',
+                                    borderRadius: '6px',
+                                    cursor: selectedUser ? 'pointer' : 'not-allowed',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}
+                            >
+                                🖨️ Print
+                            </button>
+                            <button
+                                onClick={() => setShowAddForm(true)}
+                                style={{
+                                    background: '#3b82f6',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '0.6rem 1rem',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}
+                            >
+                                ➕ Add
+                            </button>
+                            <button
+                                onClick={() => setShowUpdateForm(true)}
+                                disabled={!selectedUser}
+                                style={{
+                                    background: selectedUser ? '#f59e0b' : '#cbd5e1',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '0.6rem 1rem',
+                                    borderRadius: '6px',
+                                    cursor: selectedUser ? 'pointer' : 'not-allowed',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}
+                            >
+                                ✏️ Update
+                            </button>
+                            <button
+                                onClick={handleBack}
+                                style={{
+                                    background: '#64748b',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '0.6rem 1rem',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontWeight: '600',
+                                    fontSize: '0.95rem'
+                                }}
+                            >
+                                ← Back
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
+
+            {showAddForm && (
+                <AddStudentForm
+                    onClose={() => setShowAddForm(false)}
+                    onSuccess={() => {
+                        setShowAddForm(false);
+                        fetchUsers();
+                    }}
+                />
+            )}
+
+            {showUpdateForm && selectedUser && (
+                <UpdateStudentForm
+                    student={selectedUser}
+                    onClose={() => setShowUpdateForm(false)}
+                    onSuccess={(updatedStudent) => {
+                        setShowUpdateForm(false);
+                        setSelectedUser(updatedStudent);
+                        fetchUsers();
+                    }}
+                />
+            )}
 
             <div className="manager-content">
                 <div className="apps-list-sidebar">
@@ -200,6 +359,20 @@ const UserDetail = ({ user, onDelete }) => {
                     </div>
                 </section>
 
+                {user.role === 'student' && (
+                    <section className="detail-section">
+                        <h3>Student Information</h3>
+                        <div className="info-grid">
+                            <InfoItem label="Roll Number" value={user.rollNo} />
+                            <InfoItem label="Class" value={user.class} />
+                            <InfoItem label="Course" value={user.course} />
+                            <InfoItem label="Branch" value={user.branch} />
+                            <InfoItem label="Batch" value={user.batch} />
+                            <InfoItem label="Parents Name" value={user.parentsName} />
+                        </div>
+                    </section>
+                )}
+
                 <section className="detail-section">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <h3>Enrollment Status</h3>
@@ -270,5 +443,767 @@ const InfoItem = ({ label, value }) => (
         <p>{value || '-'}</p>
     </div>
 );
+
+const AddStudentForm = ({ onClose, onSuccess }) => {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        password: '',
+        dateOfBirth: '',
+        address: '',
+        city: '',
+        rollNo: '',
+        class: '',
+        course: '',
+        branch: '',
+        batch: '',
+        parentsName: ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await axios.post('/users', {
+                ...formData,
+                role: 'student'
+            });
+
+            if (res.data.success) {
+                alert('Student added successfully!');
+                onSuccess();
+            }
+        } catch (error) {
+            console.error('Failed to add student:', error);
+            setError(error.response?.data?.message || 'Failed to add student');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1rem'
+        }}>
+            <div style={{
+                background: 'white',
+                borderRadius: '12px',
+                padding: '2rem',
+                maxWidth: '800px',
+                width: '100%',
+                maxHeight: '90vh',
+                overflowY: 'auto'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <h2 style={{ margin: 0 }}>Add New Student</h2>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '1.5rem',
+                            cursor: 'pointer',
+                            color: '#64748b'
+                        }}
+                    >
+                        ×
+                    </button>
+                </div>
+
+                {error && (
+                    <div style={{
+                        background: '#fee2e2',
+                        color: '#b91c1c',
+                        padding: '0.75rem',
+                        borderRadius: '6px',
+                        marginBottom: '1rem'
+                    }}>
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>First Name *</label>
+                            <input
+                                type="text"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Last Name *</label>
+                            <input
+                                type="text"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Email *</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Phone *</label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Password *</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                minLength={6}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Date of Birth *</label>
+                            <input
+                                type="date"
+                                name="dateOfBirth"
+                                value={formData.dateOfBirth}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Roll Number *</label>
+                            <input
+                                type="text"
+                                name="rollNo"
+                                value={formData.rollNo}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Class *</label>
+                            <input
+                                type="text"
+                                name="class"
+                                value={formData.class}
+                                onChange={handleChange}
+                                required
+                                placeholder="e.g., Year 1, Grade 10"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Course *</label>
+                            <input
+                                type="text"
+                                name="course"
+                                value={formData.course}
+                                onChange={handleChange}
+                                required
+                                placeholder="e.g., Computer Science"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Branch *</label>
+                            <input
+                                type="text"
+                                name="branch"
+                                value={formData.branch}
+                                onChange={handleChange}
+                                required
+                                placeholder="e.g., Main Campus"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Batch *</label>
+                            <input
+                                type="text"
+                                name="batch"
+                                value={formData.batch}
+                                onChange={handleChange}
+                                required
+                                placeholder="e.g., 2024, 2024-2028"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Parents Name *</label>
+                            <input
+                                type="text"
+                                name="parentsName"
+                                value={formData.parentsName}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ gridColumn: '1 / -1' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Address *</label>
+                            <input
+                                type="text"
+                                name="address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>City *</label>
+                            <input
+                                type="text"
+                                name="city"
+                                value={formData.city}
+                                onChange={handleChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', justifyContent: 'flex-end' }}>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            style={{
+                                padding: '0.7rem 1.5rem',
+                                border: '1px solid #cbd5e1',
+                                background: 'white',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: '600'
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            style={{
+                                padding: '0.7rem 1.5rem',
+                                border: 'none',
+                                background: loading ? '#94a3b8' : '#3b82f6',
+                                color: 'white',
+                                borderRadius: '6px',
+                                cursor: loading ? 'not-allowed' : 'pointer',
+                                fontWeight: '600'
+                            }}
+                        >
+                            {loading ? 'Adding...' : 'Add Student'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+const UpdateStudentForm = ({ student, onClose, onSuccess }) => {
+    const [formData, setFormData] = useState({
+        firstName: student.firstName || '',
+        lastName: student.lastName || '',
+        phone: student.phone || '',
+        dateOfBirth: student.dateOfBirth ? student.dateOfBirth.split('T')[0] : '',
+        address: student.address || '',
+        city: student.city || '',
+        rollNo: student.rollNo || '',
+        class: student.class || '',
+        course: student.course || '',
+        branch: student.branch || '',
+        batch: student.batch || '',
+        parentsName: student.parentsName || ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await axios.put(`/users/${student._id}`, formData);
+
+            if (res.data.success) {
+                alert('Student updated successfully!');
+                onSuccess(res.data.data);
+            }
+        } catch (error) {
+            console.error('Failed to update student:', error);
+            setError(error.response?.data?.message || 'Failed to update student');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1rem'
+        }}>
+            <div style={{
+                background: 'white',
+                borderRadius: '12px',
+                padding: '2rem',
+                maxWidth: '800px',
+                width: '100%',
+                maxHeight: '90vh',
+                overflowY: 'auto'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <h2 style={{ margin: 0 }}>Update Student</h2>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '1.5rem',
+                            cursor: 'pointer',
+                            color: '#64748b'
+                        }}
+                    >
+                        ×
+                    </button>
+                </div>
+
+                {error && (
+                    <div style={{
+                        background: '#fee2e2',
+                        color: '#b91c1c',
+                        padding: '0.75rem',
+                        borderRadius: '6px',
+                        marginBottom: '1rem'
+                    }}>
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>First Name</label>
+                            <input
+                                type="text"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Last Name</label>
+                            <input
+                                type="text"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Phone</label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Date of Birth</label>
+                            <input
+                                type="date"
+                                name="dateOfBirth"
+                                value={formData.dateOfBirth}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Roll Number</label>
+                            <input
+                                type="text"
+                                name="rollNo"
+                                value={formData.rollNo}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Class</label>
+                            <input
+                                type="text"
+                                name="class"
+                                value={formData.class}
+                                onChange={handleChange}
+                                placeholder="e.g., Year 1, Grade 10"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Course</label>
+                            <input
+                                type="text"
+                                name="course"
+                                value={formData.course}
+                                onChange={handleChange}
+                                placeholder="e.g., Computer Science"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Branch</label>
+                            <input
+                                type="text"
+                                name="branch"
+                                value={formData.branch}
+                                onChange={handleChange}
+                                placeholder="e.g., Main Campus"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Batch</label>
+                            <input
+                                type="text"
+                                name="batch"
+                                value={formData.batch}
+                                onChange={handleChange}
+                                placeholder="e.g., 2024, 2024-2028"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Parents Name</label>
+                            <input
+                                type="text"
+                                name="parentsName"
+                                value={formData.parentsName}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ gridColumn: '1 / -1' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Address</label>
+                            <input
+                                type="text"
+                                name="address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>City</label>
+                            <input
+                                type="text"
+                                name="city"
+                                value={formData.city}
+                                onChange={handleChange}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.6rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '6px',
+                                    fontSize: '0.95rem'
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', justifyContent: 'flex-end' }}>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            style={{
+                                padding: '0.7rem 1.5rem',
+                                border: '1px solid #cbd5e1',
+                                background: 'white',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: '600'
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            style={{
+                                padding: '0.7rem 1.5rem',
+                                border: 'none',
+                                background: loading ? '#94a3b8' : '#f59e0b',
+                                color: 'white',
+                                borderRadius: '6px',
+                                cursor: loading ? 'not-allowed' : 'pointer',
+                                fontWeight: '600'
+                            }}
+                        >
+                            {loading ? 'Updating...' : 'Update Student'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+// Print styles
+const printStyles = `
+@media print {
+    .apps-manager > *:not(.manager-content) {
+        display: none !important;
+    }
+    .apps-list-sidebar {
+        display: none !important;
+    }
+    .app-detail-view {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    button {
+        display: none !important;
+    }
+}
+`;
+
+// Inject print styles
+if (typeof document !== 'undefined') {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = printStyles;
+    document.head.appendChild(styleSheet);
+}
 
 export default StudentRegistry;

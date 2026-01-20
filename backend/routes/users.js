@@ -38,12 +38,42 @@ router.get('/', protect, systemAdmin, async (req, res) => {
     }
 });
 
+// @route   GET /api/users/search/roll/:rollNo
+// @desc    Search student by roll number
+// @access  Private/Admin
+router.get('/search/roll/:rollNo', protect, async (req, res) => {
+    try {
+        const student = await User.findOne({
+            rollNo: req.params.rollNo,
+            role: 'student'
+        }).select('-password');
+
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found with this roll number'
+            });
+        }
+
+        res.json({
+            success: true,
+            data: student
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to search student'
+        });
+    }
+});
+
 // @route   POST /api/users
 // @desc    Create new user (including admin accounts) - System Admin only
 // @access  Private/System Admin
 router.post('/', protect, systemAdmin, auditMiddleware('user_created', 'User'), async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, password, role, dateOfBirth, address, city } = req.body;
+        const { firstName, lastName, email, phone, password, role, dateOfBirth, address, city, rollNo, class: studentClass, course, branch, batch, parentsName } = req.body;
 
         // Check if user exists
         const userExists = await User.findOne({ email });
@@ -72,7 +102,13 @@ router.post('/', protect, systemAdmin, auditMiddleware('user_created', 'User'), 
             role: role || 'student',
             dateOfBirth,
             address,
-            city
+            city,
+            rollNo,
+            class: studentClass,
+            course,
+            branch,
+            batch,
+            parentsName
         });
 
         res.status(201).json({
@@ -105,7 +141,7 @@ router.post('/', protect, systemAdmin, auditMiddleware('user_created', 'User'), 
 // @access  Private/System Admin
 router.put('/:id', protect, systemAdmin, auditMiddleware('user_updated', 'User'), async (req, res) => {
     try {
-        const { firstName, lastName, phone, dateOfBirth, address, city, isVerified } = req.body;
+        const { firstName, lastName, phone, dateOfBirth, address, city, isVerified, rollNo, class: studentClass, course, branch, batch, parentsName } = req.body;
 
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -122,6 +158,12 @@ router.put('/:id', protect, systemAdmin, auditMiddleware('user_updated', 'User')
         if (address) user.address = address;
         if (city) user.city = city;
         if (isVerified !== undefined) user.isVerified = isVerified;
+        if (rollNo) user.rollNo = rollNo;
+        if (studentClass) user.class = studentClass;
+        if (course) user.course = course;
+        if (branch) user.branch = branch;
+        if (batch) user.batch = batch;
+        if (parentsName) user.parentsName = parentsName;
 
         await user.save();
 

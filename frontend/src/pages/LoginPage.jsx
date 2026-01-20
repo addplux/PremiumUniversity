@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import './AuthPages.css';
@@ -49,22 +49,25 @@ const LoginPage = () => {
                 <div className="auth-box">
                     <div className="auth-header">
                         <h1>Welcome Back</h1>
-                        <p>Login to access your student portal</p>
+                        <p>Login to access your portal</p>
                     </div>
 
                     {error && <div className="alert alert-error">{error}</div>}
 
                     <form onSubmit={handleSubmit} className="auth-form">
                         <div className="form-group">
-                            <label>Email Address</label>
+                            <label>Email / Registration Number</label>
                             <input
-                                type="email"
+                                type="text"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                placeholder="your.email@example.com"
+                                placeholder="admin@example.com or 2024001"
                             />
+                            <small style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+                                Students: Use your roll number | Admins: Use your email
+                            </small>
                         </div>
 
                         <div className="form-group">
@@ -77,16 +80,15 @@ const LoginPage = () => {
                                 required
                                 placeholder="Enter your password"
                             />
+                            <small style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+                                Default password for new students: 1234
+                            </small>
                         </div>
 
                         <button type="submit" className="btn-primary btn-full" disabled={loading}>
                             {loading ? 'Logging in...' : 'Login'}
                         </button>
                     </form>
-
-                    <div className="auth-footer">
-                        <p>Don't have an account? <Link to="/register">Register here</Link></p>
-                    </div>
                 </div>
             </div>
         </div>

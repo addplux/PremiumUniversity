@@ -74,27 +74,34 @@ router.post('/register', async (req, res) => {
 });
 
 // @route   POST /api/auth/login
-// @desc    Login user
+// @desc    Login user (email for admins, roll number for students)
 // @access  Public
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.body; // email field can contain email or roll number
 
         // Validate input
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: 'Please provide email and password'
+                message: 'Please provide login credentials and password'
             });
         }
 
-        // Check for user (include password field)
-        const user = await User.findOne({ email }).select('+password');
+        // Check if input is email or roll number
+        let user;
+        if (email.includes('@')) {
+            // Login with email (for admins)
+            user = await User.findOne({ email }).select('+password');
+        } else {
+            // Login with roll number (for students)
+            user = await User.findOne({ rollNo: email, role: 'student' }).select('+password');
+        }
 
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid email or password'
+                message: 'Invalid credentials'
             });
         }
 
@@ -104,7 +111,7 @@ router.post('/login', async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid email or password'
+                message: 'Invalid credentials'
             });
         }
 
@@ -116,6 +123,7 @@ router.post('/login', async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                rollNo: user.rollNo,
                 role: user.role,
                 token: generateToken(user._id)
             }

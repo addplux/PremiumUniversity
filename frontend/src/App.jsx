@@ -18,6 +18,10 @@ import AdminDashboard from './pages/AdminDashboard';
 import ApplicationsManager from './pages/ApplicationsManager';
 import ContactManager from './pages/ContactManager';
 import StudentRegistry from './pages/StudentRegistry';
+import TeacherRegistry from './pages/TeacherRegistry';
+import LectureManager from './pages/LectureManager';
+import ExaminationManager from './pages/ExaminationManager';
+import StudentFeeManager from './pages/StudentFeeManager';
 import CourseManager from './pages/CourseManager';
 import CourseCatalog from './pages/CourseCatalog';
 import StudentAssignments from './pages/StudentAssignments';
@@ -68,7 +72,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+
 
           {/* Auto-redirect to role-specific dashboard */}
           <Route path="/portal" element={
@@ -124,6 +128,10 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="applications" element={<ApplicationsManager />} />
             <Route path="students" element={<StudentRegistry />} />
+            <Route path="teachers" element={<TeacherRegistry />} />
+            <Route path="lectures" element={<LectureManager />} />
+            <Route path="examinations" element={<ExaminationManager />} />
+            <Route path="fees" element={<StudentFeeManager />} />
             <Route path="finance" element={<FinanceDashboard />} />
             <Route path="contact" element={<ContactManager />} />
             <Route path="courses" element={<CourseManager />} />

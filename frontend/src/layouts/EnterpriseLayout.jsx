@@ -27,6 +27,7 @@ const EnterpriseLayout = () => {
             label: "People",
             items: [
                 { name: "Students", path: "/admin/students", icon: "👨‍🎓" },
+                { name: "Teachers", path: "/admin/teachers", icon: "👨‍🏫" },
                 { name: "Faculty", path: "/admin/faculty", icon: "👨‍🏫" },
                 { name: "Staff", path: "/admin/staff", icon: "👔" }
             ]
@@ -35,7 +36,9 @@ const EnterpriseLayout = () => {
             label: "Academics",
             items: [
                 { name: "Courses", path: "/admin/courses", icon: "📚" },
+                { name: "Lectures", path: "/admin/lectures", icon: "🎯" },
                 { name: "Assignments", path: "/admin/assignments", icon: "✍️" },
+                { name: "Examinations", path: "/admin/examinations", icon: "📝" },
                 { name: "Academic Records", path: "/admin/academic-records", icon: "🎓" },
                 { name: "Classes", path: "/admin/classes", icon: "🏫" },
             ]
@@ -43,6 +46,7 @@ const EnterpriseLayout = () => {
         {
             label: "Bursar",
             items: [
+                { name: "Student Fees", path: "/admin/fees", icon: "💳" },
                 { name: "Fees & Payments", path: "/admin/finance", icon: "💰" },
             ]
         }
