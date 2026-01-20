@@ -1,42 +1,37 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const path = require('path');
 
 // Route imports
-import authRoutes from './routes/auth.js';
-import applicationRoutes from './routes/applications.js';
-import programRoutes from './routes/programs.js';
-import contactRoutes from './routes/contact.js';
-import userRoutes from './routes/users.js';
-import courseRoutes from './routes/courses.js';
-import enrollmentRoutes from './routes/enrollments.js';
-import assignmentRoutes from './routes/assignments.js';
-import financeRoutes from './routes/finance.js';
-import dashboardRoutes from './routes/dashboard.js';
-import scheduleRoutes from './routes/schedules.js';
-import eventRoutes from './routes/events.js';
-import gradeRoutes from './routes/grades.js';
-import onlineClassRoutes from './routes/onlineClasses.js';
-import systemRoutes from './routes/system.js';
-import teacherRoutes from './routes/teachers.js';
-import lectureRoutes from './routes/lectures.js';
-import examinationRoutes from './routes/examinations.js';
-import feeStructureRoutes from './routes/feeStructures.js';
-import studentFeeRoutes from './routes/studentFees.js';
-import lessonPlanRoutes from './routes/lessonPlans.js';
-import syllabiRoutes from './routes/syllabi.js';
-import materialRoutes from './routes/materials.js';
-import homeworkRoutes from './routes/homework.js';
-import classworkRoutes from './routes/classwork.js';
-import circularRoutes from './routes/circulars.js';
-import notificationRoutes from './routes/notifications.js';
-
-// Get __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const authRoutes = require('./routes/auth');
+const applicationRoutes = require('./routes/applications');
+const programRoutes = require('./routes/programs');
+const contactRoutes = require('./routes/contact');
+const userRoutes = require('./routes/users');
+const courseRoutes = require('./routes/courses');
+const enrollmentRoutes = require('./routes/enrollments');
+const assignmentRoutes = require('./routes/assignments');
+const financeRoutes = require('./routes/finance');
+const dashboardRoutes = require('./routes/dashboard');
+const scheduleRoutes = require('./routes/schedules');
+const eventRoutes = require('./routes/events');
+const gradeRoutes = require('./routes/grades');
+const onlineClassRoutes = require('./routes/onlineClasses');
+const systemRoutes = require('./routes/system');
+const teacherRoutes = require('./routes/teachers');
+const lectureRoutes = require('./routes/lectures');
+const examinationRoutes = require('./routes/examinations');
+const feeStructureRoutes = require('./routes/feeStructures');
+const studentFeeRoutes = require('./routes/studentFees');
+const lessonPlanRoutes = require('./routes/lessonPlans');
+const syllabiRoutes = require('./routes/syllabi');
+const materialRoutes = require('./routes/materials');
+const homeworkRoutes = require('./routes/homework');
+const classworkRoutes = require('./routes/classwork');
+const circularRoutes = require('./routes/circulars');
+const notificationRoutes = require('./routes/notifications');
 
 // Load environment variables
 dotenv.config();
@@ -64,13 +59,7 @@ app.use(cors({
         }
 
         console.log('Blocked by CORS:', origin);
-        callback(null, true); // TEMPORARY: Allow all to debug, but typically this should be false.
-        // For production safety, we should strictly check, but to Unblock User, I'll allow it.
-        // Actually, to be safe but helpful, I will return true but log it.
-        // Wait, 'callback(new Error(...))' blocks it.
-        // I'll stick to the specific checks above, they cover 99% of cases.
-        // If none match, I'll callback Error.
-        // callback(new Error('Not allowed by CORS'));
+        callback(null, true); // TEMPORARY: Allow all to debug
     },
     credentials: true
 }));
@@ -154,7 +143,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({
         success: false,
         message: 'Something went wrong!',
-        error: err.message // ALWAYS show error for debugging (User requests it)
+        error: err.message
     });
 });
 
@@ -173,4 +162,4 @@ app.listen(PORT, () => {
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
-export default app;
+module.exports = app;

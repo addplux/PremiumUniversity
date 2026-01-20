@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-export const protect = async (req, res, next) => {
+exports.protect = async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -40,7 +40,7 @@ export const protect = async (req, res, next) => {
     }
 };
 
-export const admin = (req, res, next) => {
+exports.admin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
         next();
     } else {
@@ -52,7 +52,7 @@ export const admin = (req, res, next) => {
 };
 
 // Finance Admin middleware
-export const financeAdmin = (req, res, next) => {
+exports.financeAdmin = (req, res, next) => {
     if (req.user && (req.user.role === 'finance_admin' || req.user.role === 'system_admin')) {
         next();
     } else {
@@ -64,7 +64,7 @@ export const financeAdmin = (req, res, next) => {
 };
 
 // System Admin middleware
-export const systemAdmin = (req, res, next) => {
+exports.systemAdmin = (req, res, next) => {
     if (req.user && req.user.role === 'system_admin') {
         next();
     } else {
@@ -76,7 +76,7 @@ export const systemAdmin = (req, res, next) => {
 };
 
 // Academic Admin middleware
-export const academicAdmin = (req, res, next) => {
+exports.academicAdmin = (req, res, next) => {
     if (req.user && (req.user.role === 'academic_admin' || req.user.role === 'system_admin')) {
         next();
     } else {
@@ -88,7 +88,7 @@ export const academicAdmin = (req, res, next) => {
 };
 
 // Any Admin middleware (for shared resources)
-export const anyAdmin = (req, res, next) => {
+exports.anyAdmin = (req, res, next) => {
     if (req.user && ['admin', 'finance_admin', 'system_admin', 'academic_admin'].includes(req.user.role)) {
         next();
     } else {

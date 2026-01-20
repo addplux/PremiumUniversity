@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "Premium School of Health Sciences - Backend API",
   "main": "server.js",
-  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["university", "health", "education"],
+  "keywords": [
+    "university",
+    "health",
+    "education"
+  ],
   "author": "PSOHS",
   "license": "ISC",
   "dependencies": {
@@ -19,7 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
-    "mongoose":  "^8.0.0"
+    "mongoose": "^8.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

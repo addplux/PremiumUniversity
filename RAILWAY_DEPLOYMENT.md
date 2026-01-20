@@ -73,7 +73,20 @@ Update your `frontend/package.json`:
 
 ### 2. Set Up MongoDB
 
-**Option A: Use MongoDB Atlas (Recommended)**
+You have two easy options for the database:
+
+**Option A: Use Railway's Integrated MongoDB (Fastest)**
+
+1. Open your project in Railway.
+2. Click **+ New** (or "Add a Service").
+3. Select **Database** -> **MongoDB**.
+4. Railway will create a new MongoDB service for you.
+5. Once created, click on the MongoDB service.
+6. Go to the **Connect** tab.
+7. Copy the **Mongo Connection URL** (e.g., `mongodb://mongo:password@containers...`).
+8. You will use this as your `MONGODB_URI` in the backend variables.
+
+**Option B: Use MongoDB Atlas (External)**
 
 1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 2. Create a free cluster
@@ -83,10 +96,6 @@ Update your `frontend/package.json`:
    ```
    mongodb+srv://username:password@cluster.mongodb.net/premiumuni?retryWrites=true&w=majority
    ```
-
-**Option B: Use Railway's MongoDB Plugin**
-
-Railway also offers a MongoDB plugin you can add directly to your project.
 
 ### 3. Deploy Backend to Railway
 
@@ -100,7 +109,8 @@ Railway also offers a MongoDB plugin you can add directly to your project.
    - Click "+ New"
    - Select "GitHub Repo"
    - Choose your repository
-   - Set **Root Directory**: `backend`
+   - **CRITICAL:** Click "Settings" → "Root Directory" and set it to `/backend`
+   - *If you don't do this, Railway will try to build from the root and fail with "Script start.sh not found"*
    - Railway will auto-detect it's a Node.js app
 
 5. **Configure Environment Variables:**
