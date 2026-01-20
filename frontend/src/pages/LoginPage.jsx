@@ -110,6 +110,12 @@ const LoginPage = () => {
                             >
                                 📡 Test Server Connection
                             </button>
+                            <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '0.5rem' }}>
+                                Targeting: {(async () => (await import('axios')).default.defaults.baseURL)() || '...'}
+                            </p>
+                            <p style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                                (If this says '/api', your VITE_API_URL is missing!)
+                            </p>
                         </div>
                     </form>
                 </div>
