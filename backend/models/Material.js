@@ -13,6 +13,31 @@ const materialSchema = new mongoose.Schema({
         enum: ['pdf', 'video', 'link', 'document', 'presentation', 'image', 'other'],
         required: true
     },
+    periodicSemester: {
+        type: String,
+        required: true
+    },
+    programme: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Program',
+        required: true
+    },
+    semester: {
+        type: String,
+        required: true
+    },
+    batch: {
+        type: String,
+        required: true
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    faculty: {
+        type: String,
+        required: true
+    },
     fileUrl: {
         type: String
     },
@@ -20,17 +45,7 @@ const materialSchema = new mongoose.Schema({
         type: String
     },
     fileSize: {
-        type: Number // in bytes
-    },
-    course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course'
-    },
-    subject: {
-        type: String
-    },
-    topic: {
-        type: String
+        type: Number
     },
     uploadedBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -66,7 +81,8 @@ const materialSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-materialSchema.index({ course: 1, isActive: 1 });
+materialSchema.index({ programme: 1, semester: 1 });
+materialSchema.index({ batch: 1, isActive: 1 });
 materialSchema.index({ uploadedBy: 1 });
 materialSchema.index({ tags: 1 });
 
