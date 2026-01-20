@@ -1,6 +1,6 @@
-import express from 'express';
-import Program from '../models/Program.js';
-import { protect, admin } from '../middleware/auth.js';
+const express = require('express');
+const Program = require('../models/Program.js');
+const { protect, admin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -133,4 +133,4 @@ router.delete('/:id', protect, admin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

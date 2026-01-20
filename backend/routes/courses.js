@@ -1,6 +1,6 @@
-import express from 'express';
-import Course from '../models/Course.js';
-import { protect, academicAdmin } from '../middleware/auth.js';
+const express = require('express');
+const Course = require('../models/Course.js');
+const { protect, academicAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -92,4 +92,4 @@ router.delete('/:id', protect, academicAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

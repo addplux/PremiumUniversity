@@ -1,9 +1,9 @@
-import express from 'express';
-import OnlineClass from '../models/OnlineClass.js';
-import Course from '../models/Course.js';
-import Enrollment from '../models/Enrollment.js';
-import { protect, academicAdmin } from '../middleware/auth.js';
-import { auditMiddleware } from '../utils/auditLogger.js';
+const express = require('express');
+const OnlineClass = require('../models/OnlineClass.js');
+const Course = require('../models/Course.js');
+const Enrollment = require('../models/Enrollment.js');
+const { protect, academicAdmin } = require('../middleware/auth.js');
+const { auditMiddleware } = require('../utils/auditLogger.js');
 
 const router = express.Router();
 
@@ -200,4 +200,4 @@ router.get('/upcoming', protect, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

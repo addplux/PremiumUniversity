@@ -1,7 +1,7 @@
-import express from 'express';
-import StudentFee from '../models/StudentFee.js';
-import User from '../models/User.js';
-import { protect, systemAdmin } from '../middleware/auth.js';
+const express = require('express');
+const StudentFee = require('../models/StudentFee.js');
+const User = require('../models/User.js');
+const { protect, systemAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -216,4 +216,4 @@ router.delete('/:id', protect, systemAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

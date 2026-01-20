@@ -1,12 +1,12 @@
-import express from 'express';
-import Application from '../models/Application.js';
-import User from '../models/User.js';
-import Payment from '../models/Payment.js';
-import Course from '../models/Course.js';
-import Enrollment from '../models/Enrollment.js';
-import Assignment from '../models/Assignment.js';
-import Submission from '../models/Submission.js';
-import { protect, admin } from '../middleware/auth.js';
+const express = require('express');
+const Application = require('../models/Application.js');
+const User = require('../models/User.js');
+const Payment = require('../models/Payment.js');
+const Course = require('../models/Course.js');
+const Enrollment = require('../models/Enrollment.js');
+const Assignment = require('../models/Assignment.js');
+const Submission = require('../models/Submission.js');
+const { protect, admin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -157,4 +157,4 @@ router.get('/student', protect, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

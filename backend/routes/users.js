@@ -1,7 +1,7 @@
-import express from 'express';
-import User from '../models/User.js';
-import { protect, systemAdmin } from '../middleware/auth.js';
-import { auditMiddleware, createAuditLog } from '../utils/auditLogger.js';
+const express = require('express');
+const User = require('../models/User.js');
+const { protect, systemAdmin } = require('../middleware/auth.js');
+const { auditMiddleware, createAuditLog } = require('../utils/auditLogger.js');
 
 const router = express.Router();
 
@@ -291,4 +291,4 @@ router.delete('/:id', protect, systemAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

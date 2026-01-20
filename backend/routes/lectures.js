@@ -1,6 +1,6 @@
-import express from 'express';
-import Lecture from '../models/Lecture.js';
-import { protect, systemAdmin } from '../middleware/auth.js';
+const express = require('express');
+const Lecture = require('../models/Lecture.js');
+const { protect, systemAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -227,4 +227,4 @@ router.delete('/:id', protect, systemAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

@@ -1,6 +1,6 @@
-import express from 'express';
-import Teacher from '../models/Teacher.js';
-import { protect, systemAdmin } from '../middleware/auth.js';
+const express = require('express');
+const Teacher = require('../models/Teacher.js');
+const { protect, systemAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -190,4 +190,4 @@ router.delete('/:id', protect, systemAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

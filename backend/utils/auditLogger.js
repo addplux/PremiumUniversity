@@ -1,4 +1,4 @@
-import AuditLog from '../models/AuditLog.js';
+const AuditLog = require('../models/AuditLog.js');
 
 /**
  * Create an audit log entry

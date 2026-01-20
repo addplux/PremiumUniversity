@@ -1,8 +1,8 @@
-import express from 'express';
-import Assignment from '../models/Assignment.js';
-import Submission from '../models/Submission.js';
-import Enrollment from '../models/Enrollment.js';
-import { protect, academicAdmin } from '../middleware/auth.js';
+const express = require('express');
+const Assignment = require('../models/Assignment.js');
+const Submission = require('../models/Submission.js');
+const Enrollment = require('../models/Enrollment.js');
+const { protect, academicAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -166,4 +166,4 @@ router.put('/submission/:id/grade', protect, academicAdmin, async (req, res) => 
     }
 });
 
-export default router;
+module.exports = router;

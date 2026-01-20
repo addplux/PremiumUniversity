@@ -1,10 +1,10 @@
-import express from 'express';
-import Grade from '../models/Grade.js';
-import User from '../models/User.js';
-import Course from '../models/Course.js';
-import Enrollment from '../models/Enrollment.js';
-import { protect, academicAdmin } from '../middleware/auth.js';
-import { auditMiddleware } from '../utils/auditLogger.js';
+const express = require('express');
+const Grade = require('../models/Grade.js');
+const User = require('../models/User.js');
+const Course = require('../models/Course.js');
+const Enrollment = require('../models/Enrollment.js');
+const { protect, academicAdmin } = require('../middleware/auth.js');
+const { auditMiddleware } = require('../utils/auditLogger.js');
 
 const router = express.Router();
 
@@ -193,4 +193,4 @@ router.delete('/:id', protect, academicAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

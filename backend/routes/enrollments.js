@@ -1,7 +1,7 @@
-import express from 'express';
-import Enrollment from '../models/Enrollment.js';
-import Course from '../models/Course.js';
-import { protect, admin } from '../middleware/auth.js';
+const express = require('express');
+const Enrollment = require('../models/Enrollment.js');
+const Course = require('../models/Course.js');
+const { protect, admin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -243,4 +243,4 @@ router.get('/transcript/:studentId', protect, admin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

@@ -1,7 +1,7 @@
-import express from 'express';
-import Payment from '../models/Payment.js';
-import User from '../models/User.js';
-import { protect, financeAdmin } from '../middleware/auth.js';
+const express = require('express');
+const Payment = require('../models/Payment.js');
+const User = require('../models/User.js');
+const { protect, financeAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -136,4 +136,4 @@ router.get('/stats', protect, financeAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

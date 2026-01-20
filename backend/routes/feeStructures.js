@@ -1,6 +1,6 @@
-import express from 'express';
-import FeeStructure from '../models/FeeStructure.js';
-import { protect, systemAdmin } from '../middleware/auth.js';
+const express = require('express');
+const FeeStructure = require('../models/FeeStructure.js');
+const { protect, systemAdmin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -172,4 +172,4 @@ router.delete('/:id', protect, systemAdmin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

@@ -1,6 +1,6 @@
-import express from 'express';
-import Contact from '../models/Contact.js';
-import { protect, admin } from '../middleware/auth.js';
+const express = require('express');
+const Contact = require('../models/Contact.js');
+const { protect, admin } = require('../middleware/auth.js');
 
 const router = express.Router();
 
@@ -162,4 +162,4 @@ router.delete('/:id', protect, admin, async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;
