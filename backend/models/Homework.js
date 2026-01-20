@@ -9,11 +9,28 @@ const homeworkSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    subject: {
+    periodicSemester: {
         type: String,
         required: true
     },
-    class: {
+    programme: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Program',
+        required: true
+    },
+    semester: {
+        type: String,
+        required: true
+    },
+    batch: {
+        type: String,
+        required: true
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    faculty: {
         type: String,
         required: true
     },
@@ -21,10 +38,6 @@ const homeworkSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    },
-    course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course'
     },
     assignedDate: {
         type: Date,
@@ -77,7 +90,7 @@ const homeworkSchema = new mongoose.Schema({
     },
     lateSubmissionPenalty: {
         type: Number,
-        default: 0 // percentage deduction
+        default: 0
     }
 }, {
     timestamps: true
@@ -85,7 +98,7 @@ const homeworkSchema = new mongoose.Schema({
 
 // Index for efficient queries
 homeworkSchema.index({ teacher: 1, assignedDate: -1 });
-homeworkSchema.index({ class: 1, dueDate: 1 });
-homeworkSchema.index({ course: 1 });
+homeworkSchema.index({ programme: 1, semester: 1 });
+homeworkSchema.index({ batch: 1, dueDate: 1 });
 
 module.exports = mongoose.model('Homework', homeworkSchema);
