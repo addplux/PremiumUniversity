@@ -4,13 +4,13 @@
     left: 0;
     right: 0;
     background: var(--bg-white);
-    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--bg-gray);
     z-index: 1000;
     transition: var(--transition);
 }
 
 .navbar.scrolled {
-    box-shadow: var(--shadow-md);
+    border-bottom: 1px solid var(--primary-blue);
 }
 
 .nav-content {
@@ -31,6 +31,7 @@
     width: 60px;
     height: 60px;
     object-fit: contain;
+    border: 1px solid var(--bg-gray);
     border-radius: 50%;
 }
 
@@ -68,8 +69,8 @@
     bottom: 0;
     left: 0;
     width: 0;
-    height: 2px;
-    background: var(--gradient-primary);
+    height: 1px;
+    background: var(--primary-blue);
     transition: var(--transition);
 }
 
@@ -84,16 +85,16 @@
 }
 
 .btn-primary-nav {
-    background: var(--gradient-primary);
+    background: var(--primary-blue);
     color: white !important;
     padding: 0.6rem 1.5rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    border: 1px solid var(--primary-blue);
 }
 
 .btn-primary-nav:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: var(--primary-blue-dark);
 }
 
 .btn-primary-nav::after {
@@ -105,13 +106,16 @@
     color: var(--text-gray);
     font-weight: 500;
     font-size: 0.95rem;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
     cursor: pointer;
     transition: var(--transition);
+    border: 1px solid var(--bg-gray);
+    border-radius: var(--radius-sm);
 }
 
 .btn-logout:hover {
     color: var(--primary-blue);
+    border-color: var(--primary-blue);
 }
 
 .mobile-menu-btn {
