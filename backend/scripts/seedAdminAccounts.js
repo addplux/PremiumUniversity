@@ -1,25 +1,14 @@
 /**
- * Seed Admin Accounts Script
- * 
- * This script creates test admin accounts for all three admin roles:
- * - System Admin (full system access)
- * - Finance Admin (financial management)
- * - Academic Admin (academic management)
- * 
- * Usage:
- *   node scripts/seedAdminAccounts.js
+ * Seed Admin Accounts Script (CommonJS)
  */
 
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import User from '../models/User.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import readline from 'readline';
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const User = require('../models/User');
+const path = require('path');
+const readline = require('readline');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// Load env vars
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const rl = readline.createInterface({
@@ -63,18 +52,31 @@ const adminAccounts = [
 ];
 
 async function connectDB() {
-    let mongoUrl = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/psohs';
+    // Check if URI is passed via environment variable (preferred for scripts)
+    let mongoUrl = process.env.MONGODB_URI;
+
+    // Fallback to local default if no env var
+    if (!mongoUrl) {
+        mongoUrl = 'mongodb://localhost:27017/psohs';
+    }
 
     try {
-        console.log(`📡 Attempting to connect to: ${mongoUrl}`);
-        await mongoose.connect(mongoUrl, { serverSelectionTimeoutMS: 5000 });
-        console.log('✅ Connected to MongoDB\n');
-    } catch (error) {
-        console.error('\n❌ Failed to connect to default database.');
-        console.log('   Error:', error.message);
-        console.log('\nSince you are using Railway, please provide your connection string.');
-        console.log('Format: mongodb+srv://username:password@host:port/database\n');
+        console.log(`📡 Attempting to connect to database...`);
+        // Mask the password for safer logging if it exists
+        const maskedUrl = mongoUrl.replace(/mongodb(\+srv)?:\/\/([^:]+):([^@]+)@/, 'mongodb$1://$2:****@');
+        console.log(`📡 Connection String: ${maskedUrl}`);
 
+        await mongoose.connect(mongoUrl, { serverSelectionTimeoutMS: 5000 });
+        console.log('✅ Connected to MongoDB');
+        console.log(`📂 Database Name: "${mongoose.connection.name}"`);
+        console.log(`📊 Existing Users: ${await User.countDocuments()}`);
+        console.log('');
+    } catch (error) {
+        console.error('\n❌ Failed to connect to database.');
+        console.log('   Error:', error.message);
+
+        // Interactive fallback
+        console.log('\nPlease provide your connection string manually.');
         const manualUrl = await question('📝 Enter MongoDB URI: ');
 
         try {
@@ -103,12 +105,9 @@ async function seedAdminAccounts() {
                 console.log(`   Updating role to: ${accountData.role}`);
 
                 existingUser.role = accountData.role;
-                existingUser.password = accountData.password; // Reset password for test accounts
+                existingUser.password = accountData.password;
                 existingUser.isVerified = true;
-                await existingUser.save(); // Using save to trigger pre-save hasing if modified, allowing password reset
-
-                // Re-hashing password logic is in User model pre-save
-                // To ensure password is updated, we simply set it. If logic is correct, it will hash.
+                await existingUser.save();
 
                 console.log(`✅ Updated: ${accountData.firstName} ${accountData.lastName}`);
             } else {
