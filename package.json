@@ -7,9 +7,10 @@
     ],
     "scripts": {
         "install-all": "npm install",
+        "build:frontend": "npm run build --workspace=frontend",
         "start": "echo 'Please configure Root Directory in Railway settings for each service (backend/frontend)' && exit 1"
     },
     "engines": {
-        "node": ">=18.0.0"
+        "node": "20.x"
     }
 }
