@@ -80,7 +80,7 @@ const SystemAdminDashboard = () => {
             </div>
 
             {/* Recent Activity */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '2rem' }}>
+            <div className="responsive-grid-2" style={{ marginTop: '2rem' }}>
                 <div className="dashboard-section">
                     <h2>Recent Audit Logs</h2>
                     <div className="applications-table">
