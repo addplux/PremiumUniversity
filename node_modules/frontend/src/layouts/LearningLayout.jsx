@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Sidebar from './Sidebar';
+import * as Icons from '../components/Icons';
 import './Layouts.css';
 
 const LearningLayout = () => {
@@ -12,20 +13,20 @@ const LearningLayout = () => {
         {
             label: "Academic",
             items: [
-                { name: "My Dashboard", path: "/dashboard", icon: "🏠" },
-                { name: "Course Catalog", path: "/dashboard/courses", icon: "📚" },
-                { name: "Assignments", path: "/dashboard/assignments", icon: "✍️" },
-                { name: "Financials", path: "/dashboard/finance", icon: "💰" },
-                { name: "Grades", path: "/dashboard/grades", icon: "🎓" },
-                { name: "Timetable", path: "/dashboard/timetable", icon: "🕒" },
-                { name: "Events", path: "/dashboard/events", icon: "📅" },
+                { name: "My Dashboard", path: "/dashboard", icon: <Icons.IconHome /> },
+                { name: "Course Catalog", path: "/dashboard/courses", icon: <Icons.IconBook /> },
+                { name: "Assignments", path: "/dashboard/assignments", icon: <Icons.IconEdit /> },
+                { name: "Financials", path: "/dashboard/finance", icon: <Icons.IconFinance /> },
+                { name: "Grades", path: "/dashboard/grades", icon: <Icons.IconAcademic /> },
+                { name: "Timetable", path: "/dashboard/timetable", icon: <Icons.IconCalendar /> },
+                { name: "Events", path: "/dashboard/events", icon: <Icons.IconCalendar /> },
             ]
         },
         {
             label: "Campus Life",
             items: [
-                { name: "Events", path: "/dashboard/events", icon: "🗓️" },
-                { name: "Library", path: "/dashboard/library", icon: "📖" },
+                { name: "Events", path: "/dashboard/events", icon: <Icons.IconCalendar /> },
+                { name: "Library", path: "/dashboard/library", icon: <Icons.IconLibrary /> },
             ]
         }
     ];

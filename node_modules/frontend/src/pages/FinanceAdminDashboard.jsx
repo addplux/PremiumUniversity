@@ -35,31 +35,31 @@ const FinanceAdminDashboard = () => {
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">
-                <h1>🏦 Finance Administration</h1>
+                <h1>Finance Administration</h1>
                 <p>Welcome back, {user?.firstName}. Manage student fees and payments.</p>
             </div>
 
             {/* Financial Statistics */}
             <div className="dashboard-grid">
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #10b981' }}>
-                    <h4>💰 Total Revenue</h4>
+                    <h4>Total Revenue</h4>
                     <div className="stat-big">K{stats?.totalRevenue?.toLocaleString() || 0}</div>
                     <p className="text-small">All-time collections</p>
                 </div>
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #3b82f6' }}>
-                    <h4>📊 Total Payments</h4>
+                    <h4>Total Payments</h4>
                     <div className="stat-big">{stats?.totalPayments || 0}</div>
                     <p className="text-small">Payment records</p>
                 </div>
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #f59e0b' }}>
-                    <h4>📅 This Month</h4>
+                    <h4>This Month</h4>
                     <div className="stat-big">
                         K{stats?.monthlyRevenue?.find(m => m._id === new Date().getMonth() + 1)?.revenue?.toLocaleString() || 0}
                     </div>
                     <p className="text-small">Current month revenue</p>
                 </div>
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #8b5cf6' }}>
-                    <h4>📈 Average Payment</h4>
+                    <h4>Average Payment</h4>
                     <div className="stat-big">
                         K{stats?.totalPayments > 0 ? Math.round(stats.totalRevenue / stats.totalPayments).toLocaleString() : 0}
                     </div>
@@ -125,15 +125,15 @@ const FinanceAdminDashboard = () => {
                 <h2>Quick Actions</h2>
                 <div className="dashboard-grid">
                     <Link to="/admin/finance/record" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        <h4>➕ Record Payment</h4>
+                        <h4>Record Payment</h4>
                         <p className="text-small">Add new student payment</p>
                     </Link>
                     <Link to="/admin/finance/payments" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        <h4>📋 Payment History</h4>
+                        <h4>Payment History</h4>
                         <p className="text-small">View all transactions</p>
                     </Link>
                     <Link to="/admin/finance/reports" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        <h4>📊 Financial Reports</h4>
+                        <h4>Financial Reports</h4>
                         <p className="text-small">Generate reports</p>
                     </Link>
                 </div>

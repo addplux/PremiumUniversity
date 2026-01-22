@@ -38,29 +38,29 @@ const SystemAdminDashboard = () => {
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">
-                <h1>🔧 System Administration</h1>
+                <h1>System Administration</h1>
                 <p>Welcome back, {user?.firstName}. System monitoring and management.</p>
             </div>
 
             {/* System Health */}
             <div className="dashboard-grid">
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #10b981' }}>
-                    <h4>🟢 System Status</h4>
+                    <h4>System Status</h4>
                     <div className="stat-big">{systemHealth?.status || 'Unknown'}</div>
                     <p className="text-small">Database: {systemHealth?.database || 'Unknown'}</p>
                 </div>
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #3b82f6' }}>
-                    <h4>👥 Total Users</h4>
+                    <h4>Total Users</h4>
                     <div className="stat-big">{systemHealth?.stats?.totalUsers || 0}</div>
                     <p className="text-small">Registered accounts</p>
                 </div>
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #f59e0b' }}>
-                    <h4>📊 Audit Logs</h4>
+                    <h4>Audit Logs</h4>
                     <div className="stat-big">{systemHealth?.stats?.totalAuditLogs || 0}</div>
                     <p className="text-small">Total tracked actions</p>
                 </div>
                 <div className="dashboard-card" style={{ borderLeft: '4px solid #8b5cf6' }}>
-                    <h4>⏱️ Uptime</h4>
+                    <h4>Uptime</h4>
                     <div className="stat-big">{Math.floor((systemHealth?.stats?.uptime || 0) / 60)}m</div>
                     <p className="text-small">Server running time</p>
                 </div>
@@ -121,15 +121,15 @@ const SystemAdminDashboard = () => {
                 <h2>Quick Actions</h2>
                 <div className="dashboard-grid">
                     <Link to="/admin/system/users" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        <h4>👥 Manage Users</h4>
+                        <h4>Manage Users</h4>
                         <p className="text-small">Create, edit, and delete user accounts</p>
                     </Link>
                     <Link to="/admin/system/logs" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        <h4>📋 Audit Logs</h4>
+                        <h4>Audit Logs</h4>
                         <p className="text-small">View all system activity</p>
                     </Link>
                     <Link to="/admin/system/security" className="dashboard-card" style={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        <h4>🔒 Security</h4>
+                        <h4>Security</h4>
                         <p className="text-small">Monitor security events</p>
                     </Link>
                 </div>
