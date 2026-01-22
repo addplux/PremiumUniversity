@@ -73,16 +73,16 @@ const FinanceAdminDashboard = () => {
                 <div className="applications-table">
                     {recentPayments.map((payment) => (
                         <div key={payment._id} className="table-row">
-                            <div className="table-cell">
+                            <div className="table-cell" data-label="Student">
                                 <strong>{payment.student?.firstName} {payment.student?.lastName}</strong>
                                 <p className="text-small">{payment.description || payment.paymentMethod}</p>
                             </div>
-                            <div className="table-cell">
+                            <div className="table-cell" data-label="Amount">
                                 <span className="stat-big" style={{ color: '#10b981', fontSize: '1.1rem' }}>
                                     +K{payment.amount.toLocaleString()}
                                 </span>
                             </div>
-                            <div className="table-cell text-small">
+                            <div className="table-cell text-small" data-label="Date">
                                 {new Date(payment.date).toLocaleDateString()}
                             </div>
                         </div>

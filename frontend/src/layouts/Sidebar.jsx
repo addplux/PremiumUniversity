@@ -10,18 +10,19 @@ const Sidebar = ({ title, brandLink = '/', links = [], user, onLogout, mobileOpe
 
     return (
         <>
-            <button
-                className={`mobile-toggle ${mobileOpen ? 'hidden' : ''}`}
-                onClick={() => setMobileOpen(true)}
-            >
-                ☰
-            </button>
             <aside className={`sidebar ${mobileOpen ? 'open' : ''}`}>
                 <div className="sidebar-header">
-                    <Link to={brandLink} className="sidebar-brand">
-                        <img src="/assets/logo.jpg" alt="Logo" style={{ height: '30px', width: '30px', borderRadius: '50%' }} />
-                        {title}
-                    </Link>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                        <Link to={brandLink} className="sidebar-brand">
+                            <img src="/assets/logo.jpg" alt="Logo" style={{ height: '30px', width: '30px', borderRadius: '50%' }} />
+                            {title}
+                        </Link>
+                        {mobileOpen && (
+                            <button className="close-sidebar" onClick={() => setMobileOpen(false)} style={{ color: 'white', fontSize: '1.5rem' }}>
+                                ✕
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className="sidebar-nav">

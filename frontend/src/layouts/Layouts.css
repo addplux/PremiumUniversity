@@ -128,28 +128,69 @@
 .main-content {
     flex: 1;
     margin-left: 260px;
-    padding: 2rem;
+    padding: var(--spacing-lg);
     width: calc(100% - 260px);
+    transition: margin-left 0.3s ease, padding 0.3s ease;
+}
+
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: white;
+    border-bottom: 1px solid var(--bg-gray);
+    padding: 0 1rem;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 90;
+    box-shadow: var(--shadow-sm);
+}
+
+.mobile-toggle {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .page-header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .page-title {
-    font-size: 1.8rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-dark);
     margin: 0;
 }
 
 .page-breadcrumb {
     font-size: 0.9rem;
-    color: #64748b;
-    margin-top: 0.25rem;
+    color: var(--text-light);
+    margin-top: var(--spacing-xs);
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+    }
+
+    .main-content {
+        margin-left: 240px;
+        width: calc(100% - 240px);
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
@@ -159,25 +200,17 @@
         transform: translateX(0);
     }
 
+    .mobile-header {
+        display: flex;
+    }
+
+    .layout-container {
+        padding-top: 60px;
+    }
+
     .main-content {
         margin-left: 0;
         width: 100%;
-        padding: 1rem;
-    }
-
-    .mobile-toggle {
-        display: block;
-        position: fixed;
-        bottom: 1rem;
-        right: 1rem;
-        z-index: 200;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: var(--primary-color, #1a56db);
-        color: white;
-        border: none;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
+        padding: var(--spacing-md);
     }
 }

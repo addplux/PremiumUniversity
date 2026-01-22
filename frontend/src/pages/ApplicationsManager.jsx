@@ -189,8 +189,8 @@ const ApplicationDetail = ({ app, onStatusUpdate, onDelete }) => {
                         <tbody>
                             {app.academicInfo.subjects.map((sub, idx) => (
                                 <tr key={idx}>
-                                    <td>{sub.name}</td>
-                                    <td>{sub.grade}</td>
+                                    <td data-label="Subject">{sub.name}</td>
+                                    <td data-label="Grade">{sub.grade}</td>
                                 </tr>
                             ))}
                         </tbody>

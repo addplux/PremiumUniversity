@@ -86,11 +86,11 @@ const SystemAdminDashboard = () => {
                     <div className="applications-table">
                         {recentLogs.map((log) => (
                             <div key={log._id} className="table-row">
-                                <div className="table-cell">
+                                <div className="table-cell" data-label="User/Action">
                                     <strong>{log.user?.firstName} {log.user?.lastName}</strong>
                                     <p className="text-small">{log.action.replace(/_/g, ' ')}</p>
                                 </div>
-                                <div className="table-cell text-small">
+                                <div className="table-cell text-small" data-label="Date/Time">
                                     {new Date(log.createdAt).toLocaleString()}
                                 </div>
                             </div>

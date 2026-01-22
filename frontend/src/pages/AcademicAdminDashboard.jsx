@@ -81,11 +81,11 @@ const AcademicAdminDashboard = () => {
                     <div className="applications-table">
                         {upcomingClasses.map((cls) => (
                             <div key={cls._id} className="table-row">
-                                <div className="table-cell">
+                                <div className="table-cell" data-label="Class">
                                     <strong>{cls.title}</strong>
                                     <p className="text-small">{cls.course?.title || 'Unknown Course'}</p>
                                 </div>
-                                <div className="table-cell text-small">
+                                <div className="table-cell text-small" data-label="Schedule">
                                     {new Date(cls.scheduledDate).toLocaleString()}
                                 </div>
                             </div>

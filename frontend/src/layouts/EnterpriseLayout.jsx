@@ -63,6 +63,15 @@ const EnterpriseLayout = () => {
 
     return (
         <div className="layout-container">
+            <header className="mobile-header">
+                <button className="mobile-toggle" onClick={() => setMobileOpen(true)}>
+                    ☰
+                </button>
+                <div className="sidebar-brand" style={{ color: 'var(--primary-blue)' }}>
+                    PSOHS
+                </div>
+                <div style={{ width: '40px' }}></div> {/* Spacer */}
+            </header>
             <Sidebar
                 title="PSOHS Enterprise"
                 links={navLinks}
