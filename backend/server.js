@@ -1,5 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const { xss } = require('express-xss-sanitizer');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -38,6 +42,23 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
+
+// Security Middleware
+app.use(helmet()); // Sets various security-related HTTP headers
+app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
+app.use(xss()); // Sanitize request body, query, and params for XSS
+
+// Rate Limiting
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: {
+        success: false,
+        message: 'Too many login attempts from this IP, please try again after 15 minutes'
+    }
+});
 
 // Middleware
 app.use(cors({
@@ -99,7 +120,7 @@ mongoose.connect(mongoKey, {
     });
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes); // Apply rate limiter to auth routes
 app.use('/api/applications', applicationRoutes);
 app.use('/api/programs', programRoutes);
 app.use('/api/contact', contactRoutes);
