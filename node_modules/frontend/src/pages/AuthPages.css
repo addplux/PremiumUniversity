@@ -1,24 +1,30 @@
 .auth-page {
     min-height: 100vh;
-    background: var(--bg-light);
+    background: var(--primary-blue);
+    background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
     padding-top: 80px;
-}
-
-.auth-container {
-    min-height: calc(100vh - 80px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .auth-box {
     background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     padding: var(--spacing-2xl);
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
 }
 
 .register-box {
