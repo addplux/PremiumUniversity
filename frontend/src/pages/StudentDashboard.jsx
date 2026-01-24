@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import RecommendedContent from '../components/RecommendedContent';
 import './Dashboard.css';
 
 const StudentDashboard = () => {
@@ -80,29 +81,33 @@ const StudentDashboard = () => {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem', marginTop: '2rem' }}>
-                <div className="dashboard-section">
-                    <div className="section-header-dash">
-                        <h2>Upcoming Deadlines</h2>
-                        <a href="/dashboard/assignments" className="btn-text">View all assignments →</a>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div className="dashboard-section">
+                        <div className="section-header-dash">
+                            <h2>Upcoming Deadlines</h2>
+                            <a href="/dashboard/assignments" className="btn-text">View all assignments →</a>
+                        </div>
+
+                        <div className="applications-table">
+                            {stats.assignments.upcoming.length === 0 ? (
+                                <p className="p-4">All caught up! No pending assignments.</p>
+                            ) : stats.assignments.upcoming.map((asm) => (
+                                <div key={asm._id} className="table-row">
+                                    <div className="table-cell">
+                                        <strong>{asm.title}</strong>
+                                        <p className="text-small" style={{ color: '#ef4444' }}>
+                                            Due: {new Date(asm.deadline).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                    <div className="table-cell">
+                                        <span className="text-small">{asm.maxPoints} Points</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="applications-table">
-                        {stats.assignments.upcoming.length === 0 ? (
-                            <p className="p-4">All caught up! No pending assignments.</p>
-                        ) : stats.assignments.upcoming.map((asm) => (
-                            <div key={asm._id} className="table-row">
-                                <div className="table-cell">
-                                    <strong>{asm.title}</strong>
-                                    <p className="text-small" style={{ color: '#ef4444' }}>
-                                        Due: {new Date(asm.deadline).toLocaleDateString()}
-                                    </p>
-                                </div>
-                                <div className="table-cell">
-                                    <span className="text-small">{asm.maxPoints} Points</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <RecommendedContent />
                 </div>
 
                 <div className="dashboard-section">

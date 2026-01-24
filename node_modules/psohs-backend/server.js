@@ -8,8 +8,12 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
 
+// Middleware imports
+const { tenantMiddleware, optionalTenantMiddleware } = require('./middleware/tenantMiddleware');
+
 // Route imports
 const authRoutes = require('./routes/auth');
+const organizationRoutes = require('./routes/organizations');
 const applicationRoutes = require('./routes/applications');
 const programRoutes = require('./routes/programs');
 const contactRoutes = require('./routes/contact');
@@ -18,6 +22,10 @@ const courseRoutes = require('./routes/courses');
 const enrollmentRoutes = require('./routes/enrollments');
 const assignmentRoutes = require('./routes/assignments');
 const financeRoutes = require('./routes/finance');
+const paymentRoutes = require('./routes/payments');
+const aiRoutes = require('./routes/ai');
+const equityRoutes = require('./routes/equity');
+const recommendationRoutes = require('./routes/recommendations');
 const dashboardRoutes = require('./routes/dashboard');
 const scheduleRoutes = require('./routes/schedules');
 const eventRoutes = require('./routes/events');
@@ -120,33 +128,41 @@ mongoose.connect(mongoKey, {
     });
 
 // Routes
-app.use('/api/auth', authLimiter, authRoutes); // Apply rate limiter to auth routes
-app.use('/api/applications', applicationRoutes);
-app.use('/api/programs', programRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/courses', courseRoutes);
-app.use('/api/enrollments', enrollmentRoutes);
-app.use('/api/assignments', assignmentRoutes);
-app.use('/api/finance', financeRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/schedules', scheduleRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/grades', gradeRoutes);
-app.use('/api/online-classes', onlineClassRoutes);
-app.use('/api/system', systemRoutes);
-app.use('/api/teachers', teacherRoutes);
-app.use('/api/lectures', lectureRoutes);
-app.use('/api/examinations', examinationRoutes);
-app.use('/api/fee-structures', feeStructureRoutes);
-app.use('/api/student-fees', studentFeeRoutes);
-app.use('/api/lesson-plans', lessonPlanRoutes);
-app.use('/api/syllabi', syllabiRoutes);
-app.use('/api/materials', materialRoutes);
-app.use('/api/homework', homeworkRoutes);
-app.use('/api/classwork', classworkRoutes);
-app.use('/api/circulars', circularRoutes);
-app.use('/api/notifications', notificationRoutes);
+// Public routes (no tenant context required)
+app.use('/api/auth', authLimiter, optionalTenantMiddleware, authRoutes); // Apply rate limiter to auth routes
+app.use('/api/programs', optionalTenantMiddleware, programRoutes);
+
+// Multi-tenant routes (tenant context required)
+app.use('/api/organizations', tenantMiddleware, organizationRoutes);
+app.use('/api/applications', tenantMiddleware, applicationRoutes);
+app.use('/api/contact', tenantMiddleware, contactRoutes);
+app.use('/api/users', tenantMiddleware, userRoutes);
+app.use('/api/courses', tenantMiddleware, courseRoutes);
+app.use('/api/enrollments', tenantMiddleware, enrollmentRoutes);
+app.use('/api/assignments', tenantMiddleware, assignmentRoutes);
+app.use('/api/finance', tenantMiddleware, financeRoutes);
+app.use('/api/payments', tenantMiddleware, paymentRoutes);
+app.use('/api/ai', tenantMiddleware, aiRoutes);
+app.use('/api/ai/equity', tenantMiddleware, equityRoutes);
+app.use('/api/ai/content', tenantMiddleware, recommendationRoutes);
+app.use('/api/dashboard', tenantMiddleware, dashboardRoutes);
+app.use('/api/schedules', tenantMiddleware, scheduleRoutes);
+app.use('/api/events', tenantMiddleware, eventRoutes);
+app.use('/api/grades', tenantMiddleware, gradeRoutes);
+app.use('/api/online-classes', tenantMiddleware, onlineClassRoutes);
+app.use('/api/system', tenantMiddleware, systemRoutes);
+app.use('/api/teachers', tenantMiddleware, teacherRoutes);
+app.use('/api/lectures', tenantMiddleware, lectureRoutes);
+app.use('/api/examinations', tenantMiddleware, examinationRoutes);
+app.use('/api/fee-structures', tenantMiddleware, feeStructureRoutes);
+app.use('/api/student-fees', tenantMiddleware, studentFeeRoutes);
+app.use('/api/lesson-plans', tenantMiddleware, lessonPlanRoutes);
+app.use('/api/syllabi', tenantMiddleware, syllabiRoutes);
+app.use('/api/materials', tenantMiddleware, materialRoutes);
+app.use('/api/homework', tenantMiddleware, homeworkRoutes);
+app.use('/api/classwork', tenantMiddleware, classworkRoutes);
+app.use('/api/circulars', tenantMiddleware, circularRoutes);
+app.use('/api/notifications', tenantMiddleware, notificationRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

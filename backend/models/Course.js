@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const courseSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     title: {
         type: String,
         required: [true, 'Please add a course title'],
@@ -9,9 +15,9 @@ const courseSchema = new mongoose.Schema({
     code: {
         type: String,
         required: [true, 'Please add a course code'],
-        unique: true,
         uppercase: true,
         trim: true
+        // Unique per organization, not globally
     },
     description: {
         type: String,
@@ -41,5 +47,10 @@ const courseSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+// Compound index: course code unique per organization
+courseSchema.index({ organizationId: 1, code: 1 }, { unique: true });
+courseSchema.index({ organizationId: 1, program: 1 });
+courseSchema.index({ organizationId: 1, active: 1 });
 
 module.exports = mongoose.model('Course', courseSchema);

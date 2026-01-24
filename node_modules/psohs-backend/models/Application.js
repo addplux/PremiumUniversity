@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const applicationSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -114,7 +120,8 @@ const applicationSchema = new mongoose.Schema({
 });
 
 // Index for better query performance
-applicationSchema.index({ user: 1, status: 1 });
-applicationSchema.index({ program: 1, status: 1 });
+applicationSchema.index({ organizationId: 1, user: 1, status: 1 });
+applicationSchema.index({ organizationId: 1, program: 1, status: 1 });
+applicationSchema.index({ organizationId: 1, status: 1 });
 
 module.exports = mongoose.model('Application', applicationSchema);

@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const enrollmentSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -33,8 +39,10 @@ const enrollmentSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Prevent duplicate enrollment in the same course for the same semester (or indefinitely, depending on policy)
-// Let's assume for now a student can only be 'enrolled' in a course once at a time.
-enrollmentSchema.index({ student: 1, course: 1 }, { unique: true });
+// Prevent duplicate enrollment in the same course for the same semester
+// Student can only be 'enrolled' in a course once at a time per organization
+enrollmentSchema.index({ organizationId: 1, student: 1, course: 1 }, { unique: true });
+enrollmentSchema.index({ organizationId: 1, student: 1 });
+enrollmentSchema.index({ organizationId: 1, course: 1 });
 
 module.exports = mongoose.model('Enrollment', enrollmentSchema);

@@ -1,0 +1,100 @@
+.org-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    padding: 12px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.org-banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.org-banner-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.org-banner-message {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.org-banner-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.org-banner-close:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Banner types */
+.org-banner-info {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    border-bottom: 2px solid #1976d2;
+}
+
+.org-banner-warning {
+    background-color: #fff3e0;
+    color: #e65100;
+    border-bottom: 2px solid #f57c00;
+}
+
+.org-banner-error {
+    background-color: #ffebee;
+    color: #c62828;
+    border-bottom: 2px solid #d32f2f;
+}
+
+/* Adjust main content when banner is shown */
+body:has(.org-banner) {
+    padding-top: 50px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .org-banner {
+        padding: 10px 15px;
+    }
+
+    .org-banner-message {
+        font-size: 0.875rem;
+    }
+
+    body:has(.org-banner) {
+        padding-top: 45px;
+    }
+}

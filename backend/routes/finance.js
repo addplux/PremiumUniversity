@@ -6,14 +6,14 @@ const { protect, financeAdmin } = require('../middleware/auth.js');
 const router = express.Router();
 
 // @route   GET /api/finance
-// @desc    Get all payments
+// @desc    Get all payments for the organization
 // @access  Private/Admin
 router.get('/', protect, financeAdmin, async (req, res) => {
     try {
-        const payments = await Payment.find()
-            .populate('student', 'firstName lastName email studentId')
+        const payments = await Payment.find({ organizationId: req.organizationId })
+            .populate('studentId', 'firstName lastName email studentId')
             .populate('recordedBy', 'firstName lastName')
-            .sort({ date: -1 });
+            .sort({ createdAt: -1 });
 
         res.json({
             success: true,
@@ -27,25 +27,31 @@ router.get('/', protect, financeAdmin, async (req, res) => {
 });
 
 // @route   POST /api/finance
-// @desc    Record a new payment
+// @desc    Record a new payment manually (cash/bank/etc)
 // @access  Private/Admin
 router.post('/', protect, financeAdmin, async (req, res) => {
     try {
-        const { studentId, amount, paymentMethod, reference, description, status } = req.body;
+        const { studentId, amount, paymentMethod, reference, description, status, currency } = req.body;
 
-        const student = await User.findById(studentId);
+        const student = await User.findOne({ _id: studentId, organizationId: req.organizationId });
         if (!student) {
             return res.status(404).json({ success: false, message: 'Student not found' });
         }
 
         const payment = await Payment.create({
-            student: studentId,
+            organizationId: req.organizationId,
+            studentId,
             amount,
+            currency: currency || 'ZMW',
             paymentMethod,
-            reference,
+            mobileMoneyDetails: {
+                reference,
+                provider: paymentMethod
+            },
             description,
             status: status || 'completed',
-            recordedBy: req.user._id
+            recordedBy: req.user._id,
+            paidAt: status === 'completed' ? new Date() : null
         });
 
         res.status(201).json({
@@ -66,7 +72,10 @@ router.post('/', protect, financeAdmin, async (req, res) => {
 // @access  Private
 router.get('/my', protect, async (req, res) => {
     try {
-        const payments = await Payment.find({ student: req.user._id }).sort({ date: -1 });
+        const payments = await Payment.find({
+            studentId: req.user._id,
+            organizationId: req.organizationId
+        }).sort({ createdAt: -1 });
 
         res.json({
             success: true,
@@ -84,7 +93,10 @@ router.get('/my', protect, async (req, res) => {
 // @access  Private/Admin
 router.get('/student/:id', protect, financeAdmin, async (req, res) => {
     try {
-        const payments = await Payment.find({ student: req.params.id }).sort({ date: -1 });
+        const payments = await Payment.find({
+            studentId: req.params.id,
+            organizationId: req.organizationId
+        }).sort({ createdAt: -1 });
 
         res.json({
             success: true,
@@ -103,6 +115,7 @@ router.get('/student/:id', protect, financeAdmin, async (req, res) => {
 router.get('/stats', protect, financeAdmin, async (req, res) => {
     try {
         const stats = await Payment.aggregate([
+            { $match: { organizationId: req.organizationId } },
             {
                 $group: {
                     _id: null,
@@ -113,9 +126,10 @@ router.get('/stats', protect, financeAdmin, async (req, res) => {
         ]);
 
         const monthlyRevenue = await Payment.aggregate([
+            { $match: { organizationId: req.organizationId } },
             {
                 $group: {
-                    _id: { $month: '$date' },
+                    _id: { $month: '$createdAt' },
                     revenue: { $sum: '$amount' }
                 }
             },

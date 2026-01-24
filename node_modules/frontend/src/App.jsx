@@ -3,6 +3,9 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import EnterpriseLayout from './layouts/EnterpriseLayout';
 import LearningLayout from './layouts/LearningLayout';
+import OrganizationBanner from './components/OrganizationBanner';
+import OfflineIndicator from './components/OfflineIndicator';
+import LowBandwidthMode from './components/LowBandwidthMode';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -48,6 +51,9 @@ import ClassworkManager from './pages/ClassworkManager';
 import CircularManager from './pages/CircularManager';
 import NotificationCenter from './pages/NotificationCenter';
 import IDCardManager from './pages/IDCardManager';
+import RetentionDashboard from './pages/RetentionDashboard';
+import EquityDashboard from './pages/EquityDashboard';
+import AITutorWidget from './components/AITutorWidget';
 
 // Dashboard Router - Redirects to appropriate dashboard based on role
 const DashboardRouter = () => {
@@ -71,6 +77,12 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <OrganizationBanner />
+        <OfflineIndicator />
+        <LowBandwidthMode />
+        <div style={{ position: 'relative', zIndex: 1000 }}>
+          <AITutorWidget />
+        </div>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
@@ -134,6 +146,8 @@ function App() {
             </ProtectedRoute>
           }>
             <Route index element={<AdminDashboard />} />
+            <Route path="retention" element={<RetentionDashboard />} />
+            <Route path="equity" element={<EquityDashboard />} />
             <Route path="applications" element={<ApplicationsManager />} />
             <Route path="students" element={<StudentRegistry />} />
             <Route path="teachers" element={<TeacherRegistry />} />

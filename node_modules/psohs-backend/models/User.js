@@ -39,6 +39,22 @@ const userSchema = new mongoose.Schema({
         enum: ['student', 'admin', 'finance_admin', 'system_admin', 'academic_admin'],
         default: 'student'
     },
+    // Multi-tenant support
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        index: true,
+        // Not required to allow super admins without organization
+        required: function () {
+            return !this.isSuperAdmin;
+        }
+    },
+    isSuperAdmin: {
+        type: Boolean,
+        default: false,
+        // Super admins can manage all organizations
+        select: false
+    },
     isVerified: {
         type: Boolean,
         default: false
