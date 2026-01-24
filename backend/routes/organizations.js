@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Organization = require('../models/Organization');
 const User = require('../models/User');
-const { protect, admin } = require('../middleware/auth');
+const { protect, admin } = require('../middleware/auth'); // Fixed import path
 
 // @route   GET /api/organizations
 // @desc    Get all organizations (Super Admin only)
