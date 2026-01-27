@@ -1,8 +1,13 @@
 {
     "name": "premium-university-monorepo",
     "private": true,
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
     "scripts": {
         "install-all": "npm install",
+        "build": "npm run build --workspace=frontend",
         "build:frontend": "npm run build --workspace=frontend",
         "start": "node backend/server.js"
     },
@@ -40,7 +45,8 @@
         "react-dom": "^19.2.0",
         "react-router-dom": "^7.12.0",
         "sanitize-html": "^2.17.0",
-        "source-map-js": "^1.2.1"
+        "source-map-js": "^1.2.1",
+        "uuid": "^13.0.0"
     },
     "engines": {
         "node": "20.x"
