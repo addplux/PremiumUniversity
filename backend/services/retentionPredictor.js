@@ -1,4 +1,10 @@
-const tf = require('@tensorflow/tfjs-node');
+let tf;
+try {
+    tf = require('@tensorflow/tfjs');
+} catch (e) {
+    console.warn('⚠️ @tensorflow/tfjs not found. Retention Predictor will use baseline heuristics.');
+}
+
 const RetentionData = require('../models/RetentionData');
 
 class RetentionPredictorService {
@@ -104,8 +110,8 @@ class RetentionPredictorService {
      * Predict retention risk for a single student record
      */
     async predictRisk(retentionDataRecord) {
-        // If no ML model trained yet, fall back to heuristic score
-        if (!this.isTrained || !this.model) {
+        // If no ML model trained yet or TF is missing, fall back to heuristic score
+        if (!this.isTrained || !this.model || !tf) {
             retentionDataRecord.calculateBaselineRisk();
             return {
                 score: retentionDataRecord.riskPrediction.score,

@@ -1,10 +1,13 @@
 const express = require('express');
+const dotenv = require('dotenv');
+// Load environment variables early
+dotenv.config();
+
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const { xss } = require('express-xss-sanitizer');
-const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
 
@@ -127,8 +130,6 @@ mongoose.connect(mongoKey, {
         console.error('🛠️ Troubleshooting: Ensure your Railway variables are correct and not wrapped in ${{ }}.');
     });
 
-// Routes
-// Public routes (no tenant context required)
 app.use('/api/auth', authLimiter, optionalTenantMiddleware, authRoutes); // Apply rate limiter to auth routes
 app.use('/api/programs', optionalTenantMiddleware, programRoutes);
 

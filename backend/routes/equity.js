@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect, admin } = require('../middleware/auth');
-const tenantMiddleware = require('../middleware/tenantMiddleware');
+const { tenantMiddleware } = require('../middleware/tenantMiddleware');
 const equityAuditService = require('../services/equityAuditService');
 const EquityAudit = require('../models/EquityAudit');
 

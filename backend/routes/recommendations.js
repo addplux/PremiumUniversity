@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
-const tenantMiddleware = require('../middleware/tenantMiddleware');
+const { tenantMiddleware } = require('../middleware/tenantMiddleware');
 const recommendationService = require('../services/recommendationService');
 
 router.use(tenantMiddleware);

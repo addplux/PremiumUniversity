@@ -1,15 +1,22 @@
-const OpenAI = require('openai');
+let GoogleGenerativeAI;
+try {
+    const generativeAi = require('@google/generative-ai');
+    GoogleGenerativeAI = generativeAi.GoogleGenerativeAI;
+} catch (e) {
+    console.warn('⚠️ @google/generative-ai dependency not found. AI Tutor will run in mock mode.');
+}
 
 class AITutorService {
     constructor() {
-        this.openai = process.env.OPENAI_API_KEY ? new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY
-        }) : null;
+        this.genAI = process.env.GEMINI_API_KEY && GoogleGenerativeAI
+            ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+            : null;
+        this.model = this.genAI ? this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" }) : null;
     }
 
     async getResponse(studentId, message, context = {}) {
-        // If no API key, return mock response for demo/testing
-        if (!this.openai) {
+        // If no API key or dependency, return mock response for demo/testing
+        if (!this.model) {
             return this.getMockResponse(message);
         }
 
@@ -29,17 +36,10 @@ class AITutorService {
         - If asked about fees/admin, refer them to the administration.
       `;
 
-            const response = await this.openai.chat.completions.create({
-                model: 'gpt-4', // or gpt-3.5-turbo for cost
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: message }
-                ],
-                temperature: 0.7,
-                max_tokens: 500
-            });
-
-            return response.choices[0].message.content;
+            const prompt = `${systemPrompt}\n\nStudent message: ${message}`;
+            const result = await this.model.generateContent(prompt);
+            const response = await result.response;
+            return response.text();
 
         } catch (error) {
             console.error('AI Tutor Error:', error);
@@ -55,7 +55,7 @@ class AITutorService {
         return new Promise(resolve => {
             setTimeout(() => {
                 if (msg.includes('hello') || msg.includes('hi')) {
-                    resolve("Hello! I'm your AI Tutor. How can I help you with your studies today?");
+                    resolve("Hello! I'm your Gemini-powered AI Tutor (running in mock mode). How can I help you today?");
                 } else if (msg.includes('math') || msg.includes('algebra') || msg.includes('calculus')) {
                     resolve("Mathematics can be challenging! Could you share the specific problem you're working on? I can help guide you through the steps.");
                 } else if (msg.includes('assignment') || msg.includes('homework')) {
@@ -73,3 +73,4 @@ class AITutorService {
 }
 
 module.exports = new AITutorService();
+

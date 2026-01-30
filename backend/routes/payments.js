@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
-const tenantMiddleware = require('../middleware/tenantMiddleware');
+const { tenantMiddleware } = require('../middleware/tenantMiddleware');
 const paymentController = require('../controllers/paymentController');
 
 // All payment routes require tenant context

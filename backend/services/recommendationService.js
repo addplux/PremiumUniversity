@@ -30,7 +30,7 @@ class RecommendationService {
             .map(([tag]) => tag);
 
         // Mock query - in real app would query Material/Content model
-        const content Recommendations = [
+        const contentRecommendations = [
             { id: '1', title: 'Advanced JavaScript Patterns', type: 'video', tags: ['programming', 'javascript'], relevance: 0.95 },
             { id: '2', title: 'Linear Algebra for ML', type: 'document', tags: ['math', 'algebra'], relevance: 0.88 },
             { id: '3', title: 'African History: Pre-Colonial Era', type: 'video', tags: ['history', 'africa'], relevance: 0.75 }
