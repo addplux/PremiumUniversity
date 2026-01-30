@@ -192,6 +192,7 @@ export const OrganizationProvider = ({ children }) => {
         // Organization Info
         name: organization?.name || 'PremiumUniversity',
         slug: organization?.slug || 'default',
+        isMasterTenant: organization?.slug === 'yard' || (!organization && !loading),
         subdomain: organization?.subdomain || 'app',
         domain: organization?.domain,
 

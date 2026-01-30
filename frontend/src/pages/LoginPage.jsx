@@ -9,6 +9,7 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { login, isAuthenticated, isAdmin } = useAuth();
+    const { name, isMasterTenant } = useOrganization();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -48,8 +49,8 @@ const LoginPage = () => {
             <div className="auth-container">
                 <div className="auth-box">
                     <div className="auth-header">
-                        <h1>Welcome Back</h1>
-                        <p>Login to access your portal</p>
+                        <h1>{isMasterTenant ? 'Yard Cloud' : name}</h1>
+                        <p>Login to {isMasterTenant ? 'manage your cloud' : 'access your portal'}</p>
                     </div>
 
                     {error && <div className="alert alert-error">{error}</div>}
