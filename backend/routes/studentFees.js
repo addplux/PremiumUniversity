@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', protect, async (req, res) => {
     try {
         const { rollNo, semester, status, academicYear } = req.query;
-        const query = {};
+        const query = { organizationId: req.organizationId };
 
         if (rollNo) query.rollNo = rollNo;
         if (semester) query.semester = semester;
@@ -42,7 +42,10 @@ router.get('/', protect, async (req, res) => {
 // @access  Private
 router.get('/student/:rollNo', protect, async (req, res) => {
     try {
-        const fees = await StudentFee.find({ rollNo: req.params.rollNo })
+        const fees = await StudentFee.find({
+            rollNo: req.params.rollNo,
+            organizationId: req.organizationId
+        })
             .populate('student', 'firstName lastName email')
             .sort({ semester: 1, createdAt: -1 });
 
@@ -87,8 +90,12 @@ router.post('/', protect, systemAdmin, async (req, res) => {
             remarks
         } = req.body;
 
-        // Find student by roll number
-        const student = await User.findOne({ rollNo, role: 'student' });
+        // Find student by roll number within organization
+        const student = await User.findOne({
+            rollNo,
+            role: 'student',
+            organizationId: req.organizationId
+        });
         if (!student) {
             return res.status(404).json({
                 success: false,
@@ -97,6 +104,7 @@ router.post('/', protect, systemAdmin, async (req, res) => {
         }
 
         const studentFee = await StudentFee.create({
+            organizationId: req.organizationId,
             student: student._id,
             rollNo,
             studentName: studentName || `${student.firstName} ${student.lastName}`,
@@ -151,7 +159,10 @@ router.put('/:id', protect, systemAdmin, async (req, res) => {
             remarks
         } = req.body;
 
-        const studentFee = await StudentFee.findById(req.params.id);
+        const studentFee = await StudentFee.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
         if (!studentFee) {
             return res.status(404).json({
                 success: false,
@@ -192,7 +203,10 @@ router.put('/:id', protect, systemAdmin, async (req, res) => {
 // @access  Private/Admin
 router.delete('/:id', protect, systemAdmin, async (req, res) => {
     try {
-        const studentFee = await StudentFee.findById(req.params.id);
+        const studentFee = await StudentFee.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
 
         if (!studentFee) {
             return res.status(404).json({

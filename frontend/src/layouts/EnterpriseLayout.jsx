@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useOrganization } from '../context/OrganizationContext';
 import Sidebar from './Sidebar';
 import * as Icons from '../components/Icons';
+import { GlobalOutlined } from '@ant-design/icons';
 import './Layouts.css';
 
 const EnterpriseLayout = () => {
     const { user, logout } = useAuth();
+    const { name } = useOrganization();
+    const shortName = name === 'Premium School of Health Sciences' ? 'PSOHS' : name.substring(0, 10);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const navLinks = [
@@ -53,10 +57,23 @@ const EnterpriseLayout = () => {
             ]
         },
         {
-            label: "Bursar",
+            label: "Financials",
             items: [
                 { name: "Student Fees", path: "/admin/fees", icon: <Icons.IconFinance /> },
                 { name: "Fees & Payments", path: "/admin/finance", icon: <Icons.IconFinance /> },
+            ]
+        },
+        {
+            label: "Administrative Tools",
+            items: [
+                { name: "Users & Roles", path: "/admin/system/users", icon: <Icons.IconUsers /> },
+                ...(user?.role === 'system_admin' ? [
+                    { name: "Institutional Branding", path: "/admin/system/branding", icon: <Icons.IconDashboard /> },
+                    { name: "Audit Logs", path: "/admin/system/audit", icon: <Icons.IconFile /> }
+                ] : []),
+                ...(user?.isSuperAdmin ? [
+                    { name: "GOD MODE (Global)", path: "/superadmin", icon: <GlobalOutlined /> }
+                ] : [])
             ]
         }
     ];
@@ -67,13 +84,13 @@ const EnterpriseLayout = () => {
                 <button className="mobile-toggle" onClick={() => setMobileOpen(true)}>
                     ☰
                 </button>
-                <div className="sidebar-brand" style={{ color: 'var(--primary-blue)' }}>
-                    PSOHS
+                <div className="sidebar-brand" style={{ color: 'var(--primary-color)' }}>
+                    {shortName}
                 </div>
                 <div style={{ width: '40px' }}></div> {/* Spacer */}
             </header>
             <Sidebar
-                title="PSOHS Enterprise"
+                title={`${shortName} Enterprise`}
                 links={navLinks}
                 user={user}
                 onLogout={logout}

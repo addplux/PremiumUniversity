@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const submissionSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     assignment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Assignment',
@@ -46,6 +52,8 @@ const submissionSchema = new mongoose.Schema({
 });
 
 // Prevent multiple submissions for the same assignment by the same student
-submissionSchema.index({ assignment: 1, student: 1 }, { unique: true });
+submissionSchema.index({ organizationId: 1, assignment: 1, student: 1 }, { unique: true });
+submissionSchema.index({ organizationId: 1, student: 1 });
+submissionSchema.index({ organizationId: 1, status: 1 });
 
 module.exports = mongoose.model('Submission', submissionSchema);

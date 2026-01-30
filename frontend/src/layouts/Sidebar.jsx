@@ -1,8 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useOrganization } from '../context/OrganizationContext';
 import './Layouts.css';
 
 const Sidebar = ({ title, brandLink = '/', links = [], user, onLogout, mobileOpen, setMobileOpen }) => {
     const location = useLocation();
+    const { logo, name } = useOrganization();
 
     const isActive = (path) => {
         return location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -14,7 +16,7 @@ const Sidebar = ({ title, brandLink = '/', links = [], user, onLogout, mobileOpe
                 <div className="sidebar-header">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                         <Link to={brandLink} className="sidebar-brand">
-                            <img src="/assets/logo.jpg" alt="Logo" style={{ height: '30px', width: '30px', borderRadius: '50%' }} />
+                            <img src={logo || "/assets/logo.jpg"} alt={name} style={{ height: '30px', width: '30px', borderRadius: '50%' }} />
                             {title}
                         </Link>
                         {mobileOpen && (

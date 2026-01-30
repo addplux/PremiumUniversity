@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useOrganization } from '../context/OrganizationContext';
 import Sidebar from './Sidebar';
 import * as Icons from '../components/Icons';
 import './Layouts.css';
 
 const LearningLayout = () => {
     const { user, logout } = useAuth();
+    const { name } = useOrganization();
+    const shortName = name === 'Premium School of Health Sciences' ? 'PSOHS' : name.substring(0, 10);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const navLinks = [
@@ -37,13 +40,13 @@ const LearningLayout = () => {
                 <button className="mobile-toggle" onClick={() => setMobileOpen(true)}>
                     ☰
                 </button>
-                <div className="sidebar-brand" style={{ color: 'var(--primary-blue)' }}>
-                    PSOHS
+                <div className="sidebar-brand" style={{ color: 'var(--primary-color)' }}>
+                    {shortName}
                 </div>
                 <div style={{ width: '40px' }}></div> {/* Spacer */}
             </header>
             <Sidebar
-                title="PSOHS Learning"
+                title={`${shortName} Learning`}
                 links={navLinks}
                 user={user}
                 onLogout={logout}

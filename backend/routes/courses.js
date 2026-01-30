@@ -9,7 +9,8 @@ const router = express.Router();
 // @access  Public (or Protected based on needs, easier public for now or student)
 router.get('/', async (req, res) => {
     try {
-        const courses = await Course.find().populate('instructor', 'firstName lastName');
+        const query = req.organizationId ? { organizationId: req.organizationId } : {};
+        const courses = await Course.find(query).populate('instructor', 'firstName lastName');
         res.json({
             success: true,
             count: courses.length,
@@ -25,7 +26,10 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.get('/:id', async (req, res) => {
     try {
-        const course = await Course.findById(req.params.id).populate('instructor', 'firstName lastName');
+        const query = { _id: req.params.id };
+        if (req.organizationId) query.organizationId = req.organizationId;
+
+        const course = await Course.findOne(query).populate('instructor', 'firstName lastName');
         if (!course) {
             return res.status(404).json({ success: false, message: 'Course not found' });
         }
@@ -40,7 +44,10 @@ router.get('/:id', async (req, res) => {
 // @access  Private/Admin
 router.post('/', protect, academicAdmin, async (req, res) => {
     try {
-        const course = await Course.create(req.body);
+        const course = await Course.create({
+            ...req.body,
+            organizationId: req.organizationId
+        });
         res.status(201).json({
             success: true,
             data: course
@@ -59,7 +66,7 @@ router.post('/', protect, academicAdmin, async (req, res) => {
 // @access  Private/Admin
 router.put('/:id', protect, academicAdmin, async (req, res) => {
     try {
-        let course = await Course.findById(req.params.id);
+        let course = await Course.findOne({ _id: req.params.id, organizationId: req.organizationId });
         if (!course) {
             return res.status(404).json({ success: false, message: 'Course not found' });
         }
@@ -80,7 +87,7 @@ router.put('/:id', protect, academicAdmin, async (req, res) => {
 // @access  Private/Admin
 router.delete('/:id', protect, academicAdmin, async (req, res) => {
     try {
-        const course = await Course.findById(req.params.id);
+        const course = await Course.findOne({ _id: req.params.id, organizationId: req.organizationId });
         if (!course) {
             return res.status(404).json({ success: false, message: 'Course not found' });
         }

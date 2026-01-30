@@ -40,6 +40,10 @@ import Timetable from './pages/Timetable';
 import EventsCalendar from './pages/EventsCalendar';
 import ScheduleManager from './pages/ScheduleManager';
 
+// Super Admin & Admin Tools
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import BrandingEditor from './pages/BrandingEditor';
+
 // New Role-Based Dashboards
 import SystemAdminDashboard from './pages/SystemAdminDashboard';
 import FinanceAdminDashboard from './pages/FinanceAdminDashboard';
@@ -113,7 +117,17 @@ function App() {
               <Route index element={<SystemAdminDashboard />} />
               <Route path="users" element={<StudentRegistry />} />
               <Route path="audit" element={<AuditLogManager />} />
+              <Route path="branding" element={<BrandingEditor />} />
               {/* Add more system admin routes as needed */}
+            </Route>
+
+            {/* Global Super Admin Routes */}
+            <Route path="/superadmin" element={
+              <ProtectedRoute allowedRoles={['system_admin']} requireSuperAdmin={true}>
+                <EnterpriseLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<SuperAdminDashboard />} />
             </Route>
 
             {/* Finance Admin Routes */}
@@ -193,6 +207,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

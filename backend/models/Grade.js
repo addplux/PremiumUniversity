@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const gradeSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -59,7 +65,9 @@ const gradeSchema = new mongoose.Schema({
 });
 
 // Ensure one grade record per student per course per semester
-gradeSchema.index({ student: 1, course: 1, semester: 1, academicYear: 1 }, { unique: true });
+gradeSchema.index({ organizationId: 1, student: 1, course: 1, semester: 1, academicYear: 1 }, { unique: true });
+gradeSchema.index({ organizationId: 1, student: 1 });
+gradeSchema.index({ organizationId: 1, course: 1 });
 
 // Calculate total marks and GPA before saving
 gradeSchema.pre('save', function (next) {

@@ -66,6 +66,11 @@ export const OrganizationProvider = ({ children }) => {
         }
     };
 
+    const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+    };
+
     const applyBranding = (branding) => {
         if (!branding) return;
 
@@ -74,6 +79,10 @@ export const OrganizationProvider = ({ children }) => {
         // Apply custom colors
         if (branding.primaryColor) {
             root.style.setProperty('--primary-color', branding.primaryColor);
+            const rgb = hexToRgb(branding.primaryColor);
+            if (rgb) {
+                root.style.setProperty('--primary-color-rgb', rgb);
+            }
         }
         if (branding.secondaryColor) {
             root.style.setProperty('--secondary-color', branding.secondaryColor);

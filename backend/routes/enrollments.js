@@ -20,19 +20,24 @@ router.post('/', protect, auditLogMiddleware('Enrollment'), async (req, res) => 
         }
 
         // Verify course exists
-        const course = await Course.findById(courseId);
+        const course = await Course.findOne({ _id: courseId, organizationId: req.organizationId });
         if (!course) {
             return res.status(404).json({ success: false, message: 'Course not found' });
         }
 
         // Check if already enrolled
-        const existingEnrollment = await Enrollment.findOne({ student, course: courseId });
+        const existingEnrollment = await Enrollment.findOne({
+            student,
+            course: courseId,
+            organizationId: req.organizationId
+        });
         if (existingEnrollment) {
             return res.status(400).json({ success: false, message: 'Already enrolled in this course' });
         }
 
         // Create enrollment
         const enrollment = await Enrollment.create({
+            organizationId: req.organizationId,
             student,
             course: courseId,
             semester: course.semester // Auto-inherit semester from course
@@ -53,7 +58,10 @@ router.post('/', protect, auditLogMiddleware('Enrollment'), async (req, res) => 
 // @access  Private
 router.get('/my', protect, async (req, res) => {
     try {
-        const enrollments = await Enrollment.find({ student: req.user._id })
+        const enrollments = await Enrollment.find({
+            student: req.user._id,
+            organizationId: req.organizationId
+        })
             .populate('course', 'title code credits semester')
             .sort({ enrolledAt: -1 });
 
@@ -73,7 +81,10 @@ router.get('/my', protect, async (req, res) => {
 // @access  Private/Admin
 router.get('/student/:studentId', protect, admin, async (req, res) => {
     try {
-        const enrollments = await Enrollment.find({ student: req.params.studentId })
+        const enrollments = await Enrollment.find({
+            student: req.params.studentId,
+            organizationId: req.organizationId
+        })
             .populate('course', 'title code credits semester')
             .sort({ enrolledAt: -1 });
 
@@ -93,7 +104,10 @@ router.get('/student/:studentId', protect, admin, async (req, res) => {
 // @access  Private
 router.delete('/:id', protect, auditLogMiddleware('Enrollment'), async (req, res) => {
     try {
-        const enrollment = await Enrollment.findById(req.params.id);
+        const enrollment = await Enrollment.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
 
         if (!enrollment) {
             return res.status(404).json({ success: false, message: 'Enrollment not found' });
@@ -130,7 +144,10 @@ const getGradePoints = (grade) => {
 router.put('/:id/grade', protect, admin, auditLogMiddleware('Grade'), async (req, res) => {
     try {
         const { grade, status } = req.body;
-        const enrollment = await Enrollment.findById(req.params.id);
+        const enrollment = await Enrollment.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
 
         if (!enrollment) {
             return res.status(404).json({ success: false, message: 'Enrollment not found' });
@@ -155,6 +172,7 @@ router.get('/transcript', protect, async (req, res) => {
     try {
         const enrollments = await Enrollment.find({
             student: req.user._id,
+            organizationId: req.organizationId,
             status: 'completed'
         }).populate('course', 'title code credits semester');
 
@@ -205,6 +223,7 @@ router.get('/transcript/:studentId', protect, admin, async (req, res) => {
     try {
         const enrollments = await Enrollment.find({
             student: req.params.studentId,
+            organizationId: req.organizationId,
             status: 'completed'
         }).populate('course', 'title code credits semester');
 

@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useOrganization } from '../context/OrganizationContext';
 import '../pages/ProgramsPage.css';
 
 const AdmissionsPage = () => {
+    const { name } = useOrganization();
     return (
         <div className="admissions-page">
             <Navbar />
@@ -21,7 +23,7 @@ const AdmissionsPage = () => {
                         <span className="section-badge">Intake Open: January 2026</span>
                         <h2 className="section-title">Ready to Begin Your Journey?</h2>
                         <p className="section-subtitle">
-                            Follow these simple steps to apply to Premium School of Health Sciences
+                            Follow these simple steps to apply to {name}
                         </p>
                     </div>
 

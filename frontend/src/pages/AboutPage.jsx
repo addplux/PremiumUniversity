@@ -1,15 +1,20 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useOrganization } from '../context/OrganizationContext';
 
 const AboutPage = () => {
+    const { name, organization } = useOrganization();
+    const contact = organization?.contact || {};
+    const shortName = name === 'Premium School of Health Sciences' ? 'PSOHS' : name.split(' ')[0];
+
     return (
         <div>
             <Navbar />
 
             <section className="page-hero">
                 <div className="container">
-                    <h1>About PSOHS</h1>
-                    <p>Leading Healthcare Education in Zambia</p>
+                    <h1>About {shortName}</h1>
+                    <p>Leading Healthcare Education in {contact.country || 'Zambia'}</p>
                 </div>
             </section>
 
@@ -18,8 +23,8 @@ const AboutPage = () => {
                     <div className="program-detail-card">
                         <h2>Our Mission</h2>
                         <p>
-                            Premium School of Health Sciences (PSOHS) is dedicated to producing exceptional healthcare
-                            professionals who will serve communities across Zambia and beyond. Our mission is to provide
+                            {name} ({shortName}) is dedicated to producing exceptional healthcare
+                            professionals who will serve communities across {contact.country || 'Zambia'} and beyond. Our mission is to provide
                             quality education that combines theoretical knowledge with practical skills, preparing students
                             for successful careers in the healthcare sector.
                         </p>
@@ -28,14 +33,14 @@ const AboutPage = () => {
                     <div className="program-detail-card">
                         <h2>Our Vision</h2>
                         <p>
-                            To be the leading institution for health sciences education in Zambia, recognized for
+                            To be the leading institution for health sciences education in {contact.country || 'Zambia'}, recognized for
                             excellence in teaching, innovation in healthcare training, and producing graduates who
                             make a significant impact on public health.
                         </p>
                     </div>
 
                     <div className="program-detail-card">
-                        <h2>Why Choose PSOHS?</h2>
+                        <h2>Why Choose {shortName}?</h2>
                         <div className="program-details-grid">
                             <div className="detail-section">
                                 <h4>👨‍🏫 Experienced Faculty</h4>

@@ -13,6 +13,7 @@ router.post('/', protect, academicAdmin, async (req, res) => {
     try {
         const assignment = await Assignment.create({
             ...req.body,
+            organizationId: req.organizationId,
             createdBy: req.user._id
         });
 
@@ -31,8 +32,10 @@ router.post('/', protect, academicAdmin, async (req, res) => {
 // @access  Private
 router.get('/course/:courseId', protect, async (req, res) => {
     try {
-        const assignments = await Assignment.find({ course: req.params.courseId })
-            .sort({ deadline: 1 });
+        const assignments = await Assignment.find({
+            course: req.params.courseId,
+            organizationId: req.organizationId
+        }).sort({ deadline: 1 });
 
         res.json({
             success: true,
@@ -50,7 +53,10 @@ router.get('/course/:courseId', protect, async (req, res) => {
 // @access  Private
 router.get('/:id', protect, async (req, res) => {
     try {
-        const assignment = await Assignment.findById(req.params.id).populate('course', 'title code');
+        const assignment = await Assignment.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        }).populate('course', 'title code');
         if (!assignment) {
             return res.status(404).json({ success: false, message: 'Assignment not found' });
         }
@@ -81,7 +87,10 @@ router.get('/:id', protect, async (req, res) => {
 // @access  Private/Student
 router.post('/:id/submit', protect, async (req, res) => {
     try {
-        const assignment = await Assignment.findById(req.params.id);
+        const assignment = await Assignment.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
         if (!assignment) {
             return res.status(404).json({ success: false, message: 'Assignment not found' });
         }
@@ -97,6 +106,7 @@ router.post('/:id/submit', protect, async (req, res) => {
         }
 
         const submission = await Submission.create({
+            organizationId: req.organizationId,
             assignment: req.params.id,
             student: req.user._id,
             content: req.body.content,
@@ -121,7 +131,10 @@ router.post('/:id/submit', protect, async (req, res) => {
 // @access  Private/Admin
 router.get('/:id/submissions', protect, academicAdmin, async (req, res) => {
     try {
-        const submissions = await Submission.find({ assignment: req.params.id })
+        const submissions = await Submission.find({
+            assignment: req.params.id,
+            organizationId: req.organizationId
+        })
             .populate('student', 'firstName lastName email')
             .sort({ submittedAt: -1 });
 
@@ -143,7 +156,10 @@ router.put('/submission/:id/grade', protect, academicAdmin, async (req, res) => 
     try {
         const { grade, feedback } = req.body;
 
-        const submission = await Submission.findById(req.params.id);
+        const submission = await Submission.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
         if (!submission) {
             return res.status(404).json({ success: false, message: 'Submission not found' });
         }

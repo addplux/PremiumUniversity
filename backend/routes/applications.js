@@ -10,6 +10,7 @@ const router = express.Router();
 router.post('/', protect, async (req, res) => {
     try {
         const application = await Application.create({
+            organizationId: req.organizationId,
             user: req.user._id,
             ...req.body
         });
@@ -34,7 +35,10 @@ router.post('/', protect, async (req, res) => {
 // @access  Private
 router.get('/my', protect, async (req, res) => {
     try {
-        const applications = await Application.find({ user: req.user._id }).sort({ createdAt: -1 });
+        const applications = await Application.find({
+            user: req.user._id,
+            organizationId: req.organizationId
+        }).sort({ createdAt: -1 });
 
         res.json({
             success: true,
@@ -55,7 +59,10 @@ router.get('/my', protect, async (req, res) => {
 // @access  Private
 router.get('/:id', protect, async (req, res) => {
     try {
-        const application = await Application.findById(req.params.id).populate('user', 'firstName lastName email');
+        const application = await Application.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        }).populate('user', 'firstName lastName email');
 
         if (!application) {
             return res.status(404).json({
@@ -92,7 +99,7 @@ router.get('/', protect, admin, async (req, res) => {
     try {
         const { program, status, page = 1, limit = 20 } = req.query;
 
-        const query = {};
+        const query = { organizationId: req.organizationId };
         if (program) query.program = program;
         if (status) query.status = status;
 
@@ -127,7 +134,10 @@ router.put('/:id/status', protect, admin, async (req, res) => {
     try {
         const { status, comment } = req.body;
 
-        const application = await Application.findById(req.params.id);
+        const application = await Application.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
 
         if (!application) {
             return res.status(404).json({
@@ -169,7 +179,10 @@ router.put('/:id/status', protect, admin, async (req, res) => {
 // @access  Private
 router.delete('/:id', protect, async (req, res) => {
     try {
-        const application = await Application.findById(req.params.id);
+        const application = await Application.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
 
         if (!application) {
             return res.status(404).json({

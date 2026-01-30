@@ -1,20 +1,24 @@
 import { Link } from 'react-router-dom';
+import { useOrganization } from '../context/OrganizationContext';
 import './Footer.css';
 
 const Footer = () => {
+    const { organization, logo, name } = useOrganization();
+    const contact = organization?.contact || {};
+
     return (
         <footer className="footer">
             <div className="container">
                 <div className="footer-grid">
                     <div className="footer-col">
                         <img
-                            src="/assets/logo.jpg"
-                            alt="PSOHS Logo"
+                            src={logo || "/assets/logo.jpg"}
+                            alt={`${name} Logo`}
                             className="footer-logo"
                         />
                         <p className="footer-tagline">Pursuing Professional Excellence</p>
                         <p className="footer-description">
-                            Premium School of Health Sciences is committed to providing quality healthcare education.
+                            {name} is committed to providing quality healthcare education.
                         </p>
                     </div>
 
@@ -42,15 +46,15 @@ const Footer = () => {
                     <div className="footer-col">
                         <h4>Contact</h4>
                         <ul>
-                            <li>📧 info@psohs.ac.zm</li>
-                            <li>📞 +260 XXX XXX XXX</li>
-                            <li>📍 Lusaka, Zambia</li>
+                            <li>📧 {contact.supportEmail || contact.adminEmail || 'info@psohs.ac.zm'}</li>
+                            <li>📞 {contact.adminPhone || '+260 XXX XXX XXX'}</li>
+                            <li>📍 {contact.address || 'Lusaka'}, {contact.country || 'Zambia'}</li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} Premium School of Health Sciences. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} {name}. All rights reserved.</p>
                 </div>
             </div>
         </footer>

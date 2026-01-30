@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useOrganization } from '../context/OrganizationContext';
 import './AITutorWidget.css';
 
 const AITutorWidget = () => {
     const { user } = useAuth();
+    const { name, primaryColor } = useOrganization();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { role: 'assistant', content: "Hi! I'm your AI Tutor. I can help with your course material, assignments, or study tips. What are you working on?" }
@@ -66,7 +68,7 @@ const AITutorWidget = () => {
                         <div className="header-info">
                             <span className="tutor-avatar">🤖</span>
                             <div>
-                                <h3>AfriEdu Tutor</h3>
+                                <h3>{name.split(' ')[0]} Assistant</h3>
                                 <span className="status-indicator">Online</span>
                             </div>
                         </div>

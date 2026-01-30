@@ -16,24 +16,29 @@ router.post('/', protect, academicAdmin, auditMiddleware('grade_posted', 'Grade'
         const { studentId, courseId, caMarks, examMarks, semester, academicYear, remarks } = req.body;
 
         // Verify student exists
-        const student = await User.findById(studentId);
+        const student = await User.findOne({ _id: studentId, organizationId: req.organizationId });
         if (!student || student.role !== 'student') {
             return res.status(404).json({ success: false, message: 'Student not found' });
         }
 
         // Verify course exists
-        const course = await Course.findById(courseId);
+        const course = await Course.findOne({ _id: courseId, organizationId: req.organizationId });
         if (!course) {
             return res.status(404).json({ success: false, message: 'Course not found' });
         }
 
         // Check if student is enrolled in the course
-        const enrollment = await Enrollment.findOne({ student: studentId, course: courseId });
+        const enrollment = await Enrollment.findOne({
+            student: studentId,
+            course: courseId,
+            organizationId: req.organizationId
+        });
         if (!enrollment) {
             return res.status(400).json({ success: false, message: 'Student is not enrolled in this course' });
         }
 
         const grade = await Grade.create({
+            organizationId: req.organizationId,
             student: studentId,
             course: courseId,
             caMarks,
@@ -68,7 +73,10 @@ router.put('/:id', protect, academicAdmin, auditMiddleware('grade_updated', 'Gra
     try {
         const { caMarks, examMarks, remarks } = req.body;
 
-        const grade = await Grade.findById(req.params.id);
+        const grade = await Grade.findOne({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
         if (!grade) {
             return res.status(404).json({ success: false, message: 'Grade not found' });
         }
@@ -103,7 +111,10 @@ router.get('/course/:courseId', protect, academicAdmin, async (req, res) => {
     try {
         const { semester, academicYear } = req.query;
 
-        const query = { course: req.params.courseId };
+        const query = {
+            course: req.params.courseId,
+            organizationId: req.organizationId
+        };
         if (semester) query.semester = semester;
         if (academicYear) query.academicYear = academicYear;
 
@@ -128,7 +139,10 @@ router.get('/course/:courseId', protect, academicAdmin, async (req, res) => {
 // @access  Private/Academic Admin
 router.get('/student/:studentId', protect, academicAdmin, async (req, res) => {
     try {
-        const grades = await Grade.find({ student: req.params.studentId })
+        const grades = await Grade.find({
+            student: req.params.studentId,
+            organizationId: req.organizationId
+        })
             .populate('course', 'title code')
             .sort({ academicYear: -1, semester: -1 });
 
@@ -153,7 +167,10 @@ router.get('/student/:studentId', protect, academicAdmin, async (req, res) => {
 // @access  Private/Student
 router.get('/my', protect, async (req, res) => {
     try {
-        const grades = await Grade.find({ student: req.user._id })
+        const grades = await Grade.find({
+            student: req.user._id,
+            organizationId: req.organizationId
+        })
             .populate('course', 'title code')
             .sort({ academicYear: -1, semester: -1 });
 
@@ -178,7 +195,10 @@ router.get('/my', protect, async (req, res) => {
 // @access  Private/Academic Admin
 router.delete('/:id', protect, academicAdmin, async (req, res) => {
     try {
-        const grade = await Grade.findByIdAndDelete(req.params.id);
+        const grade = await Grade.findOneAndDelete({
+            _id: req.params.id,
+            organizationId: req.organizationId
+        });
         if (!grade) {
             return res.status(404).json({ success: false, message: 'Grade not found' });
         }

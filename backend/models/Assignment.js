@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const assignmentSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     course: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Course',
@@ -31,5 +37,8 @@ const assignmentSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+assignmentSchema.index({ organizationId: 1, course: 1 });
+assignmentSchema.index({ organizationId: 1, createdBy: 1 });
 
 module.exports = mongoose.model('Assignment', assignmentSchema);

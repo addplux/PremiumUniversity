@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useOrganization } from '../context/OrganizationContext';
 import './Navbar.css';
 
 const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
     const { isAuthenticated, isAdmin, user, logout } = useAuth();
+    const { organization, logo, name } = useOrganization();
 
     const isActive = (path) => location.pathname === path;
 
@@ -21,13 +23,13 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-container">
                         <img
-                            src="/assets/logo.jpg"
-                            alt="PSOHS Logo"
+                            src={logo || "/assets/logo.jpg"}
+                            alt={`${name} Logo`}
                             className="logo"
                         />
                         <div className="logo-text">
-                            <h2>PSOHS</h2>
-                            <p>Premium School of Health Sciences</p>
+                            <h2>{name === 'Premium School of Health Sciences' ? 'PSOHS' : name.substring(0, 10)}</h2>
+                            <p>{name}</p>
                         </div>
                     </Link>
 

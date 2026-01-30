@@ -98,3 +98,19 @@ exports.anyAdmin = (req, res, next) => {
         });
     }
 };
+// Super Admin (Global) middleware
+exports.superAdmin = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id).select('+isSuperAdmin');
+        if (user && user.isSuperAdmin) {
+            next();
+        } else {
+            res.status(403).json({
+                success: false,
+                message: 'Access denied. Global Super Admin privileges required.'
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};

@@ -1,8 +1,11 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useOrganization } from '../context/OrganizationContext';
 import './GalleryPage.css';
 
 const GalleryPage = () => {
+    const { name } = useOrganization();
+    const shortName = name === 'Premium School of Health Sciences' ? 'PSOHS' : name.split(' ')[0];
     const gallery = [
         {
             src: '/assets/facility_equipment.jpg',
@@ -38,7 +41,7 @@ const GalleryPage = () => {
             <section className="page-hero">
                 <div className="container">
                     <h1>Student Life & Facilities</h1>
-                    <p>Experience life at PSOHS through our gallery</p>
+                    <p>Experience life at {shortName} through our gallery</p>
                 </div>
             </section>
 

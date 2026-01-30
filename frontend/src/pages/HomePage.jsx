@@ -2,9 +2,13 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useOrganization } from '../context/OrganizationContext';
 import './HomePage.css';
 
 const HomePage = () => {
+    const { name, organization } = useOrganization();
+    const contact = organization?.contact || {};
+
     useEffect(() => {
         // Intersection Observer for stats animation
         const statNumbers = document.querySelectorAll('.stat-number');
@@ -52,7 +56,7 @@ const HomePage = () => {
                             <span className="hero-badge">January 2026 Intake Open</span>
                             <h1 className="hero-title">Pursuing Professional Excellence in Health Sciences</h1>
                             <p className="hero-subtitle">
-                                Join Zambia's premier institution for Registered Nursing, Clinical Medicine, and Environmental Health programs
+                                Join {name}'s premier institution for Registered Nursing, Clinical Medicine, and Environmental Health programs
                             </p>
                             <div className="hero-buttons">
                                 <Link to="/admissions" className="btn-primary">Apply Now</Link>
@@ -100,10 +104,10 @@ const HomePage = () => {
                 <div className="container">
                     <div className="about-grid">
                         <div className="about-content">
-                            <span className="section-badge">About PSOHS</span>
-                            <h2 className="section-title">Leading Healthcare Education in Zambia</h2>
+                            <span className="section-badge">About {name === 'Premium School of Health Sciences' ? 'PSOHS' : name.split(' ')[0]}</span>
+                            <h2 className="section-title">Leading Healthcare Education in {contact.country || 'Zambia'}</h2>
                             <p>
-                                Premium School of Health Sciences (PSOHS) is a premier institution dedicated to
+                                {name} is a premier institution dedicated to
                                 producing exceptional healthcare professionals. Our commitment to excellence,
                                 modern facilities, and experienced faculty ensure that our graduates are well-prepared
                                 for successful careers in the healthcare sector.
@@ -118,7 +122,7 @@ const HomePage = () => {
                         <div className="about-image">
                             <img
                                 src="/assets/students_group.jpg"
-                                alt="PSOHS Students"
+                                alt={`${name} Students`}
                             />
                         </div>
                     </div>

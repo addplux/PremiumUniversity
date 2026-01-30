@@ -2,21 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Organization = require('../models/Organization');
 const User = require('../models/User');
-const { protect, admin } = require('../middleware/auth'); // Fixed import path
+const { protect, superAdmin } = require('../middleware/auth');
 
 // @route   GET /api/organizations
 // @desc    Get all organizations (Super Admin only)
 // @access  Private/Super Admin
-router.get('/', protect, async (req, res) => {
+router.get('/', protect, superAdmin, async (req, res) => {
     try {
-        // Check if user is super admin
-        const user = await User.findById(req.user._id).select('+isSuperAdmin');
-        if (!user.isSuperAdmin) {
-            return res.status(403).json({
-                success: false,
-                message: 'Access denied. Super admin privileges required.'
-            });
-        }
 
         const organizations = await Organization.find()
             .populate('createdBy', 'firstName lastName email')
@@ -81,7 +73,7 @@ router.get('/:id', protect, async (req, res) => {
 
         // Check if user has access (super admin or belongs to this org)
         const user = await User.findById(req.user._id).select('+isSuperAdmin');
-        if (!user.isSuperAdmin && req.organizationId.toString() !== organization._id.toString()) {
+        if (!user.isSuperAdmin && req.organizationId && req.organizationId.toString() !== organization._id.toString()) {
             return res.status(403).json({
                 success: false,
                 message: 'Access denied'
@@ -101,16 +93,8 @@ router.get('/:id', protect, async (req, res) => {
 // @route   POST /api/organizations
 // @desc    Create new organization
 // @access  Private/Super Admin
-router.post('/', protect, async (req, res) => {
+router.post('/', protect, superAdmin, async (req, res) => {
     try {
-        // Check if user is super admin
-        const user = await User.findById(req.user._id).select('+isSuperAdmin');
-        if (!user.isSuperAdmin) {
-            return res.status(403).json({
-                success: false,
-                message: 'Access denied. Super admin privileges required.'
-            });
-        }
 
         const {
             name,
@@ -193,7 +177,7 @@ router.put('/:id', protect, async (req, res) => {
         // Check if user has access
         const user = await User.findById(req.user._id).select('+isSuperAdmin');
         const isSystemAdmin = req.user.role === 'system_admin' &&
-            req.organizationId.toString() === organization._id.toString();
+            req.organizationId && req.organizationId.toString() === organization._id.toString();
 
         if (!user.isSuperAdmin && !isSystemAdmin) {
             return res.status(403).json({
@@ -239,16 +223,8 @@ router.put('/:id', protect, async (req, res) => {
 // @route   DELETE /api/organizations/:id
 // @desc    Delete organization (soft delete - set to inactive)
 // @access  Private/Super Admin
-router.delete('/:id', protect, async (req, res) => {
+router.delete('/:id', protect, superAdmin, async (req, res) => {
     try {
-        // Check if user is super admin
-        const user = await User.findById(req.user._id).select('+isSuperAdmin');
-        if (!user.isSuperAdmin) {
-            return res.status(403).json({
-                success: false,
-                message: 'Access denied. Super admin privileges required.'
-            });
-        }
 
         const organization = await Organization.findById(req.params.id);
 

@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const studentFeeSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
     student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -89,6 +95,10 @@ const studentFeeSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+studentFeeSchema.index({ organizationId: 1, student: 1 });
+studentFeeSchema.index({ organizationId: 1, status: 1 });
+studentFeeSchema.index({ organizationId: 1, academicYear: 1 });
 
 // Calculate total due and remaining balance before saving
 studentFeeSchema.pre('save', function (next) {

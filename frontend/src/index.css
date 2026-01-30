@@ -20,6 +20,11 @@
   /* Deep Professional Green */
   --medical-green-dark: #1B5E20;
 
+  /* Dynamic Branding Variables - Default to PSOHS Colors */
+  --primary-color: #0A2540;
+  --secondary-color: #C49F4D;
+  --primary-color-rgb: 10, 37, 64;
+
   --text-dark: #1A1F36;
   --text-gray: #4F566B;
   --text-light: #697386;
@@ -29,8 +34,8 @@
   --bg-gray: #E3E8EE;
 
   /* Gradients - Subtle and Classic */
-  --gradient-primary: linear-gradient(135deg, #0A2540 0%, #1A3A5B 100%);
-  --gradient-hero: linear-gradient(135deg, rgba(10, 37, 64, 0.96) 0%, rgba(5, 22, 38, 0.98) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.96) 0%, rgba(var(--primary-color-rgb), 0.98) 100%);
 
   /* Typography */
   --font-primary: 'Inter', sans-serif;
@@ -149,8 +154,8 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 1px var(--primary-blue);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
 }
 
 /* ==================== UTILITY CLASSES ==================== */
@@ -191,9 +196,9 @@ select:focus {
 }
 
 .btn-primary {
-  background: var(--primary-blue);
+  background: var(--primary-color);
   color: white;
-  border-color: var(--primary-blue);
+  border-color: var(--primary-color);
 }
 
 .btn-primary:hover {
@@ -203,8 +208,8 @@ select:focus {
 
 .btn-secondary {
   background: transparent;
-  color: var(--primary-blue);
-  border: 1px solid var(--primary-blue);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
 .btn-secondary:hover {
