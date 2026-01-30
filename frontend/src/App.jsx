@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { NotificationProvider } from './context/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import EnterpriseLayout from './layouts/EnterpriseLayout';
 import LearningLayout from './layouts/LearningLayout';
@@ -54,6 +55,7 @@ import IDCardManager from './pages/IDCardManager';
 import RetentionDashboard from './pages/RetentionDashboard';
 import EquityDashboard from './pages/EquityDashboard';
 import AITutorWidget from './components/AITutorWidget';
+import AuditLogManager from './pages/AuditLogManager';
 
 // Dashboard Router - Redirects to appropriate dashboard based on role
 const DashboardRouter = () => {
@@ -76,119 +78,121 @@ const DashboardRouter = () => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <OrganizationBanner />
-        <OfflineIndicator />
-        <LowBandwidthMode />
-        <div style={{ position: 'relative', zIndex: 1000 }}>
-          <AITutorWidget />
-        </div>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/programs" element={<ProgramsPage />} />
-          <Route path="/admissions" element={<AdmissionsPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<LoginPage />} />
+      <NotificationProvider>
+        <Router>
+          <OrganizationBanner />
+          <OfflineIndicator />
+          <LowBandwidthMode />
+          <div style={{ position: 'relative', zIndex: 1000 }}>
+            <AITutorWidget />
+          </div>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/programs" element={<ProgramsPage />} />
+            <Route path="/admissions" element={<AdmissionsPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/login" element={<LoginPage />} />
 
 
-          {/* Auto-redirect to role-specific dashboard */}
-          <Route path="/portal" element={
-            <ProtectedRoute>
-              <DashboardRouter />
-            </ProtectedRoute>
-          } />
+            {/* Auto-redirect to role-specific dashboard */}
+            <Route path="/portal" element={
+              <ProtectedRoute>
+                <DashboardRouter />
+              </ProtectedRoute>
+            } />
 
-          {/* System Admin Routes */}
-          <Route path="/admin/system" element={
-            <ProtectedRoute allowedRoles={['system_admin']}>
-              <EnterpriseLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<SystemAdminDashboard />} />
-            <Route path="users" element={<StudentRegistry />} />
-            {/* Add more system admin routes as needed */}
-          </Route>
+            {/* System Admin Routes */}
+            <Route path="/admin/system" element={
+              <ProtectedRoute allowedRoles={['system_admin']}>
+                <EnterpriseLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<SystemAdminDashboard />} />
+              <Route path="users" element={<StudentRegistry />} />
+              <Route path="audit" element={<AuditLogManager />} />
+              {/* Add more system admin routes as needed */}
+            </Route>
 
-          {/* Finance Admin Routes */}
-          <Route path="/admin/finance" element={
-            <ProtectedRoute allowedRoles={['finance_admin', 'system_admin']}>
-              <EnterpriseLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<FinanceAdminDashboard />} />
-            <Route path="payments" element={<FinanceDashboard />} />
-            <Route path="record" element={<RecordPayment />} />
-            <Route path="reports" element={<FinanceReports />} />
-            {/* Add more finance admin routes as needed */}
-          </Route>
+            {/* Finance Admin Routes */}
+            <Route path="/admin/finance" element={
+              <ProtectedRoute allowedRoles={['finance_admin', 'system_admin']}>
+                <EnterpriseLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<FinanceAdminDashboard />} />
+              <Route path="payments" element={<FinanceDashboard />} />
+              <Route path="record" element={<RecordPayment />} />
+              <Route path="reports" element={<FinanceReports />} />
+              {/* Add more finance admin routes as needed */}
+            </Route>
 
-          {/* Academic Admin Routes */}
-          <Route path="/admin/academic" element={
-            <ProtectedRoute allowedRoles={['academic_admin', 'system_admin']}>
-              <EnterpriseLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<AcademicAdminDashboard />} />
-            <Route path="courses" element={<CourseManager />} />
-            <Route path="assignments" element={<AssignmentManager />} />
-            <Route path="grades" element={<AcademicRecords />} />
-            <Route path="timetable" element={<ScheduleManager />} />
-            {/* Add more academic admin routes as needed */}
-          </Route>
+            {/* Academic Admin Routes */}
+            <Route path="/admin/academic" element={
+              <ProtectedRoute allowedRoles={['academic_admin', 'system_admin']}>
+                <EnterpriseLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<AcademicAdminDashboard />} />
+              <Route path="courses" element={<CourseManager />} />
+              <Route path="assignments" element={<AssignmentManager />} />
+              <Route path="grades" element={<AcademicRecords />} />
+              <Route path="timetable" element={<ScheduleManager />} />
+              {/* Add more academic admin routes as needed */}
+            </Route>
 
-          {/* Legacy Admin Routes (for backward compatibility) */}
-          <Route path="/admin" element={
-            <ProtectedRoute allowedRoles={['admin', 'system_admin', 'finance_admin', 'academic_admin']}>
-              <EnterpriseLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<AdminDashboard />} />
-            <Route path="retention" element={<RetentionDashboard />} />
-            <Route path="equity" element={<EquityDashboard />} />
-            <Route path="applications" element={<ApplicationsManager />} />
-            <Route path="students" element={<StudentRegistry />} />
-            <Route path="teachers" element={<TeacherRegistry />} />
-            <Route path="lectures" element={<LectureManager />} />
-            <Route path="examinations" element={<ExaminationManager />} />
-            <Route path="fees" element={<StudentFeeManager />} />
-            <Route path="finance" element={<FinanceDashboard />} />
-            <Route path="contact" element={<ContactManager />} />
-            <Route path="courses" element={<CourseManager />} />
-            <Route path="assignments" element={<AssignmentManager />} />
-            <Route path="academic-records" element={<AcademicRecords />} />
-            <Route path="classes" element={<ScheduleManager />} />
-            <Route path="lesson-planning" element={<LessonPlanning />} />
-            <Route path="syllabus" element={<SyllabusManager />} />
-            <Route path="materials" element={<MaterialsManager />} />
-            <Route path="homework" element={<HomeworkManager />} />
-            <Route path="classwork" element={<ClassworkManager />} />
-            <Route path="circulars" element={<CircularManager />} />
-            <Route path="notifications" element={<NotificationCenter />} />
-            <Route path="id-cards" element={<IDCardManager />} />
-          </Route>
+            {/* Legacy Admin Routes (for backward compatibility) */}
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['admin', 'system_admin', 'finance_admin', 'academic_admin']}>
+                <EnterpriseLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<AdminDashboard />} />
+              <Route path="retention" element={<RetentionDashboard />} />
+              <Route path="equity" element={<EquityDashboard />} />
+              <Route path="applications" element={<ApplicationsManager />} />
+              <Route path="students" element={<StudentRegistry />} />
+              <Route path="teachers" element={<TeacherRegistry />} />
+              <Route path="lectures" element={<LectureManager />} />
+              <Route path="examinations" element={<ExaminationManager />} />
+              <Route path="fees" element={<StudentFeeManager />} />
+              <Route path="finance" element={<FinanceDashboard />} />
+              <Route path="contact" element={<ContactManager />} />
+              <Route path="courses" element={<CourseManager />} />
+              <Route path="assignments" element={<AssignmentManager />} />
+              <Route path="academic-records" element={<AcademicRecords />} />
+              <Route path="classes" element={<ScheduleManager />} />
+              <Route path="lesson-planning" element={<LessonPlanning />} />
+              <Route path="syllabus" element={<SyllabusManager />} />
+              <Route path="materials" element={<MaterialsManager />} />
+              <Route path="homework" element={<HomeworkManager />} />
+              <Route path="classwork" element={<ClassworkManager />} />
+              <Route path="circulars" element={<CircularManager />} />
+              <Route path="notifications" element={<NotificationCenter />} />
+              <Route path="id-cards" element={<IDCardManager />} />
+            </Route>
 
-          {/* Student Portal */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute allowedRoles={['student']}>
-              <LearningLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<StudentDashboard />} />
-            <Route path="courses" element={<CourseCatalog />} />
-            <Route path="assignments" element={<StudentAssignments />} />
-            <Route path="finance" element={<StudentFinance />} />
-            <Route path="grades" element={<GradesDashboard />} />
-            <Route path="timetable" element={<Timetable />} />
-            <Route path="events" element={<EventsCalendar />} />
-          </Route>
+            {/* Student Portal */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <LearningLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<StudentDashboard />} />
+              <Route path="courses" element={<CourseCatalog />} />
+              <Route path="assignments" element={<StudentAssignments />} />
+              <Route path="finance" element={<StudentFinance />} />
+              <Route path="grades" element={<GradesDashboard />} />
+              <Route path="timetable" element={<Timetable />} />
+              <Route path="events" element={<EventsCalendar />} />
+            </Route>
 
-          {/* 404 */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
+            {/* 404 */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
     </AuthProvider>
   );
 }

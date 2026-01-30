@@ -2,13 +2,14 @@ const express = require('express');
 const Enrollment = require('../models/Enrollment.js');
 const Course = require('../models/Course.js');
 const { protect, admin } = require('../middleware/auth.js');
+const auditLogMiddleware = require('../middleware/auditMiddleware');
 
 const router = express.Router();
 
 // @route   POST /api/enrollments
 // @desc    Enroll in a course
 // @access  Private
-router.post('/', protect, async (req, res) => {
+router.post('/', protect, auditLogMiddleware('Enrollment'), async (req, res) => {
     try {
         const { courseId } = req.body;
         let student = req.user._id;
@@ -90,7 +91,7 @@ router.get('/student/:studentId', protect, admin, async (req, res) => {
 // @route   DELETE /api/enrollments/:id
 // @desc    Drop a course (Admin or Student themselves)
 // @access  Private
-router.delete('/:id', protect, async (req, res) => {
+router.delete('/:id', protect, auditLogMiddleware('Enrollment'), async (req, res) => {
     try {
         const enrollment = await Enrollment.findById(req.params.id);
 
@@ -126,7 +127,7 @@ const getGradePoints = (grade) => {
 // @route   PUT /api/enrollments/:id/grade
 // @desc    Update final grade for an enrollment (Admin)
 // @access  Private/Admin
-router.put('/:id/grade', protect, admin, async (req, res) => {
+router.put('/:id/grade', protect, admin, auditLogMiddleware('Grade'), async (req, res) => {
     try {
         const { grade, status } = req.body;
         const enrollment = await Enrollment.findById(req.params.id);

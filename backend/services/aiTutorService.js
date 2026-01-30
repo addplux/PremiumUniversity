@@ -1,3 +1,6 @@
+const { CircuitBreaker } = require('../util/resilience');
+const notificationService = require('./notificationService');
+
 let GoogleGenerativeAI;
 try {
     const generativeAi = require('@google/generative-ai');
@@ -12,65 +15,80 @@ class AITutorService {
             ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
             : null;
         this.model = this.genAI ? this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" }) : null;
+
+        // Initialize Circuit Breaker for Gemini API
+        if (this.model) {
+            this.breaker = new CircuitBreaker(
+                (prompt) => this.model.generateContent(prompt),
+                { failureThreshold: 3, resetTimeout: 60000 } // 1 minute reset
+            );
+        }
     }
 
     async getResponse(studentId, message, context = {}) {
-        // If no API key or dependency, return mock response for demo/testing
+        // If no API key or dependency, or circuit breaker tripped, return mock/fallback
         if (!this.model) {
             return this.getMockResponse(message);
         }
 
         try {
             const systemPrompt = `
-        You are an AI Tutor for AfriEdu Hub.
-        Student Context:
-        - Name: ${context.studentName || 'Student'}
-        - Course: ${context.courseName || 'General'}
-        - Level: ${context.level || 'University'}
-        
-        Instructions:
-        - Be encouraging, patient, and clear.
-        - Use culturally relevant examples for Africa where appropriate.
-        - Explain concepts simply but correctly.
-        - Do not write essays for the student, guide them.
-        - If asked about fees/admin, refer them to the administration.
-      `;
+                You are an AI Tutor for AfriEdu Hub.
+                Student Context:
+                - Name: ${context.studentName || 'Student'}
+                - Course: ${context.courseName || 'General'}
+                - Level: ${context.level || 'University'}
+                
+                Instructions:
+                - Be encouraging, patient, and clear.
+                - Use culturally relevant examples for Africa where appropriate.
+                - Explain concepts simply but correctly.
+                - Do not write essays for the student, guide them.
+                - If asked about fees/admin, refer them to the administration.
+            `;
 
             const prompt = `${systemPrompt}\n\nStudent message: ${message}`;
-            const result = await this.model.generateContent(prompt);
+
+            // Use Circuit Breaker to fire the request
+            const result = await this.breaker.fire(prompt);
             const response = await result.response;
-            return response.text();
+            const text = response.text();
+
+            // Send real-time notification
+            notificationService.sendToUser(studentId, {
+                title: 'AI Tutor Response',
+                message: `Your tutor has replied to: "${message.substring(0, 20)}..."`,
+                type: 'info',
+                context: 'ai_chat'
+            });
+
+            return text;
 
         } catch (error) {
-            console.error('AI Tutor Error:', error);
+            console.error('AI Tutor Error:', error.message);
+            if (error.message.includes('Circuit Breaker is OPEN')) {
+                return "The AI service is currently unavailable. I'm switching to offline mode.";
+            }
             return "I'm having trouble connecting right now. Please try again later or ask your instructor directly.";
         }
     }
 
     getMockResponse(message) {
-        // Simple keyword matching for demo purposes
         const msg = message.toLowerCase();
-
-        // Simulate thinking delay
         return new Promise(resolve => {
             setTimeout(() => {
                 if (msg.includes('hello') || msg.includes('hi')) {
-                    resolve("Hello! I'm your Gemini-powered AI Tutor (running in mock mode). How can I help you today?");
-                } else if (msg.includes('math') || msg.includes('algebra') || msg.includes('calculus')) {
-                    resolve("Mathematics can be challenging! Could you share the specific problem you're working on? I can help guide you through the steps.");
-                } else if (msg.includes('assignment') || msg.includes('homework')) {
-                    resolve("I can help clarify assignment requirements or review concepts, but I can't do the work for you. What specifically are you stuck on?");
+                    resolve("Hello! I'm your AI Tutor (running in fallback mode). How can I help you today?");
+                } else if (msg.includes('math') || msg.includes('algebra')) {
+                    resolve("Mathematics can be challenging! Share the specific problem, and I'll guide you through it.");
                 } else if (msg.includes('fee') || msg.includes('payment')) {
-                    resolve("For questions about fees or payments, please check the 'Financial Statements' section in your dashboard or contact the finance office.");
-                } else if (msg.includes('thank')) {
-                    resolve("You're welcome! Keep up the good work. Let me know if you need anything else.");
+                    resolve("For questions about fees, please check the 'Financial Statements' section or contact the finance office.");
                 } else {
-                    resolve("That's an interesting question. To give you the best answer, could you provide a bit more context or specific details about what you're learning?");
+                    resolve("I'm currently in fallback mode, but I'll do my best to help! Could you specify your concern?");
                 }
-            }, 1000);
+            }, 800);
         });
     }
 }
 
 module.exports = new AITutorService();
-

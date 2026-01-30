@@ -3,13 +3,14 @@ const router = express.Router();
 const { protect } = require('../middleware/auth');
 const { tenantMiddleware } = require('../middleware/tenantMiddleware');
 const paymentController = require('../controllers/paymentController');
+const auditLogMiddleware = require('../middleware/auditMiddleware');
 
 // All payment routes require tenant context
 router.use(tenantMiddleware);
 router.use(protect);
 
 // Mobile Money Payment Routes
-router.post('/mobile-money/initiate', paymentController.initiateMobilePayment);
+router.post('/mobile-money/initiate', auditLogMiddleware('Payment'), paymentController.initiateMobilePayment);
 router.get('/status/:id', paymentController.getPaymentStatus);
 router.get('/my-payments', paymentController.getMyPayments);
 

@@ -39,25 +39,20 @@ router.get('/health', protect, systemAdmin, async (req, res) => {
     }
 });
 
-// @route   GET /api/system/logs
+// @route   GET /api/system/audit-logs
 // @desc    Get audit logs (System Admin only)
 // @access  Private/System Admin
-router.get('/logs', protect, systemAdmin, async (req, res) => {
+router.get('/audit-logs', protect, systemAdmin, async (req, res) => {
     try {
-        const { page = 1, limit = 50, action, userId, startDate, endDate } = req.query;
+        const { page = 1, limit = 100, resource, action } = req.query;
 
         const query = {};
+        if (resource) query.resource = resource;
         if (action) query.action = action;
-        if (userId) query.user = userId;
-        if (startDate || endDate) {
-            query.createdAt = {};
-            if (startDate) query.createdAt.$gte = new Date(startDate);
-            if (endDate) query.createdAt.$lte = new Date(endDate);
-        }
 
         const logs = await AuditLog.find(query)
-            .populate('user', 'firstName lastName email role')
-            .sort({ createdAt: -1 })
+            .populate('userId', 'firstName lastName email role')
+            .sort({ timestamp: -1 })
             .limit(parseInt(limit))
             .skip((parseInt(page) - 1) * parseInt(limit));
 

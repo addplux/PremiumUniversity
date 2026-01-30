@@ -1,43 +1,40 @@
 const mongoose = require('mongoose');
 
-const auditLogSchema = new mongoose.Schema({
-    user: {
+const AuditLogSchema = new mongoose.Schema({
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true,
+        index: true
+    },
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        index: true
     },
     action: {
-        type: String,
-        required: true,
-        enum: [
-            'user_created', 'user_updated', 'user_deleted', 'role_changed',
-            'payment_recorded', 'payment_updated', 'payment_deleted',
-            'assignment_created', 'assignment_updated', 'assignment_deleted',
-            'grade_posted', 'grade_updated',
-            'schedule_created', 'schedule_updated', 'schedule_deleted',
-            'online_class_created', 'online_class_updated', 'online_class_cancelled',
-            'login', 'logout', 'failed_login'
-        ]
+        type: String, // e.g., 'CREATE', 'UPDATE', 'DELETE', 'LOGIN'
+        required: true
     },
-    targetModel: {
-        type: String,
-        enum: ['User', 'Payment', 'Assignment', 'Grade', 'Schedule', 'OnlineClass', 'Auth']
+    resource: {
+        type: String, // e.g., 'Grade', 'Payment', 'User'
+        required: true
     },
-    targetId: {
+    resourceId: {
         type: mongoose.Schema.Types.ObjectId
     },
-    details: {
-        type: mongoose.Schema.Types.Mixed
+    metadata: {
+        previousState: mongoose.Schema.Types.Mixed,
+        newState: mongoose.Schema.Types.Mixed,
+        ipAddress: String,
+        userAgent: String
     },
-    ipAddress: String,
-    userAgent: String
-}, {
-    timestamps: true
+    timestamp: {
+        type: Date,
+        default: Date.now,
+        index: true
+    }
 });
 
-// Index for efficient querying
-auditLogSchema.index({ user: 1, createdAt: -1 });
-auditLogSchema.index({ action: 1, createdAt: -1 });
-auditLogSchema.index({ targetModel: 1, targetId: 1 });
-
-module.exports = mongoose.model('AuditLog', auditLogSchema);
+module.exports = mongoose.model('AuditLog', AuditLogSchema);
