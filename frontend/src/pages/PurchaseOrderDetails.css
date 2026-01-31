@@ -1,0 +1,57 @@
+.po-details {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.grand-total-row td {
+    border-top: 2px solid #374151 !important;
+    background: #f9fafb;
+    font-size: 1.125rem;
+}
+
+.address-text {
+    white-space: pre-wrap;
+    text-align: right;
+    max-width: 200px;
+}
+
+.delivery-item {
+    padding: 1rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.delivery-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.delivery-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+@media (max-width: 1024px) {
+    .address-text {
+        text-align: left;
+        max-width: 100%;
+        margin-top: 0.25rem;
+    }
+
+    .info-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-group span {
+        text-align: left;
+    }
+}

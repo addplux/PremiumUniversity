@@ -1,0 +1,50 @@
+.evaluation-page {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.list-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.list-item {
+    text-align: left;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    background: white;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-item:hover {
+    background: #f9fafb;
+}
+
+.split-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.pdf-placeholder {
+    border: 2px dashed #d1d5db;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background: #f9fafb;
+}
+
+.score-sheet {
+    background: #fff;
+    border-left: 4px solid #10b981;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}

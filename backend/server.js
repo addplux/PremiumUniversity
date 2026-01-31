@@ -52,6 +52,23 @@ const classworkRoutes = require('./routes/classwork');
 const circularRoutes = require('./routes/circulars');
 const notificationRoutes = require('./routes/notifications');
 
+// Supply Chain & Procurement routes
+const supplierRoutes = require('./routes/suppliers');
+const requisitionRoutes = require('./routes/requisitions');
+const purchaseOrderRoutes = require('./routes/purchaseOrders');
+const inventoryRoutes = require('./routes/inventory');
+const warehouseRoutes = require('./routes/warehouses');
+const forecastingRoutes = require('./routes/forecasting');
+const automationRoutes = require('./routes/automation');
+const logisticsRoutes = require('./routes/logistics');
+const contractRoutes = require('./routes/contracts');
+const tenderRoutes = require('./routes/tenders');
+const bidRoutes = require('./routes/bids');
+const evaluationRoutes = require('./routes/evaluation');
+const ecatalogueRoutes = require('./routes/ecatalogue');
+
+
+
 // Load environment variables
 dotenv.config();
 
@@ -160,6 +177,23 @@ app.use('/api/classwork', tenantMiddleware, classworkRoutes);
 app.use('/api/circulars', tenantMiddleware, circularRoutes);
 app.use('/api/notifications', tenantMiddleware, notificationRoutes);
 
+// Supply Chain & Procurement routes
+app.use('/api/suppliers', tenantMiddleware, supplierRoutes);
+app.use('/api/requisitions', tenantMiddleware, requisitionRoutes);
+app.use('/api/purchase-orders', tenantMiddleware, purchaseOrderRoutes);
+app.use('/api/inventory', tenantMiddleware, inventoryRoutes);
+app.use('/api/warehouses', tenantMiddleware, warehouseRoutes);
+app.use('/api/forecasting', tenantMiddleware, forecastingRoutes);
+app.use('/api/automation', tenantMiddleware, automationRoutes);
+app.use('/api/logistics', tenantMiddleware, logisticsRoutes);
+app.use('/api/contracts', tenantMiddleware, contractRoutes);
+app.use('/api/tenders', tenantMiddleware, tenderRoutes);
+app.use('/api/bids', tenantMiddleware, bidRoutes);
+app.use('/api/evaluation', tenantMiddleware, evaluationRoutes);
+app.use('/api/ecatalogue', tenantMiddleware, ecatalogueRoutes);
+
+
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({
@@ -229,6 +263,10 @@ app.set('io', io);
 server.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+});
+
+server.on('error', (err) => {
+    console.error('❌ Server Listen Error:', err);
 });
 
 module.exports = app;

@@ -1,0 +1,44 @@
+.purchase-orders {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.po-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.po-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.po-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.po-card .supplier {
+    margin: 0.25rem 0 0 0;
+    color: #3b82f6;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.amount.grand {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #059669;
+}
+
+@media (max-width: 768px) {
+    .po-grid {
+        grid-template-columns: 1fr;
+    }
+}

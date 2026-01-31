@@ -147,6 +147,25 @@ const AdminDashboard = () => {
                 { name: 'Tasks', path: '/admin/tasks' },
                 { name: 'Announcements', path: '/admin/announcements' }
             ]
+        },
+        {
+            title: 'Supply Chain Management',
+            icon: '📦',
+            color: '#8b5cf6',
+            items: [
+                { name: 'Suppliers', path: '/admin/suppliers' },
+                { name: 'Purchase Requisitions', path: '/admin/requisitions' },
+                { name: 'Purchase Orders', path: '/admin/purchase-orders' },
+                { name: 'Inventory', path: '/admin/inventory' },
+                { name: 'Warehouses', path: '/admin/warehouses' },
+                { name: 'Demand Forecasting', path: '/admin/forecasting' },
+                { name: 'Automated Reordering', path: '/admin/automation' },
+                { name: 'Contracts', path: '/admin/contracts' },
+                { name: 'Logistics Tracking', path: '/admin/logistics' },
+                { name: 'Tender Management', path: '/admin/tenders' },
+                { name: 'Bid Evaluation', path: '/admin/bids/evaluation' },
+                { name: 'Yard Catalogue', path: '/admin/ecatalogue' }
+            ]
         }
     ];
 

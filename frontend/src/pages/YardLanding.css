@@ -1,255 +1,365 @@
-.yard-landing {
-    --yard-bg: #f8fafc;
-    --yard-dark: #0f172a;
-    --yard-blue: #3b82f6;
-    --yard-text: #334155;
-    background-color: var(--yard-bg);
-    color: var(--yard-text);
+/* Yard Minimalist Design System */
+:root {
+    --yard-bg: #ffffff;
+    --yard-text-primary: #0f172a;
+    /* Slate 900 */
+    --yard-text-secondary: #475569;
+    /* Slate 600 */
+    --yard-text-muted: #94a3b8;
+    /* Slate 400 */
+    --yard-primary: #7c3aed;
+    /* Violet 600 */
+    --yard-primary-hover: #6d28d9;
+    /* Violet 700 */
+    --yard-surface: #f8fafc;
+    /* Slate 50 */
+    --yard-border: #e2e8f0;
+    /* Slate 200 */
+    --yard-radius: 12px;
+    --yard-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --yard-shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --yard-font: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+.yard-landing {
+    font-family: var(--yard-font);
+    background-color: var(--yard-bg);
+    color: var(--yard-text-primary);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* Container */
 .yard-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 2rem;
 }
 
-/* Hero */
+/* Typography Overrides */
+.yard-landing h1,
+.yard-landing h2,
+.yard-landing h3 {
+    letter-spacing: -0.025em;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--yard-text-primary);
+}
+
+.yard-landing p {
+    color: var(--yard-text-secondary);
+    font-size: 1.125rem;
+}
+
+/* Utility: Highlight Text */
+.text-highlight {
+    background: linear-gradient(135deg, var(--yard-primary) 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Badge */
+.yard-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background-color: #f3e8ff;
+    /* Purple 100 */
+    color: var(--yard-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Hero Section */
 .yard-hero {
-    padding: 100px 0;
-    background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
+    padding: 6rem 0;
+    position: relative;
     overflow: hidden;
+}
+
+/* Background Glow Effect */
+.yard-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(124, 58, 237, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .hero-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 4rem;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-text h1 {
     font-size: 3.5rem;
-    line-height: 1.1;
-    color: var(--yard-dark);
-    margin-bottom: 24px;
-    font-weight: 800;
+    margin-bottom: 1.5rem;
 }
 
-.text-highlight {
-    color: var(--yard-blue);
-    position: relative;
-}
-
-.hero-sub {
+.hero-text .hero-sub {
     font-size: 1.25rem;
-    line-height: 1.6;
-    margin-bottom: 32px;
-    color: #475569;
-}
-
-.yard-badge {
-    background: #e0f2fe;
-    color: #0369a1;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    display: inline-block;
-    margin-bottom: 16px;
+    max-width: 50ch;
+    margin-bottom: 2.5rem;
 }
 
 .yard-hero-btns {
     display: flex;
-    gap: 16px;
+    gap: 1rem;
 }
 
+/* Buttons */
 .yard-btn-primary {
-    background: var(--yard-blue);
-    color: white;
-    padding: 14px 28px;
-    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--yard-text-primary);
+    /* Black button for clean look */
+    color: #fff;
     font-weight: 600;
+    border-radius: var(--yard-radius);
+    transition: all 0.2s ease;
     text-decoration: none;
-    transition: all 0.2s;
 }
 
 .yard-btn-primary:hover {
-    background: #2563eb;
-    transform: translateY(-2px);
+    background-color: #000;
+    transform: translateY(-1px);
 }
 
 .yard-btn-secondary {
-    background: white;
-    color: var(--yard-dark);
-    padding: 14px 28px;
-    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background-color: transparent;
+    color: var(--yard-text-secondary);
     font-weight: 600;
+    border-radius: var(--yard-radius);
+    transition: color 0.2s ease;
     text-decoration: none;
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s;
 }
 
-/* Platform Preview */
+.yard-btn-secondary:hover {
+    color: var(--yard-primary);
+}
+
+/* Platform Preview (Mockup) */
 .platform-preview {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e2e8f0;
+    background: #fff;
+    border-radius: var(--yard-radius);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    border: 1px solid var(--yard-border);
     overflow: hidden;
+    position: relative;
 }
 
 .preview-header {
     background: #f1f5f9;
-    padding: 12px;
+    padding: 0.75rem;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--yard-border);
 }
 
-.dots {
+.preview-header .dots {
     display: flex;
     gap: 6px;
-    margin-right: 20px;
+    margin-right: 1rem;
 }
 
-.dots span {
-    width: 8px;
-    height: 8px;
+.preview-header .dots span {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: #cbd5e1;
+    background-color: #cbd5e1;
 }
 
 .preview-header .bar {
-    background: white;
-    border-radius: 4px;
-    padding: 4px 12px;
-    font-size: 11px;
-    color: #94a3b8;
-    flex-grow: 1;
-    text-align: center;
+    background: #fff;
+    flex: 1;
+    height: 24px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--yard-text-muted);
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
 }
 
 .preview-content {
     display: flex;
     height: 300px;
+    background: var(--yard-surface);
 }
 
 .mock-sidebar {
     width: 60px;
-    background: #0f172a;
     height: 100%;
+    border-right: 1px solid var(--yard-border);
+    background: #fff;
 }
 
 .mock-main {
-    flex-grow: 1;
-    padding: 20px;
-    background: #f8fafc;
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .mock-card {
-    height: 60px;
-    background: white;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    border: 1px solid #e2e8f0;
+    height: 80px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid var(--yard-border);
 }
 
 .mock-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 }
 
 .mock-grid span {
-    height: 80px;
-    background: white;
-    border-radius: 6px;
-    border: 1px solid #e2e8f0;
+    height: 100px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid var(--yard-border);
 }
 
-/* Features */
+/* Features Section */
 .yard-features {
-    padding: 100px 0;
+    padding: 6rem 0;
+    background-color: var(--yard-surface);
 }
 
 .section-intro {
     text-align: center;
     max-width: 700px;
-    margin: 0 auto 60px;
+    margin: 0 auto 4rem;
 }
 
 .section-intro h2 {
     font-size: 2.5rem;
-    color: var(--yard-dark);
-    margin-bottom: 16px;
+    margin-bottom: 1rem;
 }
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
 }
 
 .yard-feat-card {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s;
+    background: #fff;
+    padding: 2rem;
+    border-radius: var(--yard-radius);
+    border: 1px solid var(--yard-border);
+    transition: all 0.3s ease;
 }
 
 .yard-feat-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: var(--yard-shadow-hover);
+    border-color: rgba(124, 58, 237, 0.2);
 }
 
 .yard-feat-card .icon {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    background: #f3e8ff;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 .yard-feat-card h3 {
     font-size: 1.25rem;
-    margin-bottom: 12px;
-    color: var(--yard-dark);
+    margin-bottom: 0.75rem;
 }
 
-/* CTA */
+.yard-feat-card p {
+    font-size: 1rem;
+    color: var(--yard-text-secondary);
+    line-height: 1.6;
+}
+
+/* CTA Section */
 .yard-cta {
-    padding-bottom: 100px;
+    padding: 6rem 0;
+    text-align: center;
 }
 
 .cta-box {
-    background: var(--yard-dark);
-    color: white;
-    padding: 80px 40px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    /* Deep Indigo */
+    padding: 4rem 2rem;
     border-radius: 24px;
-    text-align: center;
-    background-image: radial-gradient(circle at top right, #1e293b, transparent);
+    color: #fff;
 }
 
 .cta-box h2 {
+    color: #fff;
     font-size: 2.5rem;
-    margin-bottom: 16px;
+    margin-bottom: 1rem;
 }
 
 .cta-box p {
-    font-size: 1.25rem;
-    color: #94a3b8;
-    margin-bottom: 40px;
+    color: #bfdbfe;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+.cta-box .yard-btn-primary {
+    background-color: #fff;
+    color: #312e81;
+    /* Indigo text */
+}
+
+.cta-box .yard-btn-primary:hover {
+    background-color: #f8fafc;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+    .yard-hero {
+        padding: 3rem 0;
+    }
+
     .hero-grid {
         grid-template-columns: 1fr;
         text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 2.5rem;
     }
 
     .yard-hero-btns {
         justify-content: center;
     }
 
-    .hero-text h1 {
-        font-size: 2.5rem;
+    .platform-preview {
+        margin-top: 2rem;
     }
 }

@@ -1,0 +1,83 @@
+.inventory-management {
+    padding: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Alerts */
+.alerts-section {
+    margin-bottom: 1.5rem;
+}
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.alert-danger {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #dc2626;
+}
+
+.alert-warning {
+    background: #fef3c7;
+    color: #92400e;
+    border-left: 4px solid #f59e0b;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info strong {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.product-info small {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.quantity {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #1f2937;
+}
+
+.value {
+    font-weight: 600;
+    color: #059669;
+}
+
+@media (max-width: 768px) {
+    .header-actions {
+        flex-direction: column;
+    }
+
+    .header-actions .btn {
+        width: 100%;
+    }
+}

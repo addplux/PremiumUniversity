@@ -14,21 +14,22 @@ const YardLanding = () => {
                 <div className="yard-container">
                     <div className="hero-grid">
                         <div className="hero-text">
-                            <span className="yard-badge">Master Your Institution</span>
-                            <h1>Launch Your University in the Cloud with <span className="text-highlight">Yard</span></h1>
+                            <span className="yard-badge">Higher Education Infrastructure</span>
+                            <h1>The Digital Backbone for <span className="text-highlight">Modern Universities</span></h1>
                             <p className="hero-sub">
-                                The ultimate hosting platform for modern universities. Deploy a fully-branded, secure, and scalable ERP system in minutes.
+                                Yard is the all-in-one cloud operating system for higher education institutions.
+                                Manage students, finance, academics, and compliance on a single, secure platform.
                             </p>
                             <div className="yard-hero-btns">
-                                <Link to="/contact" className="yard-btn-primary">Get Started</Link>
-                                <a href="#features" className="yard-btn-secondary">Learn More</a>
+                                <Link to="/contact" className="yard-btn-primary">Schedule a Demo</Link>
+                                <a href="#features" className="yard-btn-secondary">Explore Platform</a>
                             </div>
                         </div>
                         <div className="hero-visual">
                             <div className="platform-preview">
                                 <div className="preview-header">
                                     <div className="dots"><span></span><span></span><span></span></div>
-                                    <div className="bar">yard.cloud/portal</div>
+                                    <div className="bar">yard.cloud/manage</div>
                                 </div>
                                 <div className="preview-content">
                                     <div className="mock-sidebar"></div>
@@ -49,30 +50,30 @@ const YardLanding = () => {
             <section id="features" className="yard-features">
                 <div className="yard-container">
                     <div className="section-intro">
-                        <h2>Infrastructure Built for Education</h2>
-                        <p>Everything you need to manage students, staff, and academics at scale.</p>
+                        <h2>Enterprise-Grade Campus Management</h2>
+                        <p>Built for scale, security, and administrative efficiency.</p>
                     </div>
 
                     <div className="features-grid">
                         <div className="yard-feat-card">
-                            <div className="icon">🎨</div>
-                            <h3>White-Labeling</h3>
-                            <p>Full control over your branding. Custom domains, logos, and CSS for a native institution feel.</p>
-                        </div>
-                        <div className="yard-feat-card">
-                            <div className="icon">🛡️</div>
-                            <h3>Data Isolation</h3>
-                            <p>Military-grade tenant isolation. Your university's data is private, secure, and strictly isolated.</p>
-                        </div>
-                        <div className="yard-feat-card">
-                            <div className="icon">⚡</div>
+                            <div className="icon">🚀</div>
                             <h3>Instant Deployment</h3>
-                            <p>Launch your portal instantly. No servers to manage, no maintenance headaches.</p>
+                            <p>Launch your institution's digital campus in minutes, not months. Fully hosted and managed.</p>
                         </div>
                         <div className="yard-feat-card">
-                            <div className="icon">📊</div>
-                            <h3>Advanced Analytics</h3>
-                            <p>Gain insights into student performance and financial health with built-in BI tools.</p>
+                            <div className="icon">🎨</div>
+                            <h3>White-Label Branding</h3>
+                            <p>Your domain, your colors, your identity. We stay in the background while your brand shines.</p>
+                        </div>
+                        <div className="yard-feat-card">
+                            <div className="icon">🔒</div>
+                            <h3>Sovereign Data</h3>
+                            <p>Complete tenant isolation ensures your institutional data remains private, secure, and compliant.</p>
+                        </div>
+                        <div className="yard-feat-card">
+                            <div className="icon">📈</div>
+                            <h3>Financial Intelligence</h3>
+                            <p>Integrated payment processing and financial reporting designed specifically for tuition & fees.</p>
                         </div>
                     </div>
                 </div>
@@ -82,9 +83,9 @@ const YardLanding = () => {
             <section className="yard-cta">
                 <div className="yard-container">
                     <div className="cta-box">
-                        <h2>Join the Future of Higher Ed Hosting</h2>
-                        <p>Empower your staff and students with a state-of-the-art digital campus.</p>
-                        <Link to="/contact" className="yard-btn-primary">Connect with Yard</Link>
+                        <h2>Ready to modernize your institution?</h2>
+                        <p>Join the network of forward-thinking universities running on Yard.</p>
+                        <Link to="/contact" className="yard-btn-primary">Partner with Yard</Link>
                     </div>
                 </div>
             </section>

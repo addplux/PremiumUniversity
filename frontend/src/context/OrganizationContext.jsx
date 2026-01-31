@@ -44,20 +44,23 @@ export const OrganizationProvider = ({ children }) => {
             console.error('Failed to fetch organization:', err);
             setError(err.response?.data?.message || 'Failed to load organization');
 
-            // Set default organization for development
+            // Set default organization for development (Yard Master Tenant)
             setOrganization({
-                name: 'Premium School of Health Sciences',
-                slug: 'default',
-                subdomain: 'app',
+                name: 'Yard - Higher Ed Hosting',
+                slug: 'yard',
+                subdomain: 'yard',
                 subscription: {
                     plan: 'enterprise',
                     status: 'active'
                 },
                 branding: {
-                    primaryColor: '#1a56db',
-                    secondaryColor: '#4f46e5'
+                    primaryColor: '#8A2BE2',
+                    secondaryColor: '#4B0082',
+                    logo: '/assets/yard-logo.png'
                 },
-                features: {},
+                features: {
+                    multiTenancy: true
+                },
                 limits: {},
                 usage: {}
             });

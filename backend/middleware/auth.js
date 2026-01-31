@@ -114,3 +114,19 @@ exports.superAdmin = async (req, res, next) => {
         res.status(500).json({ success: false, message: 'Server error' });
     }
 };
+
+// Generic role authorization middleware
+exports.authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: 'Not authorized' });
+        }
+        if (!roles.includes(req.user.role) && req.user.role !== 'system_admin' && req.user.role !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: `User role ${req.user.role} is not authorized to access this route`
+            });
+        }
+        next();
+    };
+};

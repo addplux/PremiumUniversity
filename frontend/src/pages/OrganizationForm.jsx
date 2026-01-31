@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, Divider, Row, Col, InputNumber, Switch, Select, message } from 'react-redux';
-// Note: Using standard antd as assuming it's available based on project patterns
-import { Form as AntForm, Input as AntInput, Button as AntButton, Divider as AntDivider, Row as AntRow, Col as AntCol, InputNumber as AntInputNumber, Switch as AntSwitch, Select as AntSelect } from 'antd';
+import { Form as AntForm, Input as AntInput, Button as AntButton, Divider as AntDivider, Row as AntRow, Col as AntCol, InputNumber as AntInputNumber, Switch as AntSwitch, Select as AntSelect, message } from 'antd';
 
 const OrganizationForm = ({ initialValues, onSuccess }) => {
     const [form] = AntForm.useForm();

@@ -1,0 +1,64 @@
+.bid-page {
+    background: #f3f4f6;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.bid-container {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tender-summary {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+}
+
+.tender-summary h3 {
+    margin: 0 0 0.5rem 0;
+    color: #1e40af;
+}
+
+.tender-summary p {
+    margin: 0.25rem 0;
+    color: #4b5563;
+}
+
+.file-upload-section {
+    margin: 2rem 0;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1.5rem 0;
+}
+
+.file-upload-section h4 {
+    margin-bottom: 1rem;
+    color: #374151;
+}
+
+.hint {
+    color: #9ca3af;
+    font-style: italic;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}

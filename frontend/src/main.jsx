@@ -3,11 +3,17 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { OrganizationProvider } from './context/OrganizationContext.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <OrganizationProvider>
-      <App />
-    </OrganizationProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <OrganizationProvider>
+          <App />
+        </OrganizationProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

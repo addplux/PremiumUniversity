@@ -1,0 +1,157 @@
+.approval-workflow {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.workflow-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.workflow-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Timeline */
+.approval-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.approval-timeline::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.timeline-content {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 3px solid #e5e7eb;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-header strong {
+    font-size: 1rem;
+    color: #1f2937;
+}
+
+.timeline-date {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.timeline-body {
+    font-size: 0.875rem;
+}
+
+.approver-info {
+    margin: 0.5rem 0;
+    color: #374151;
+}
+
+.approval-comments {
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 6px;
+    color: #374151;
+}
+
+.approval-comments strong {
+    color: #1f2937;
+}
+
+.approval-level {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.empty-timeline {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+}
+
+/* Buttons */
+.btn-success {
+    background: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+@media (max-width: 768px) {
+    .workflow-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .workflow-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .workflow-actions .btn {
+        width: 100%;
+    }
+}

@@ -51,32 +51,32 @@ const tenantMiddleware = async (req, res, next) => {
             });
         }
 
-        // Method 5: Default to first organization (backward compatibility for single-tenant)
+        // Method 5: Default to 'yard' (Master Tenant) for root access
         if (!organization) {
             organization = await Organization.findOne({
-                slug: 'default',
+                slug: 'yard',
                 isActive: true
             });
 
-            // If no default exists, create one for backward compatibility
+            // If no 'yard' organization exists, create it
             if (!organization) {
-                console.log('No default organization found, creating one...');
+                console.log('No Yard master tenant found, creating one...');
                 organization = await Organization.create({
-                    name: 'Premium School of Health Sciences',
-                    slug: 'default',
-                    subdomain: 'app',
+                    name: 'Yard - Higher Ed Hosting',
+                    slug: 'yard',
+                    subdomain: 'yard',
                     contact: {
-                        adminEmail: 'admin@psohs.ac.zm'
+                        adminEmail: 'admin@yard.cloud'
                     },
                     subscription: {
                         plan: 'enterprise',
                         status: 'active'
                     },
                     limits: {
-                        maxStudents: 10000,
-                        maxStaff: 500,
-                        maxCourses: 1000,
-                        maxStorageGB: 100
+                        maxStudents: -1, // Unlimited
+                        maxStaff: -1,
+                        maxCourses: -1,
+                        maxStorageGB: 1000
                     },
                     features: {
                         sso: true,
@@ -86,10 +86,16 @@ const tenantMiddleware = async (req, res, next) => {
                         advancedReporting: true,
                         mobileApp: true,
                         bulkImport: true,
-                        webhooks: true
+                        webhooks: true,
+                        multiTenancy: true
+                    },
+                    branding: {
+                        primaryColor: '#8A2BE2', // Electric Purple
+                        secondaryColor: '#4B0082', // Indigo
+                        logo: '/assets/yard-logo.png'
                     }
                 });
-                console.log('Default organization created:', organization.slug);
+                console.log('Yard master tenant created:', organization.slug);
             }
         }
 
