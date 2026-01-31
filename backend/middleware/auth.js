@@ -102,7 +102,8 @@ exports.anyAdmin = (req, res, next) => {
 exports.superAdmin = async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id).select('+isSuperAdmin');
-        if (user && user.isSuperAdmin) {
+        // Allow if isSuperAdmin flag is true OR role is system_admin
+        if (user && (user.isSuperAdmin || req.user.role === 'system_admin')) {
             next();
         } else {
             res.status(403).json({

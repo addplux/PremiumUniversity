@@ -60,6 +60,7 @@ import RetentionDashboard from './pages/RetentionDashboard';
 import EquityDashboard from './pages/EquityDashboard';
 import AITutorWidget from './components/AITutorWidget';
 import AuditLogManager from './pages/AuditLogManager';
+import InstitutionManager from './pages/InstitutionManager';
 
 // Supply Chain & Procurement Pages
 import SupplierManagement from './pages/SupplierManagement';
@@ -137,7 +138,8 @@ function App() {
             <Route path="users" element={<StudentRegistry />} />
             <Route path="audit" element={<AuditLogManager />} />
             <Route path="branding" element={<BrandingEditor />} />
-            {/* Add more system admin routes as needed */}
+            <Route path="institutions" element={<InstitutionManager />} />
+            <Route path="institutions/create" element={<InstitutionManager />} />
           </Route>
 
           {/* Global Super Admin Routes */}
