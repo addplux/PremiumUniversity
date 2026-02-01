@@ -18,7 +18,7 @@ const YardLanding = () => {
                             <h1>The Digital Backbone for <span className="text-highlight">Modern Universities</span></h1>
                             <p className="hero-sub">
                                 Yard is the all-in-one cloud operating system for higher education institutions.
-                                Manage students, finance, academics, and compliance on a single, secure platform.
+                                Manage students, finance, academics, compliance, and supply chain operations on a single, secure platform.
                             </p>
                             <div className="yard-hero-btns">
                                 <Link to="/contact" className="yard-btn-primary">Schedule a Demo</Link>
@@ -61,9 +61,9 @@ const YardLanding = () => {
                             <p>Launch your institution's digital campus in minutes, not months. Fully hosted and managed.</p>
                         </div>
                         <div className="yard-feat-card">
-                            <div className="icon">🎨</div>
-                            <h3>White-Label Branding</h3>
-                            <p>Your domain, your colors, your identity. We stay in the background while your brand shines.</p>
+                            <div className="icon">🛒</div>
+                            <h3>Procurement & Tenders</h3>
+                            <p>End-to-end supply chain management, from e-tendering and vendor portals to automated purchasing.</p>
                         </div>
                         <div className="yard-feat-card">
                             <div className="icon">🔒</div>

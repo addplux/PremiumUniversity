@@ -53,6 +53,7 @@ const Footer = () => {
                                 <>
                                     <li><Link to="/contact">Campus ERP</Link></li>
                                     <li><Link to="/contact">Finance & Billing</Link></li>
+                                    <li><Link to="/contact">Procurement & Tenders</Link></li>
                                     <li><Link to="/contact">Student Portals</Link></li>
                                     <li><Link to="/contact">Data Residency</Link></li>
                                 </>

@@ -18,11 +18,52 @@
     padding: 0.75rem 0;
 }
 
-/* Yard Master Tenant Specific Glassmorphism */
-.navbar.yard-navbar.scrolled {
-    background: rgba(255, 255, 255, 0.4);
-    border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+/* Yard Master Tenant Specific Glassmorphism (Dark Theme) */
+.navbar.yard-navbar {
+    background: rgba(11, 11, 21, 0.5);
+    /* Semi-transparent dark base */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+.navbar.yard-navbar.scrolled {
+    background: rgba(11, 11, 21, 0.85);
+    /* Darker on scroll */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    /* Purple accent border */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Yard Navbar Text Colors */
+.navbar.yard-navbar .nav-links a,
+.navbar.yard-navbar .logo-text h2,
+.navbar.yard-navbar .logo-text p {
+    color: #F8FAFC;
+    /* Slate 50 */
+}
+
+.navbar.yard-navbar .nav-links a:hover,
+.navbar.yard-navbar .nav-links a.active {
+    color: #A78BFA;
+    /* Light Purple */
+}
+
+.navbar.yard-navbar .nav-links a:not(.btn-primary-nav)::after {
+    background: #8B5CF6;
+    /* Purple underline */
+}
+
+/* Update logo border for dark theme */
+.navbar.yard-navbar .logo {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Menu Button for Yard */
+.navbar.yard-navbar .mobile-menu-btn span {
+    background: #F8FAFC;
+}
+
 
 .nav-content {
     display: flex;

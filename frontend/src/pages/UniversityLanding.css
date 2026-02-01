@@ -21,8 +21,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
-    opacity: 0.3;
+    /* Container background with dark overlay for University landing */
+    background:
+        linear-gradient(to bottom, rgba(26, 86, 219, 0.85), rgba(30, 27, 75, 0.9)),
+        url('/images/yard-bg-container.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: 0;
 }
 
 .hero-overlay {
@@ -34,6 +40,7 @@
     background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
 }
 
+/* Hero Section Refinements */
 .hero-content {
     position: relative;
     z-index: 2;
