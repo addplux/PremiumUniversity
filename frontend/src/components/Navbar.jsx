@@ -8,7 +8,7 @@ const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
-    const { isAuthenticated, isAdmin, user, logout } = useAuth();
+    const { isAuthenticated, isAdmin, isAnyAdmin, user, logout } = useAuth();
     const { organization, logo, name, isMasterTenant } = useOrganization();
 
     useEffect(() => {
@@ -79,13 +79,14 @@ const Navbar = () => {
                             <>
                                 <li>
                                     <Link
-                                        to={isAdmin ? '/admin' : '/dashboard'}
-                                        className={isActive(isAdmin ? '/admin' : '/dashboard') ? 'active' : ''}
+                                        to="/portal"
+                                        className={isActive('/portal') ? 'active' : ''}
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        {isAdmin ? 'Admin Panel' : 'My Dashboard'}
+                                        {isAnyAdmin ? 'Admin Console' : 'My Dashboard'}
                                     </Link>
                                 </li>
+
                                 <li>
                                     <button onClick={handleLogout} className="btn-logout">
                                         Logout ({user?.firstName})

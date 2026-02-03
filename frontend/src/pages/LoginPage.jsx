@@ -25,12 +25,7 @@ const LoginPage = () => {
         const result = await login(formData.email, formData.password);
 
         if (result.success) {
-            // Redirect based on role
-            if (isAdmin) {
-                navigate('/admin');
-            } else {
-                navigate('/dashboard');
-            }
+            navigate('/portal');
         } else {
             setError(result.message);
         }
@@ -39,7 +34,7 @@ const LoginPage = () => {
     };
 
     if (isAuthenticated) {
-        navigate(isAdmin ? '/admin' : '/dashboard');
+        navigate('/portal');
         return null;
     }
 
