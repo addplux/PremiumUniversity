@@ -23,7 +23,15 @@ export const OrganizationProvider = ({ children }) => {
     const fetchOrganization = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('/organizations/current');
+
+            // Extract tenant from query parameter if present
+            const params = new URLSearchParams(window.location.search);
+            const tenant = params.get('tenant');
+
+            const response = await axios.get('/organizations/current', {
+                params: tenant ? { tenant } : {}
+            });
+
 
             if (response.data.success) {
                 const org = response.data.data;

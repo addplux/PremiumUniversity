@@ -20,8 +20,11 @@ async function onboardSilverMaple() {
             branding: {
                 primaryColor: '#2d5a27', // A forest green
                 secondaryColor: '#8a9a5b', // Sage green
-                logo: 'https://images.unsplash.com/photo-1590066304602-4f7e0c18455d?auto=format&fit=crop&w=100&h=100'
+                logo: 'https://images.unsplash.com/photo-1590066304602-4f7e0c18455d?auto=format&fit=crop&w=100&h=100',
+                heroImage: '/assets/silver_maple_nurses.jpg',
+                gallery: ['/assets/silver_maple_graduation.jpg']
             },
+
             contact: {
                 adminEmail: 'chancellor@silvermaple.edu',
                 country: 'Zambia'

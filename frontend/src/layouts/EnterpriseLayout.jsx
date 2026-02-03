@@ -9,11 +9,12 @@ import './Layouts.css';
 
 const EnterpriseLayout = () => {
     const { user, logout } = useAuth();
-    const { name } = useOrganization();
+    const { name, isMasterTenant } = useOrganization();
     const shortName = name === 'Premium School of Health Sciences' ? 'PSOHS' : name.substring(0, 10);
     const [mobileOpen, setMobileOpen] = useState(false);
 
-    const navLinks = [
+    // Default University Navigation
+    const universityLinks = [
         {
             label: "Dashboard",
             items: [
@@ -42,44 +43,63 @@ const EnterpriseLayout = () => {
             items: [
                 { name: "Courses", path: "/admin/courses", icon: <Icons.IconBook /> },
                 { name: "Lectures", path: "/admin/lectures", icon: <Icons.IconAcademic /> },
-                { name: "Lesson Planning", path: "/admin/lesson-planning", icon: <Icons.IconEdit /> },
-                { name: "Syllabus", path: "/admin/syllabus", icon: <Icons.IconBook /> },
-                { name: "Materials", path: "/admin/materials", icon: <Icons.IconFile /> },
-                { name: "Homework", path: "/admin/homework", icon: <Icons.IconEdit /> },
-                { name: "Classwork", path: "/admin/classwork", icon: <Icons.IconEdit /> },
                 { name: "Assignments", path: "/admin/assignments", icon: <Icons.IconFile /> },
-                { name: "Examinations", path: "/admin/examinations", icon: <Icons.IconFile /> },
-                { name: "Circulars", path: "/admin/circulars", icon: <Icons.IconBell /> },
-                { name: "Notifications", path: "/admin/notifications", icon: <Icons.IconBell /> },
                 { name: "ID Cards", path: "/admin/id-cards", icon: <Icons.IconUsers /> },
                 { name: "Academic Records", path: "/admin/academic-records", icon: <Icons.IconAcademic /> },
-                { name: "Classes", path: "/admin/classes", icon: <Icons.IconHome /> },
             ]
         },
         {
             label: "Financials",
             items: [
                 { name: "Student Fees", path: "/admin/fees", icon: <Icons.IconFinance /> },
-                { name: "Fees & Payments", path: "/admin/finance", icon: <Icons.IconFinance /> },
-            ]
-        },
-        {
-            label: "Administrative Tools",
-            items: [
-                { name: "Users & Roles", path: "/admin/system/users", icon: <Icons.IconUsers /> },
-                ...(user?.role === 'system_admin' ? [
-                    { name: "Institutional Branding", path: "/admin/system/branding", icon: <Icons.IconDashboard /> },
-                    { name: "Audit Logs", path: "/admin/system/audit", icon: <Icons.IconFile /> }
-                ] : []),
-                ...(user?.isSuperAdmin ? [
-                    { name: "GOD MODE (Global)", path: "/superadmin", icon: <GlobalOutlined /> }
-                ] : [])
             ]
         }
     ];
 
+    // Yard (Master Tenant) Navigation
+    const yardLinks = [
+        {
+            label: "Operations",
+            items: [
+                { name: "Yard Overview", path: "/admin/system", icon: <Icons.IconDashboard /> },
+            ]
+        },
+        {
+            label: "Institution Management",
+            items: [
+                { name: "All Institutions", path: "/admin/system/institutions", icon: <Icons.IconHome /> },
+                { name: "System Branding", path: "/admin/system/branding", icon: <Icons.IconDashboard /> },
+            ]
+        },
+        {
+            label: "Procurement & Tenders",
+            items: [
+                { name: "Tender Management", path: "/admin/tenders", icon: <Icons.IconFile /> },
+                { name: "Bid Evaluation", path: "/admin/bids/evaluation", icon: <Icons.IconEdit /> },
+                { name: "Yard Catalogue", path: "/admin/ecatalogue", icon: <Icons.IconBook /> },
+            ]
+        },
+        {
+            label: "Purchasing & Supply",
+            items: [
+                { name: "Vendors & Suppliers", path: "/admin/suppliers", icon: <Icons.IconUsers /> },
+                { name: "Purchase Requisitions", path: "/admin/requisitions", icon: <Icons.IconFile /> },
+                { name: "Purchase Orders", path: "/admin/purchase-orders", icon: <Icons.IconFile /> },
+            ]
+        },
+        {
+            label: "System",
+            items: [
+                { name: "User Management", path: "/admin/system/users", icon: <Icons.IconUsers /> },
+                { name: "Audit Logs", path: "/admin/system/audit", icon: <Icons.IconFile /> }
+            ]
+        }
+    ];
+
+    const navLinks = isMasterTenant ? yardLinks : universityLinks;
+
     return (
-        <div className="layout-container">
+        <div className={`layout-container ${isMasterTenant ? 'yard-theme' : ''}`}>
             <header className="mobile-header">
                 <button className="mobile-toggle" onClick={() => setMobileOpen(true)}>
                     ☰
@@ -90,7 +110,7 @@ const EnterpriseLayout = () => {
                 <div style={{ width: '40px' }}></div> {/* Spacer */}
             </header>
             <Sidebar
-                title={`${shortName} Enterprise`}
+                title={isMasterTenant ? "Yard Console" : `${shortName} Admin`}
                 links={navLinks}
                 user={user}
                 onLogout={logout}
@@ -103,5 +123,6 @@ const EnterpriseLayout = () => {
         </div>
     );
 };
+
 
 export default EnterpriseLayout;

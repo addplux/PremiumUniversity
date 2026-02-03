@@ -27,8 +27,9 @@ router.get('/', protect, superAdmin, async (req, res) => {
 
 // @route   GET /api/organizations/current
 // @desc    Get current organization (based on tenant context)
-// @access  Private
-router.get('/current', protect, async (req, res) => {
+// @access  Public
+router.get('/current', async (req, res) => {
+
     try {
         if (!req.organizationId) {
             return res.status(404).json({

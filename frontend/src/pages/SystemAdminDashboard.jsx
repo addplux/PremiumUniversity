@@ -6,157 +6,188 @@ import './Dashboard.css';
 
 const SystemAdminDashboard = () => {
     const { user } = useAuth();
-    const [loading, setLoading] = useState(false); // Mock loading for now as we redesign
 
-    // Management Categories for Yard Dashboard
-    const managementCategories = [
+    // Operation Pillars for Yard
+    const pillars = [
         {
-            title: 'Yard Operations',
-            icon: '🏗️',
-            color: '#8b5cf6', // Yard Purple
-            items: [
-                { name: 'Tender Management', path: '/admin/tenders' },
-                { name: 'Bid Evaluation', path: '/admin/bids/evaluation' },
-                { name: 'Supply Chain', path: '/admin/suppliers' }, // Entry point to SC modules
-                { name: 'Yard Catalogue', path: '/admin/ecatalogue' },
-                { name: 'Logistics', path: '/admin/logistics' }
-            ]
-        },
-        {
-            title: 'Institution Management',
+            title: 'Institution Hosting',
             icon: '🏛️',
-            color: '#3b82f6', // Institutional Blue
-            items: [
-                { name: 'All Institutions', path: '/admin/system/institutions' }, // New Page
-                { name: 'Add New Institution', path: '/admin/system/institutions/create' }, // Direct Action
-                { name: 'Global Settings', path: '/admin/system/settings' }
+            desc: 'Onboard and manage universities, branding, and connectivity.',
+            color: '#8B5CF6',
+            links: [
+                { name: 'Managed Institutions', path: '/admin/system/institutions' },
+                { name: 'Custom Branding', path: '/admin/system/branding' },
+                { name: 'System Logs', path: '/admin/system/audit' }
             ]
         },
         {
-            title: 'System & Security',
-            icon: '🛡️',
-            color: '#10b981', // Security Green
-            items: [
-                { name: 'User Management', path: '/admin/system/users' },
-                { name: 'Audit Logs', path: '/admin/system/logs' },
-                { name: 'Security Overview', path: '/admin/system/security' },
-                { name: 'System Health', path: '/system/health' }
+            title: 'Procurement Center',
+            icon: '📜',
+            desc: 'Manage global tenders, bid evaluations, and the Yard e-Catalogue.',
+            color: '#3B82F6',
+            links: [
+                { name: 'Active Tenders', path: '/admin/tenders' },
+                { name: 'Bid Evaluations', path: '/admin/bids/evaluation' },
+                { name: 'Global Catalogue', path: '/admin/ecatalogue' }
+            ]
+        },
+        {
+            title: 'Purchasing & Supply',
+            icon: '💳',
+            desc: 'Oversee purchasing flow, requisitions, and vendor relationships.',
+            color: '#10B981',
+            links: [
+                { name: 'Vendor Directory', path: '/admin/suppliers' },
+                { name: 'Purchase Orders', path: '/admin/purchase-orders' },
+                { name: 'Requisitions', path: '/admin/requisitions' }
             ]
         }
     ];
 
     return (
-        <div className="dashboard-container">
-            <div className="dashboard-header">
+        <div className="yard-dashboard-refined">
+            <style>{`
+                .yard-dashboard-refined {
+                    padding: 2rem;
+                    color: #f8fafc;
+                }
+                .yard-header {
+                    margin-bottom: 3rem;
+                }
+                .yard-header h1 {
+                    font-size: 2.5rem;
+                    font-weight: 800;
+                    margin-bottom: 0.5rem;
+                    background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .yard-header p {
+                    color: #94a3b8;
+                    font-size: 1.1rem;
+                }
+                .stats-bar {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1.5rem;
+                    margin-bottom: 3.5rem;
+                }
+                .stat-box {
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(139, 92, 246, 0.2);
+                    padding: 1.5rem;
+                    border-radius: 16px;
+                    backdrop-filter: blur(10px);
+                }
+                .stat-box h4 {
+                    font-size: 0.8rem;
+                    text-transform: uppercase;
+                    color: #94a3b8;
+                    margin-bottom: 0.5rem;
+                    letter-spacing: 0.05em;
+                }
+                .stat-box .val {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: #fff;
+                }
+                .pillars-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                    gap: 2rem;
+                }
+                .pillar-card {
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 20px;
+                    padding: 2rem;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .pillar-card:hover {
+                    border-color: rgba(139, 92, 246, 0.5);
+                    background: rgba(139, 92, 246, 0.05);
+                    transform: translateY(-5px);
+                }
+                .pillar-icon {
+                    font-size: 2.5rem;
+                    margin-bottom: 1rem;
+                }
+                .pillar-card h2 {
+                    font-size: 1.5rem;
+                    margin-bottom: 0.75rem;
+                }
+                .pillar-card p {
+                    color: #94a3b8;
+                    font-size: 0.95rem;
+                    margin-bottom: 2rem;
+                    line-height: 1.6;
+                }
+                .pillar-links {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+                }
+                .pillar-link {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 12px;
+                    color: #e2e8f0;
+                    text-decoration: none;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                }
+                .pillar-link:hover {
+                    background: rgba(139, 92, 246, 0.2);
+                    border-color: rgba(139, 92, 246, 0.4);
+                    padding-left: 1.25rem;
+                }
+            `}</style>
+
+            <header className="yard-header">
                 <h1>Yard Control Center</h1>
-                <p>Welcome back, {user?.firstName}. Manage global operations and institutions.</p>
-            </div>
+                <p>Operational overview for Platform Administrator: {user?.firstName}</p>
+            </header>
 
-            {/* Quick Stats Row (Placeholder data for design) */}
-            <div className="dashboard-grid" style={{ marginBottom: '2rem' }}>
-                <div className="dashboard-card" style={{ borderLeft: '4px solid #8b5cf6' }}>
-                    <h4>🏢 Institutions</h4>
-                    <div className="stat-big">1</div>
-                    <p className="text-small">Active Universites</p>
+            <div className="stats-bar">
+                <div className="stat-box">
+                    <h4>Universities</h4>
+                    <div className="val">1</div>
                 </div>
-                <div className="dashboard-card" style={{ borderLeft: '4px solid #3b82f6' }}>
-                    <h4>📋 Active Tenders</h4>
-                    <div className="stat-big">0</div>
-                    <p className="text-small">Global opportunities</p>
+                <div className="stat-box">
+                    <h4>Global Tenders</h4>
+                    <div className="val">0</div>
                 </div>
-                <div className="dashboard-card" style={{ borderLeft: '4px solid #10b981' }}>
-                    <h4>💰 Platform Revenue</h4>
-                    <div className="stat-big">$0.00</div>
-                    <p className="text-small">Monthly Recurring</p>
+                <div className="stat-box">
+                    <h4>Active Vendors</h4>
+                    <div className="val">0</div>
                 </div>
-                <div className="dashboard-card" style={{ borderLeft: '4px solid #f59e0b' }}>
-                    <h4>👥 Total Users</h4>
-                    <div className="stat-big">3</div>
-                    <p className="text-small">Across all tenants</p>
+                <div className="stat-box">
+                    <h4>Reqs Pending</h4>
+                    <div className="val">0</div>
                 </div>
             </div>
 
-            {/* 3 Pillars Layout */}
-            <div style={{ marginTop: '2rem' }}>
-                <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: '600' }}>Management Pillars</h2>
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', // Wider cards
-                    gap: '1.5rem'
-                }}>
-                    {managementCategories.map((category, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                background: 'white',
-                                borderRadius: '12px',
-                                padding: '2rem',
-                                boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-                                border: '1px solid #e5e7eb',
-                                transition: 'all 0.3s ease',
-                                display: 'flex',
-                                flexDirection: 'column'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-4px)';
-                                e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
-                            }}
-                        >
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem', borderBottom: `2px solid ${category.color}`, paddingBottom: '1rem' }}>
-                                <span style={{ fontSize: '2.5rem', marginRight: '1rem' }}>{category.icon}</span>
-                                <div>
-                                    <h3 style={{
-                                        margin: 0,
-                                        fontSize: '1.25rem',
-                                        fontWeight: '700',
-                                        color: '#1f2937'
-                                    }}>
-                                        {category.title}
-                                    </h3>
-                                    <span style={{ fontSize: '0.875rem', color: category.color, fontWeight: '500' }}>
-                                        {category.items.length} Modules Active
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                {category.items.map((item, idx) => (
-                                    <Link
-                                        key={idx}
-                                        to={item.path}
-                                        style={{
-                                            textDecoration: 'none',
-                                            padding: '1rem',
-                                            background: '#f3f4f6',
-                                            borderRadius: '8px',
-                                            color: '#374151',
-                                            fontWeight: '500',
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            transition: 'background 0.2s ease'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = category.color;
-                                            e.currentTarget.style.color = 'white';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = '#f3f4f6';
-                                            e.currentTarget.style.color = '#374151';
-                                        }}
-                                    >
-                                        {item.name}
-                                        <span>→</span>
-                                    </Link>
-                                ))}
-                            </div>
+            <div className="pillars-grid">
+                {pillars.map((pillar, i) => (
+                    <div key={i} className="pillar-card">
+                        <div className="pillar-icon">{pillar.icon}</div>
+                        <h2>{pillar.title}</h2>
+                        <p>{pillar.desc}</p>
+                        <div className="pillar-links">
+                            {pillar.links.map((link, j) => (
+                                <Link key={j} to={link.path} className="pillar-link">
+                                    {link.name} <span>→</span>
+                                </Link>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

@@ -33,6 +33,10 @@ const organizationSchema = new mongoose.Schema({
     branding: {
         logo: String,
         favicon: String,
+        heroImage: String,
+        aboutImage: String,
+        gallery: [String],
+
         primaryColor: {
             type: String,
             default: '#1a56db'
@@ -44,6 +48,7 @@ const organizationSchema = new mongoose.Schema({
         customCSS: String,
         emailTemplate: String
     },
+
 
     // Subscription & Billing
     subscription: {

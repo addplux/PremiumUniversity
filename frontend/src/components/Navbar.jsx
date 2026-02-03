@@ -32,14 +32,17 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-container">
                         <img
-                            src={logo || "/assets/logo.jpg"}
+                            src={logo || (name === 'Premium School of Health Sciences' ? "/assets/logo.jpg" : null)}
                             alt={`${name} Logo`}
                             className="logo"
+                            style={!logo && name !== 'Premium School of Health Sciences' ? { display: 'none' } : {}}
                         />
+
                         <div className="logo-text">
-                            <h2>{name === 'Premium School of Health Sciences' ? 'PSOHS' : name.substring(0, 10)}</h2>
+                            <h2>{name === 'Premium School of Health Sciences' ? 'PSOHS' : (name.length > 15 ? name.substring(0, 12) + '...' : name)}</h2>
                             <p>{name}</p>
                         </div>
+
                     </Link>
 
                     <button

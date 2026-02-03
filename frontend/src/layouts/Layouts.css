@@ -186,6 +186,58 @@
     margin-top: var(--spacing-xs);
 }
 
+/* Yard Theme Overrides */
+.layout-container.yard-theme {
+    background-color: #0B0B15;
+    color: #F8FAFC;
+}
+
+.yard-theme .sidebar {
+    background: linear-gradient(180deg, #0B0B15 0%, #1E1B4B 100%);
+    border-right: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.yard-theme .sidebar-header {
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.yard-theme .nav-link {
+    color: rgba(248, 250, 252, 0.6);
+}
+
+.yard-theme .nav-link:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: #A78BFA;
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.yard-theme .nav-link.active {
+    background: rgba(139, 92, 246, 0.15);
+    color: #C4B5FD;
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+}
+
+.yard-theme .main-content {
+    background-color: #0B0B15;
+}
+
+.yard-theme .nav-section-label {
+    color: rgba(139, 92, 246, 0.5);
+}
+
+.yard-theme .user-mini-profile {
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.yard-theme .user-name {
+    color: #F8FAFC;
+}
+
+.yard-theme .user-role {
+    color: #A78BFA;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .sidebar {

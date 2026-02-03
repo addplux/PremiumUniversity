@@ -12,10 +12,12 @@ const Footer = () => {
                 <div className="footer-grid">
                     <div className="footer-col">
                         <img
-                            src={logo || "/assets/logo.jpg"}
+                            src={logo || (name === 'Premium School of Health Sciences' ? "/assets/logo.jpg" : null)}
                             alt={`${name} Logo`}
                             className="footer-logo"
+                            style={!logo && name !== 'Premium School of Health Sciences' ? { display: 'none' } : {}}
                         />
+
                         <p className="footer-tagline">
                             {isMasterTenant ? 'Modern Infrastructure for Higher Ed' : 'Pursuing Professional Excellence'}
                         </p>

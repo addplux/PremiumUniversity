@@ -48,7 +48,9 @@ const UniversityLanding = () => {
             <Navbar />
 
             {/* Hero Section */}
-            <section className="hero">
+            <section className="hero" style={organization?.branding?.heroImage ? {
+                '--hero-bg': `url(${organization.branding.heroImage})`
+            } : {}}>
                 <div className="hero-overlay"></div>
                 <div className="hero-content">
                     <div className="container">
@@ -58,6 +60,7 @@ const UniversityLanding = () => {
                             <p className="hero-subtitle">
                                 Join {name}'s premier institution for Registered Nursing, Clinical Medicine, and Environmental Health programs
                             </p>
+
                             <div className="hero-buttons">
                                 <Link to="/admissions" className="btn-primary">Apply Now</Link>
                                 <Link to="/programs" className="btn-secondary">Explore Programs</Link>
@@ -104,7 +107,8 @@ const UniversityLanding = () => {
                 <div className="container">
                     <div className="about-grid">
                         <div className="about-content">
-                            <span className="section-badge">About {name === 'Premium School of Health Sciences' ? 'PSOHS' : name.split(' ')[0]}</span>
+                            <span className="section-badge">About {name === 'Premium School of Health Sciences' ? 'PSOHS' : (name.split(' ').length > 1 ? name.split(' ').slice(0, 2).join(' ') : name)}</span>
+
                             <h2 className="section-title">Leading Healthcare Education in {contact.country || 'Zambia'}</h2>
                             <p>
                                 {name} is a premier institution dedicated to
@@ -121,10 +125,12 @@ const UniversityLanding = () => {
                         </div>
                         <div className="about-image">
                             <img
-                                src="/assets/students_group.jpg"
+                                src={organization?.branding?.aboutImage || (name === 'Premium School of Health Sciences' ? "/assets/students_group.jpg" : "https://images.unsplash.com/photo-1576091160550-217359f42af1?auto=format&fit=crop&w=800&q=80")}
                                 alt={`${name} Students`}
                             />
                         </div>
+
+
                     </div>
                 </div>
             </section>
@@ -232,21 +238,30 @@ const UniversityLanding = () => {
                     </div>
 
                     <div className="facilities-grid">
-                        <div className="facility-card">
-                            <img
-                                src="/assets/facility_equipment.jpg"
-                                alt="Medical Equipment"
-                            />
-                            <h4>Modern Medical Equipment</h4>
-                        </div>
-                        <div className="facility-card">
-                            <img
-                                src="/assets/clinical_training.jpg"
-                                alt="Clinical Training"
-                            />
-                            <h4>Clinical Training Facilities</h4>
-                        </div>
+                        {organization?.branding?.gallery && organization.branding.gallery.length > 0 ? (
+                            organization.branding.gallery.map((img, index) => (
+                                <div key={index} className="facility-card">
+                                    <img
+                                        src={img}
+                                        alt={`Facility ${index + 1}`}
+                                    />
+                                    <h4>{name} Campus Life</h4>
+                                </div>
+
+                            ))
+                        ) : (
+                            <>
+                                <div className="facility-card">
+                                    <div className="placeholder-image" style={{ height: '250px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <span>Campus Life Photo</span>
+                                    </div>
+                                    <h4>Dynamic Learning Environment</h4>
+                                </div>
+
+                            </>
+                        )}
                     </div>
+
                 </div>
             </section>
 
